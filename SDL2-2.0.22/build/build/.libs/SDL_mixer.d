@@ -1,0 +1,29 @@
+build/SDL_mixer.lo: \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/SDL_mixer.c \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/../SDL_internal.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/../dynapi/SDL_dynapi.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/../dynapi/SDL_dynapi_overrides.h \
+ include/SDL_config.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_platform.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/begin_code.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/close_code.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_assert.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_config.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_log.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_stdinc.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_cpuinfo.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_timer.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_error.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_audio.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_endian.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_mutex.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_thread.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_atomic.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_platform.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_rwops.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/SDL_sysaudio.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_mutex.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/include/SDL_thread.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/../SDL_dataqueue.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/./SDL_audio_c.h \
+ /home/oskari/Projects/SDLGame/SDL2-2.0.22/src/audio/./../SDL_internal.h
