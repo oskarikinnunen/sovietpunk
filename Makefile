@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
+#    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/07/08 12:55:16 by okinnune         ###   ########.fr        #
+#    Updated: 2022/07/20 03:57:18 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,5 +28,6 @@ all: $(OBJ) $(SDL2) $(LIBFT)
 $(SDL2):
 	cd SDL2-2.0.22/build && ../configure --prefix=$(PWD)/libs/ && make install
 
+#clean: rm libs subfolders
 $(LIBFT):
 	make -C libft

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP_PNG.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:11:21 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/08 16:53:45 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/20 05:44:57 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,15 @@ typedef struct s_pngpalette
 typedef struct s_pngdata
 {
 	Uint32			size[2];
+	Uint8			*data;
 	Uint8			bitdepth;
 	Uint8			colortype;
 	t_pngpalette	palette;
 }	t_pngdata;
 
+/* PNG.C */
+/* \brief parses a png image
+*/
+void	pngparse(t_pngdata *data);
 
 #endif

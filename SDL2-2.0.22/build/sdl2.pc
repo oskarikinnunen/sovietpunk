@@ -1,6 +1,6 @@
 # sdl pkg-config source file
 
-prefix=/home/oskari/Projects/SDLGame/libs
+prefix=/home/oskari/Projects/sovietpunk/libs
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

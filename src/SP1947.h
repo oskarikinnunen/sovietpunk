@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/08 12:42:32 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/20 05:45:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include "libft.h"
+//#include "SP_PNG.h"
 
-# define WINDOW_W 1920
-# define WINDOW_H 1080
+# define WINDOW_W 1280
+# define WINDOW_H 720
 # define X 0
 # define Y 1
 
@@ -28,6 +29,7 @@ typedef struct s_SDL_Context
 	SDL_Window		*window;
 	SDL_Surface		*surface;
 	SDL_Renderer	*renderer;
+	struct	s_pngdata		*textures;
 }	t_SDL_Context;
 
 /* MAP.C */
@@ -44,10 +46,5 @@ int		sp_fileopen(char *filename, int flags);
 /* \brief Exits the program after printing out the requested string
 	@param str string that's printed out to stderror (2) */
 void	error_exit(char *str);
-
-/* PNG.C */
-/* \brief parses a png image
-*/
-void	pngparse();
 
 #endif

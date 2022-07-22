@@ -1,6 +1,6 @@
 # sdl2 cmake project-config input for ./configure scripts
 
-set(prefix "/home/oskari/Projects/SDLGame/libs") 
+set(prefix "/home/oskari/Projects/sovietpunk/libs") 
 set(exec_prefix "${prefix}")
 set(libdir "${exec_prefix}/lib")
 set(includedir "${prefix}/include")
