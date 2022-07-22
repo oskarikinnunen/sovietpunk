@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   png.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/20 08:58:57 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/22 17:36:15 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
 		//printf("i %i \n", i);
 		//ptr++;
 	}
-	printf("palette len %i \n", i);
+	png->palette.length = i;
+	printf("pal len %i \n", png->palette.length);
 	return (ptr);
 }
 
@@ -57,7 +58,7 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 {
 	while (ft_strncmp(ptr, "IDAT", 4) != 0)
 		ptr++;
-	ptr += 11; // should be 4??
+	ptr += 12; // should be 4??
 	printf("string start %s \n", ptr);
 	int count = 0;
 	png->data = ft_memalloc(sizeof(Uint8) * png->size[X] * png->size[Y]);

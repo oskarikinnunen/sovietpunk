@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/20 05:45:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/22 20:33:51 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # define WINDOW_H 720
 # define X 0
 # define Y 1
+
+typedef struct s_simpleimg
+{
+	Uint32	size[2];
+	Uint32	*data;
+	Uint32	length;
+}	t_simpleimg;
 
 typedef struct s_SDL_Context
 {

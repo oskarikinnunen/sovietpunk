@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/20 06:20:50 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/22 21:11:07 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 #include "SP1947_MAPED.h"
 #include "SP_PNG.h"
+#include "SP_OBJ.h"
 
 //TODO: draw text, update map state, whatever youll figure it out
 
@@ -37,6 +38,13 @@ Uint64	coloratpoint(t_pngdata png, int ix, int iy)
 	int	index;
 	
 	index = ix + ((iy * png.size[Y]));
+	if (png.data[index] > png.palette.length || png.data[index] < 0)
+		printf("weird index value %i \n", png.data[index]);
+	/*if (ix == 159 && iy == 1)
+		printf("second line last pixel index = %i", index);
+	if (ix == 0 && iy == 2)
+		printf("NEXT line last pixel index = %i", index);*/
+	printf("%i ", png.data[index]);
 	return (png.palette.plte[png.data[index]]);
 }
 
@@ -47,22 +55,28 @@ void	drawtexture(t_SDL_Context context, int x, int y)
 
 	iy = 0;
 	ix = 0;
-	while (iy < context.textures[0].size[Y])
+	printf("drawing texture with size %i %i\n", context.textures[0].size[X], context.textures[0].size[Y]);
+	while (++iy < context.textures[0].size[Y] - 1)
 	{
-		while (ix <= context.textures[0].size[X])
+		while (ix < context.textures[0].size[X])
 		{
-			int color = coloratpoint(context.textures[0], ix, iy);
+			int color = coloratpoint(context.textures[0], ix + iy, iy);
 			
 			SDL_SetRenderDrawColor(context.renderer,
 				color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF, 0xFF);
-			SDL_RenderDrawPoint(context.renderer, x + ix, y + iy);
+			SDL_RenderDrawPoint(context.renderer, ix + x, iy + y);
 			ix++;
 		}
+		printf("\n", ix);
 		ix = 0;
-		iy++;
+		//iy++;
+		/*int color = coloratpoint(context.textures[0], ix, iy);
+		SDL_SetRenderDrawColor(context.renderer,
+			color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF, 0xFF);
+		SDL_RenderDrawPoint(context.renderer, ix + x, iy + y);*/
 	}
-	printf("final pixel %i %i \n", ix, iy);
-	SDL_RenderPresent(context.renderer);
+	//printf("final pixel %i %i \n", ix, iy);
+	//SDL_RenderPresent(context.renderer);
 }
 
 void	drawmapstate(t_SDL_Context	context)
@@ -84,7 +98,6 @@ void	drawmapstate(t_SDL_Context	context)
 	}
 	drawtexture(context, 100, 100);
 }
-
 
 void	mapcreator_eventloop(int fd, t_SDL_Context context)
 {
@@ -111,6 +124,7 @@ void	mapcreator_eventloop(int fd, t_SDL_Context context)
 				printf("x = %i, y = %i \n", data.cursor[X], data.cursor[Y]);
 				//SDL_RenderDrawPoint(context.renderer, data.cursor[X], data.cursor[Y]);
 				SDL_RenderPresent(context.renderer);
+				SDL_UpdateWindowSurface(context.window);
 			}
 				
 			if (event.type == SDL_QUIT)
@@ -124,9 +138,20 @@ void	mapcreator(char *mapname, t_SDL_Context context) //Maybe just make this a s
 {
 	int			fd;
 	t_pngdata	png;
+	t_simpleimg	img;
+	t_fdf		fdf;
+	t_obj		obj;
 
-	fd = open(mapname, O_CREAT | O_RDWR); //Make protect function
+	fd = open(mapname, O_CREAT | O_RDWR); //USE protect function (sp_open)
 	pngparse(&png);
+	close(fd);
 	context.textures = &png;
+	ft_memcpy(img.size, png.size, sizeof(Uint32[2]));
+	img.length = png.size[X] * png.size[Y] * sizeof(Uint32);
+	img.data = ft_memalloc(img.length);
+	
+	parse_obj(&obj);
+	fdf_init(&fdf, &img, &obj); //TODO: call fdf in mapcreator loop
+	
 	mapcreator_eventloop(fd, context);
 }

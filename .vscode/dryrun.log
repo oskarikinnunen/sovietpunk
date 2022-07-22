@@ -1,0 +1,7 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/okinnune/sovietpunk'
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread   -c -o src/map.o src/map.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread   -c -o src/obj.o src/obj.c
+gcc src/main.o src/map.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o -o SovietPunk1947 `libs/bin/sdl2-config --cflags --libs` -Ilib/include/SDL2/ -Isrc -Ilibft libft/libft.a
+make: Leaving directory `/Users/okinnune/sovietpunk'
+ 

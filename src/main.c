@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/20 05:19:21 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/22 16:09:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,26 @@ int	main(int argc, char **args)
 	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0 || SDL_Init(SDL_INIT_EVENTS) < 0)
 		printf("SDL_Init error");
+	
+	context.renderer = NULL;
 	context.window = SDL_CreateWindow("SovietPunk 1947", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
-	context.renderer = SDL_CreateRenderer(context.window, -1, 0);
+	context.renderer = SDL_CreateRenderer(context.window, -1, 0); //Read documentation to find out if surface is created aswell!
+	if (context.renderer == NULL)
+		printf("Still null? \n");
 	if (context.window == NULL)
 		printf("Couldn't create SDL2 window :(");
-	
+	printf("sdl context and init \n");
 	context.surface = SDL_GetWindowSurface(context.window);
-	SDL_FillRect(context.surface, NULL, SDL_MapRGB(context.surface->format, 0xFF, 0xFF, 0xFF));
 	SDL_UpdateWindowSurface(context.window);
-	//SDL_Loop(context);
-	//GameLoop(context);
 	mapcreator("newmap", context);
+	//GameLoop(context);
+	
+	//SDL_FillRect(context.surface, NULL, SDL_MapRGB(context.surface->format, 0xFF, 0xFF, 0xFF));
+	return 1;
+	
+	
+	//GameLoop(context);
+	//mapcreator("newmap", context);
 	SDL_DestroyWindow(context.window);
 	SDL_Quit();
 	return (0);
