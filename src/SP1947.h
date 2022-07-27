@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 20:33:51 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/27 02:30:20 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,13 @@ typedef struct s_SDL_Context
 	SDL_Window		*window;
 	SDL_Surface		*surface;
 	SDL_Renderer	*renderer;
-	struct	s_pngdata		*textures;
+	struct	s_pngdata		*textures; //convert pngdarta into simpleimages
+	t_simpleimg				*images;
+	struct	s_fdf			*objects;
 }	t_SDL_Context;
+
+/* image.c */
+void	drawimage(t_SDL_Context context, int x, int y);
 
 /* MAP.C */
 void	mapcreator(char *mapname, t_SDL_Context context);

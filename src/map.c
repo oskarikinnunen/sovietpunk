@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 21:11:07 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/27 03:39:37 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,34 +69,29 @@ void	drawtexture(t_SDL_Context context, int x, int y)
 		}
 		printf("\n", ix);
 		ix = 0;
-		//iy++;
-		/*int color = coloratpoint(context.textures[0], ix, iy);
-		SDL_SetRenderDrawColor(context.renderer,
-			color & 0xFF, (color >> 8) & 0xFF, (color >> 16) & 0xFF, 0xFF);
-		SDL_RenderDrawPoint(context.renderer, ix + x, iy + y);*/
 	}
-	//printf("final pixel %i %i \n", ix, iy);
-	//SDL_RenderPresent(context.renderer);
 }
 
-void	drawmapstate(t_SDL_Context	context)
+void	drawmapstate(t_SDL_Context	context, t_mapeddata data)
 {
 	int	gridsize = 10;
 	int	crd[2];
 
 	ft_bzero(crd, sizeof(int [2]));
+	
 	while (crd[Y] < gridsize * TILESIZE)
 	{
 		while (crd[X] < gridsize * TILESIZE)
 		{
+			SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 255);
+			if (crd[X] / TILESIZE == data.cursor[X] && crd[Y] / TILESIZE == data.cursor[Y])
+				SDL_SetRenderDrawColor(context.renderer, 255, 0, 0, 255);
 			drawrect(context.renderer, crd);
-			//draw rectangle
 			crd[X] += TILESIZE;
 		}
 		crd[X] = 0;
 		crd[Y] += TILESIZE;
 	}
-	drawtexture(context, 100, 100);
 }
 
 void	mapcreator_eventloop(int fd, t_SDL_Context context)
@@ -112,17 +107,21 @@ void	mapcreator_eventloop(int fd, t_SDL_Context context)
 		{
 			if (event.type == SDL_KEYDOWN)
 			{
+				SDL_SetRenderDrawColor(context.renderer, 0, 0, 0, 255);
 				SDL_RenderClear(context.renderer);
-				//drawmapstate(context);
-				drawtexture(context, 10, 10);
+				//drawtexture(context, 10, 10);
+				
 				printf("key: %i\n", event.key.keysym.sym);
+				context.objects[0].view[X] -= (event.key.keysym.sym == SDLK_LEFT) * 10;
+				context.objects[0].view[X] += (event.key.keysym.sym == SDLK_RIGHT) * 10;
+				//drawimage(context, 50, 50);
+				//fdf_update(&context.objects[0]);
+				
 				data.cursor[X] -= (event.key.keysym.sym == SDLK_LEFT);
 				data.cursor[X] += (event.key.keysym.sym == SDLK_RIGHT);
 				data.cursor[Y] -= (event.key.keysym.sym == SDLK_UP);
 				data.cursor[Y] += (event.key.keysym.sym == SDLK_DOWN);
-				//SDL_GetKeyboardState()
-				printf("x = %i, y = %i \n", data.cursor[X], data.cursor[Y]);
-				//SDL_RenderDrawPoint(context.renderer, data.cursor[X], data.cursor[Y]);
+				drawmapstate(context, data);
 				SDL_RenderPresent(context.renderer);
 				SDL_UpdateWindowSurface(context.window);
 			}
@@ -148,10 +147,13 @@ void	mapcreator(char *mapname, t_SDL_Context context) //Maybe just make this a s
 	context.textures = &png;
 	ft_memcpy(img.size, png.size, sizeof(Uint32[2]));
 	img.length = png.size[X] * png.size[Y] * sizeof(Uint32);
-	img.data = ft_memalloc(img.length);
+	img.data = ft_memalloc(img.length * sizeof(Uint32));
+	ft_memset(img.data, 255, img.length);
 	
 	parse_obj(&obj);
 	fdf_init(&fdf, &img, &obj); //TODO: call fdf in mapcreator loop
-	
+	fdf_update(&fdf);
+	context.images = &img;
+	context.objects = &fdf;
 	mapcreator_eventloop(fd, context);
 }

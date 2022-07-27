@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 20:39:52 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/07/27 02:36:57 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,13 @@ void	draw_line(t_simpleimg *si, t_bresenham b)
 	unsigned int	offset;
 
 	b_res = 0;
-	ft_bzero(si->data, si->length * sizeof(Uint32));
+	//
 	while (b_res != 1)
 	{
 		offset = b.local[X] + (b.local[Y] * si->size[X]);
-		/*if (b.local[X] < fdf.img->size[X] && b.local[Y] < fdf.img->size[Y] &&
-			b.local[X] >= 0 && b.local[Y] >= 0)*/
-		si->data[offset] = INT_MAX;
-		
+		if (b.local[X] < si->size[X] && b.local[X] > 0 &&
+			b.local[Y] < si->size[Y] && b.local[Y] > 0 && offset < (si->length / sizeof(Uint32)))
+			si->data[offset] = INT_MAX;
 		//printf("b localx %i, target = %i\n", b.local[X], b.target[X]);
 		//printf("b localx %i \n", b.target[X]);
 		b_res = step_bresenham(&b);
@@ -51,6 +50,8 @@ void	fdf_drawskeleton(t_fdf fdf)
 
 	//populate_bresenham(&b)
 	i = 0;
+	printf("faces in obj %i verts %i \n", fdf.obj->f_count, fdf.obj->v_count);
+	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
 	while (i < fdf.obj->f_count)
 	{
 		//Start vector
@@ -72,7 +73,7 @@ void	fdf_drawskeleton(t_fdf fdf)
 	}
 }
 
-static void	calc_matrices(t_fdf *fdf) // GET fdf as param
+static void	calc_matrices(t_fdf *fdf)
 {
 	float	angles[2];
 
@@ -103,7 +104,6 @@ static void	calc_matrices(t_fdf *fdf) // GET fdf as param
 }
 
 //TODO: fdf_init: allocates the memory and handles errors if that fails
-
 int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 {
 	int	i;
@@ -113,7 +113,6 @@ int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 	fdf->verts = ft_memalloc(sizeof(float *) * object->v_count);
 	fdf->img = img;
 	fdf->obj = object; //TODO: might not work cause this might just be the object variable that's in local scope
-	printf("fdf.obj facecount %i \n", fdf->obj->f_count);
 	if (fdf->depth == NULL || fdf->verts == NULL)
 		return (-1);
 	i = 0;
@@ -144,7 +143,7 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
-		v3_add(fdf->verts[i], (float [3]) {100, 100, 0});
+		v3_add(fdf->verts[i], (float [3]) {58, 58, 0});
 		i++;
 	}
 	//ft_bzero(fdf->img->data_addr, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
