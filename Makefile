@@ -6,7 +6,7 @@
 #    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/08/10 02:32:06 by okinnune         ###   ########.fr        #
+#    Updated: 2022/08/10 21:05:18 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME= SovietPunk1947
 INCLUDE= -Ilib/include/SDL2/ -Isrc -Ilibft
 LIBFT= libft/libft.a
 SDL2= libs/lib/libSDL2.a
-SRCFILES= main.c map.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c image.c gameloop.c
+SRCFILES= main.c map.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
+		image.c gameloop.c deltatime.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc

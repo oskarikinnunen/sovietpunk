@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/10 03:12:39 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/11 01:29:00 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@
 
 typedef struct s_player
 {
-	Uint32	pos[2];
+	int32_t	dest[2];
+	float	rot;
+	int32_t	pos[2];
+	int32_t	sp_pos[2];
 	float	angle;
+	float	move;
 }	t_player;
 
 typedef struct s_simpleimg
@@ -48,10 +52,17 @@ typedef struct s_sdlcontext
 	struct	s_fdf			*objects;
 }	t_sdlcontext;
 
+typedef struct s_clock
+{
+	Uint32	prev_time;
+	Uint32	delta;
+} t_clock;
+
 typedef struct s_gamecontext
 {
 	t_sdlcontext	*sdlcontext;
 	t_player		player;
+	t_clock			clock;
 }	t_gamecontext;
 
 /* gameloop.c */
@@ -59,6 +70,9 @@ void	gameloop(t_gamecontext *gc);
 
 /* image.c */
 void	drawimage(t_sdlcontext context, int x, int y);
+
+/* deltatime.c */
+void	update_deltatime(t_clock *c);
 
 /* MAP.C */
 void	mapcreator(char *mapname, t_sdlcontext context);
