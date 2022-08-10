@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/11 01:48:02 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/11 02:12:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #define MAP_H 8
 #define RAY_LENGTH	200
 #define WALLSCALE	2
-#define GAMESCALE	10
-#define RENDERSCALE	20
+#define GAMESCALE	40
+#define RENDERSCALE	40
 #define TURNSPEED	0.002f
-#define MOVESPEED	50
+#define MOVESPEED	0.1f;
 
 
 static void	drawrect(SDL_Renderer *r, int *crd) //TODO make this generic and add to helper file
@@ -83,10 +83,12 @@ int	raycast_len(int *crd, int *dst, t_sdlcontext sdl) //TODO use int[2] as param
 	while (b.local[X] > 0 && b.local[X] < MAP_W * GAMESCALE
 			&& b.local[Y] > 0 && b.local[Y] < MAP_H * GAMESCALE)
 	{
-		step_bresenham(&b);
-		if (b.local[Y] % 10 != 0 || b.local[X] % 10 != 0)
-			if (map[(b.local[Y] / GAMESCALE)][b.local[X] / GAMESCALE] == 1)
-				break;
+		step_bresenham_x(&b);
+		if (map[(b.local[Y] / GAMESCALE)][b.local[X] / GAMESCALE] == 1)
+			break;
+		step_bresenham_y(&b);
+		if (map[(b.local[Y] / GAMESCALE)][b.local[X] / GAMESCALE] == 1)
+			break;
 	}
 	DrawLineWithRenderScale(sdl.renderer, crd, b.local);
 	len = sqrt((crd[X] - b.local[X]) * (crd[X] - b.local[X]) + //TODO: make v2dist function
@@ -140,37 +142,9 @@ int v2dist(int *v, int *ov)
 
 void moveplayer(t_player *plr, int deltatime)
 {
-	t_bresenham	b; // static?
-	int			i;
-	int32_t		to[2];
-
-	to[X] = plr->dest[X];
-	to[Y] = plr->dest[Y];
-	populate_bresenham(&b, plr->sp_pos, to);
-	i = 0;
-	if (plr->dest[X] != 0 && plr->dest[Y] != 0)
-	{
-		printf("plr pos %i %i, mov %i %i, distance %i d2 %i\n", plr->pos[X], plr->pos[Y], to[X], to[Y],
-											v2dist(plr->pos, to), v2dist(to, b.local));
-		while (v2dist(plr->sp_pos, b.local) < deltatime)
-		{
-			step_bresenham(&b);
-			//printf("br %i %i \n", b.local[X], b.local[Y]);
-		}
-		plr->sp_pos[X] = b.local[X];
-		plr->sp_pos[Y] = b.local[Y];
-		printf("%i %i \n", plr->sp_pos[X], plr->sp_pos[Y]);
-		if (ft_abs(plr->sp_pos[X]) > MOVESPEED)
-		{
-			plr->pos[X] += (plr->sp_pos[X] < 0) ? -1 : 1;
-			plr->sp_pos[X] = 0;
-		}
-		if (ft_abs(plr->sp_pos[Y]) > MOVESPEED)
-		{
-			plr->pos[Y] += (plr->sp_pos[Y] < 0) ? -1 : 1;
-			plr->sp_pos[Y] = 0;
-		}
-	}
+	
+	plr->pos[X] += plr->dest[X];
+	plr->pos[Y] += plr->dest[Y];
 	//printf("distance %i \n", v2dist(plr->pos, b.local));
 	
 	//plr->pos[X] = b.local[X];
@@ -187,14 +161,16 @@ void	playerinput(SDL_Keycode kc, t_player *plr)
 	plr->rot -= (kc == SDLK_LEFT) * TURNSPEED;
 	if (kc == SDLK_UP)
 	{
-		plr->dest[X] = sin(plr->angle + 0.63) * 1000; //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
-		plr->dest[Y] = cos(plr->angle + 0.63) * 1000;
+		plr->dest[X] = sin(plr->angle + 0.63); //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
+		plr->dest[Y] = cos(plr->angle + 0.63);
 	}
 	if (kc == SDLK_DOWN)
 	{
-		plr->dest[X] = sin(plr->angle + 0.63) * -1000;
-		plr->dest[Y] = cos(plr->angle + 0.63) * -1000;
+		plr->dest[X] = -sin(plr->angle + 0.63);
+		plr->dest[Y] = -cos(plr->angle + 0.63);
 	}
+	plr->dest[X] *= MOVESPEED;
+	plr->dest[Y] *= MOVESPEED;
 }
 
 //void raycast()
@@ -226,7 +202,7 @@ void gameloop (t_gamecontext *gc)
 				if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT)
 					gc->player.rot = 0;
 				if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_DOWN)
-					ft_bzero(gc->player.dest, sizeof(Sint8[2]));
+					ft_bzero(gc->player.dest, sizeof(float[2]));
 			}
 			if (event.type == SDL_QUIT) return ;
 		}
@@ -243,15 +219,15 @@ void gameloop (t_gamecontext *gc)
 		while (scan_h < 512)
 		{
 			scan_angle += 0.0025; //512 * 0.005 is under 1 rad
-			ray_d[X] = sin(scan_angle) * RAY_LENGTH;
-			ray_d[Y] = cos(scan_angle) * RAY_LENGTH;
-			ray_d[X] += gc->player.pos[X];
-			ray_d[Y] += gc->player.pos[Y];
-			wallheights[scan_h] = raycast_len(gc->player.pos, ray_d, *gc->sdlcontext);
+			ray_d[X] = sin(scan_angle) * RAY_LENGTH * GAMESCALE;
+			ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
+			ray_d[X] += (int)gc->player.pos[X];
+			ray_d[Y] += (int)gc->player.pos[Y];
+			wallheights[scan_h] = raycast_len((int[2]){gc->player.pos[X], gc->player.pos[Y]}, ray_d, *gc->sdlcontext);
 			scan_h++;
 		}
 		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 255, 0, 0, 255);
-		DrawLineWithRenderScale(gc->sdlcontext->renderer, gc->player.pos, gc->player.dest);
+		//DrawLineWithRenderScale(gc->sdlcontext->renderer, gc->player.pos, gc->player.dest);
 		
 		SDL_RenderPresent(gc->sdlcontext->renderer);
 

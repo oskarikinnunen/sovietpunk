@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/11 01:29:00 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/11 01:54:33 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@
 # define X 0
 # define Y 1
 
+//Yeah yeah it's unauthentic to have the player coordinates as floating points,
+// my brain hurt doing the integer so math so f it
 typedef struct s_player
 {
-	int32_t	dest[2];
+	float	dest[2];
 	float	rot;
-	int32_t	pos[2];
+	float	pos[2];
 	int32_t	sp_pos[2];
 	float	angle;
 	float	move;
