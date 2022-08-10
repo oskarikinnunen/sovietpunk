@@ -42,9 +42,6 @@ Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
 		png->palette.plte[i] = *ptr + (*(ptr + 1) << 8) + (*(ptr + 2) << 16);
 		ptr += 3;
 		/*png->palette.plte[i] = *(Uint64 *)ptr;*/
-		if (i == 0)
-			printf("color %li %li %li\n", png->palette.plte[i] & 0xFF, (png->palette.plte[i] >> 8) & 0xFF
-										, (png->palette.plte[i] >> 16) & 0xFF);
 		i++;
 		//printf("i %i \n", i);
 		//ptr++;
@@ -59,7 +56,7 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 	while (ft_strncmp(ptr, "IDAT", 4) != 0)
 		ptr++;
 	ptr += 12; // should be 4??
-	printf("string start %s \n", ptr);
+	//printf("string start %s \n", ptr);
 	int count = 0;
 	png->data = ft_memalloc(sizeof(Uint8) * png->size[X] * png->size[Y]);
 	//protec
@@ -68,8 +65,6 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 	while (ft_strncmp(ptr, "tEXt", 4) != 0
 		&& count < png->size[X] * png->size[Y])
 	{
-		if (count == 0 || count == 2)
-			printf("first pixel %i second pixel %i \n", png->data[0], png->data[1]);
 		png->data[count] = *ptr;
 		ptr++;
 		count++;
@@ -94,7 +89,7 @@ void	pngparse(t_pngdata	*png)
 	ptr = buf;
 	while (ft_strcmp(++ptr, "IHDR") != 0 && len > 0) //Extract function?
 		len--;
-	printf("string: %s length left: %i\n", ptr, len);
+	//printf("string: %s length left: %i\n", ptr, len);
 	ptr += 4; //Skip IHDR
 	png->size[X] = png4byte(ptr);
 	png->size[Y] = png4byte(ptr+4);

@@ -1,2 +1,2 @@
-#define SDL_REVISION "git@github.com:oskarikinnunen/sovietpunk@1c121a493ac3b0ba282f6d71025156c8f10466ef"
+#define SDL_REVISION "git@github.com:oskarikinnunen/sovietpunk.git@c7f02c126fb66b062c51c97d8a153efda6295df6"
 #define SDL_REVISION_NUMBER 0

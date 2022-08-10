@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/27 02:09:06 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/09 20:39:17 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	return (img.data[index]);
 }
 
-void	drawimage(t_SDL_Context context, int x, int y)
+void	drawimage(t_sdlcontext context, int x, int y)
 {
 	int			iy;
 	int			ix;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/27 02:30:20 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/10 03:12:39 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "../libs/include/SDL2/SDL.h"
 #include <stdlib.h>
 #include <fcntl.h>
+#include <math.h>
 #include "libft.h"
 //#include "SP_PNG.h"
 
@@ -24,6 +25,12 @@
 # define X 0
 # define Y 1
 
+typedef struct s_player
+{
+	Uint32	pos[2];
+	float	angle;
+}	t_player;
+
 typedef struct s_simpleimg
 {
 	Uint32	size[2];
@@ -31,21 +38,30 @@ typedef struct s_simpleimg
 	Uint32	length;
 }	t_simpleimg;
 
-typedef struct s_SDL_Context
+typedef struct s_sdlcontext
 {
-	SDL_Window		*window;
-	SDL_Surface		*surface;
-	SDL_Renderer	*renderer;
+	SDL_Window				*window;
+	SDL_Surface				*surface;
+	SDL_Renderer			*renderer;
 	struct	s_pngdata		*textures; //convert pngdarta into simpleimages
 	t_simpleimg				*images;
 	struct	s_fdf			*objects;
-}	t_SDL_Context;
+}	t_sdlcontext;
+
+typedef struct s_gamecontext
+{
+	t_sdlcontext	*sdlcontext;
+	t_player		player;
+}	t_gamecontext;
+
+/* gameloop.c */
+void	gameloop(t_gamecontext *gc);
 
 /* image.c */
-void	drawimage(t_SDL_Context context, int x, int y);
+void	drawimage(t_sdlcontext context, int x, int y);
 
 /* MAP.C */
-void	mapcreator(char *mapname, t_SDL_Context context);
+void	mapcreator(char *mapname, t_sdlcontext context);
 
 /* FILE_OPEN.c */
 

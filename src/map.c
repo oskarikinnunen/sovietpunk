@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/27 03:39:37 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/09 20:39:17 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ Uint64	coloratpoint(t_pngdata png, int ix, int iy)
 		printf("second line last pixel index = %i", index);
 	if (ix == 0 && iy == 2)
 		printf("NEXT line last pixel index = %i", index);*/
-	printf("%i ", png.data[index]);
+	//printf("%i ", png.data[index]);
 	return (png.palette.plte[png.data[index]]);
 }
 
-void	drawtexture(t_SDL_Context context, int x, int y)
+void	drawtexture(t_sdlcontext context, int x, int y)
 {
 	int	iy;
 	int ix;
@@ -67,12 +67,12 @@ void	drawtexture(t_SDL_Context context, int x, int y)
 			SDL_RenderDrawPoint(context.renderer, ix + x, iy + y);
 			ix++;
 		}
-		printf("\n", ix);
+		//printf("\n", ix);
 		ix = 0;
 	}
 }
 
-void	drawmapstate(t_SDL_Context	context, t_mapeddata data)
+void	drawmapstate(t_sdlcontext	context, t_mapeddata data)
 {
 	int	gridsize = 10;
 	int	crd[2];
@@ -94,7 +94,7 @@ void	drawmapstate(t_SDL_Context	context, t_mapeddata data)
 	}
 }
 
-void	mapcreator_eventloop(int fd, t_SDL_Context context)
+void	mapcreator_eventloop(int fd, t_sdlcontext context)
 {
 	SDL_Event	event;
 	t_mapeddata	data;
@@ -107,15 +107,15 @@ void	mapcreator_eventloop(int fd, t_SDL_Context context)
 		{
 			if (event.type == SDL_KEYDOWN)
 			{
-				SDL_SetRenderDrawColor(context.renderer, 0, 0, 0, 255);
+				//SDL_SetRenderDrawColor(context.renderer, 0, 0, 0, 255);
 				SDL_RenderClear(context.renderer);
-				//drawtexture(context, 10, 10);
+				drawtexture(context, 10, 10);
 				
 				printf("key: %i\n", event.key.keysym.sym);
 				context.objects[0].view[X] -= (event.key.keysym.sym == SDLK_LEFT) * 10;
 				context.objects[0].view[X] += (event.key.keysym.sym == SDLK_RIGHT) * 10;
-				//drawimage(context, 50, 50);
-				//fdf_update(&context.objects[0]);
+				drawimage(context, 50, 50);
+				fdf_update(&context.objects[0]);
 				
 				data.cursor[X] -= (event.key.keysym.sym == SDLK_LEFT);
 				data.cursor[X] += (event.key.keysym.sym == SDLK_RIGHT);
@@ -123,7 +123,7 @@ void	mapcreator_eventloop(int fd, t_SDL_Context context)
 				data.cursor[Y] += (event.key.keysym.sym == SDLK_DOWN);
 				drawmapstate(context, data);
 				SDL_RenderPresent(context.renderer);
-				SDL_UpdateWindowSurface(context.window);
+				//SDL_UpdateWindowSurface(context.window);
 			}
 				
 			if (event.type == SDL_QUIT)
@@ -133,7 +133,7 @@ void	mapcreator_eventloop(int fd, t_SDL_Context context)
 	return ;
 }
 
-void	mapcreator(char *mapname, t_SDL_Context context) //Maybe just make this a standalone program?
+void	mapcreator(char *mapname, t_sdlcontext context) //Maybe just make this a standalone program?
 {
 	int			fd;
 	t_pngdata	png;

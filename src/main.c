@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 16:09:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/10 02:50:28 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Uint64	deltatime()
 	return (time - prevtime);
 }
 
-int	SDL_Loop(t_SDL_Context context)
+int	SDL_Loop(t_sdlcontext context)
 {
 	SDL_Event	event;
 	while (SDL_PollEvent(&event) != 0)
@@ -43,46 +43,32 @@ int	SDL_Loop(t_SDL_Context context)
 	return (1);
 }
 
-void	GameLoop(t_SDL_Context context)
-{
-	//loadmap();
-	while (1)
-	{
-		printf("deltatime %li \n", deltatime());
-		if (!SDL_Loop(context))
-			break ;
-		
-	}
-}
-
-
 int	main(int argc, char **args)
 {
-	t_SDL_Context	context;
-	ft_bzero(&context, sizeof(t_SDL_Context));
+	t_gamecontext	gcontext;
+	t_sdlcontext	context;
+	ft_bzero(&context, sizeof(t_sdlcontext));
+	ft_bzero(&gcontext, sizeof(t_gamecontext));
 	
+	gcontext.sdlcontext = &context;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0 || SDL_Init(SDL_INIT_EVENTS) < 0)
 		printf("SDL_Init error");
-	
 	context.renderer = NULL;
-	context.window = SDL_CreateWindow("SovietPunk 1947", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
+	context.window = SDL_CreateWindow("SovietPunk 1947",
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
 	context.renderer = SDL_CreateRenderer(context.window, -1, 0); //Read documentation to find out if surface is created aswell!
 	if (context.renderer == NULL)
-		printf("Still null? \n");
+		printf("Still null? \n"); //Error exit
 	if (context.window == NULL)
-		printf("Couldn't create SDL2 window :(");
+		printf("Couldn't create SDL2 window :("); //error exit
 	printf("sdl context and init \n");
 	context.surface = SDL_GetWindowSurface(context.window);
 	SDL_UpdateWindowSurface(context.window);
-	mapcreator("newmap", context);
-	//GameLoop(context);
-	
-	//SDL_FillRect(context.surface, NULL, SDL_MapRGB(context.surface->format, 0xFF, 0xFF, 0xFF));
-	return 1;
-	
-	
-	//GameLoop(context);
 	//mapcreator("newmap", context);
+	gameloop(&gcontext);
+
+
 	SDL_DestroyWindow(context.window);
 	SDL_Quit();
 	return (0);
