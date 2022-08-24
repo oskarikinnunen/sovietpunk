@@ -1,3 +1,6 @@
 {
-	"makefile.extensionOutputFolder": "./.vscode"
+	"makefile.extensionOutputFolder": "./.vscode",
+	"files.associations": {
+		"sp1947.h": "c"
+	}
 }

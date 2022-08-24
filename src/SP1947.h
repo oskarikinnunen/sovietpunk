@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/11 01:54:33 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/25 00:03:30 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define X 0
 # define Y 1
 
+#define TURNSPEED	0.002f
+#define MOVESPEED	0.1f
 //Yeah yeah it's unauthentic to have the player coordinates as floating points,
 // my brain hurt doing the integer so math so f it
 typedef struct s_player
@@ -66,6 +68,9 @@ typedef struct s_gamecontext
 	t_player		player;
 	t_clock			clock;
 }	t_gamecontext;
+
+/* eventloop.c */
+int		eventloop(t_gamecontext *gc);
 
 /* gameloop.c */
 void	gameloop(t_gamecontext *gc);

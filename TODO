@@ -1,0 +1,10 @@
+
+make editor where you can place objects in the world (walls, player, enemies/fdfobjects)
+
+render textures on walls
+
+render minifdf objects in the world
+
+implement dda for raycast and ditch weird integer scaling raycast thingy
+
+make error exit function
