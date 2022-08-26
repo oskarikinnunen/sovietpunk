@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   png.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 17:36:15 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/26 00:00:44 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 	/*printf("first pixel %i second pixel %i \n", png->data[0], png->data[1]);*/
 }
 
-void	pngparse(t_pngdata	*png)
+void	pngparse(t_pngdata	*png, char *filename)
 {
 	int			fd;
 	int			len;
@@ -81,7 +81,7 @@ void	pngparse(t_pngdata	*png)
 	Uint8		buf[32000];
 	//t_pngdata	png;
 
-	fd = sp_fileopen("grassuc.png", O_RDONLY);
+	fd = sp_fileopen(filename, O_RDONLY);
 	//fd = sp_fileopen("exdc.png", O_RDONLY);
 	len = read(fd, buf, sizeof(Uint8) * 32000);
 	//error_exit("png file didn't fit in static buffer");
@@ -104,4 +104,5 @@ void	pngparse(t_pngdata	*png)
 	//fillpalette(png, &ptr, &buf, len);
 	ptr = readpalette(png, ptr);
 	readdat(png, ptr);
+	close(fd);
 }

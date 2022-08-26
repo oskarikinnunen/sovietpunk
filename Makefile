@@ -6,7 +6,7 @@
 #    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/08/24 23:06:19 by okinnune         ###   ########.fr        #
+#    Updated: 2022/08/26 02:42:07 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,15 +15,15 @@ NAME= SovietPunk1947
 INCLUDE= -Ilib/include/SDL2/ -Isrc -Ilibft
 LIBFT= libft/libft.a
 SDL2= libs/lib/libSDL2.a
-SRCFILES= main.c map.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
-		image.c gameloop.c deltatime.c eventloop.c
+SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
+		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
 CFLAGS += -g $(INCLUDE) -ldl -lpthread -lm
 PWD= $(shell pwd)
 
-all: $(OBJ) $(SDL2) $(LIBFT)
+all: $(OBJ) $(SDL2) $(LIBFT) src/SP1947.h
 	$(CC) $(OBJ) -o $(NAME) `libs/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBFT) -lm
 
 $(SDL2):

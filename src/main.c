@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/25 00:27:21 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/26 02:41:51 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,12 @@ int	main(int argc, char **args)
 	
 	createsdlcontext(&context);
 	gcontext.sdlcontext = &context;
-	//mapcreator("newmap", context);
-	gameloop(&gcontext);
+	loadpngs(&context);
+	//load images
+	if (argc == 3 && ft_strcmp(args[1], "-e") == 0 && ft_strlen(args[2]) > 0)
+		mapcreator(args[2], context);
+	else
+		gameloop(&gcontext);
 	SDL_DestroyWindow(context.window);
 	SDL_Quit();
 	return (0);

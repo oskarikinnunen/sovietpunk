@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/25 00:03:30 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/26 02:41:29 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,17 @@
 #include "libft.h"
 //#include "SP_PNG.h"
 
-# define WINDOW_W 1280
+# define WINDOW_W 720
 # define WINDOW_H 720
 # define X 0
 # define Y 1
 
-#define TURNSPEED	0.002f
-#define MOVESPEED	0.1f
+# define TURNSPEED	0.002f
+# define MOVESPEED	0.1f
+# define MAPSIZE	16
 //Yeah yeah it's unauthentic to have the player coordinates as floating points,
 // my brain hurt doing the integer so math so f it
+
 typedef struct s_player
 {
 	float	dest[2];
@@ -51,9 +53,9 @@ typedef struct s_sdlcontext
 	SDL_Window				*window;
 	SDL_Surface				*surface;
 	SDL_Renderer			*renderer;
-	struct	s_pngdata		*textures; //convert pngdarta into simpleimages
+	//struct	s_pngdata		*textures; //convert pngdarta into simpleimages
 	t_simpleimg				*images;
-	struct	s_fdf			*objects;
+	//struct	s_fdf			*objects;
 }	t_sdlcontext;
 
 typedef struct s_clock
@@ -66,6 +68,7 @@ typedef struct s_gamecontext
 {
 	t_sdlcontext	*sdlcontext;
 	t_player		player;
+	Uint32			map[MAPSIZE * MAPSIZE];
 	t_clock			clock;
 }	t_gamecontext;
 
@@ -77,12 +80,16 @@ void	gameloop(t_gamecontext *gc);
 
 /* image.c */
 void	drawimage(t_sdlcontext context, int x, int y);
+void	drawimagescaled(t_sdlcontext context, int p[2], int tid, int scale);
 
 /* deltatime.c */
 void	update_deltatime(t_clock *c);
 
 /* MAP.C */
 void	mapcreator(char *mapname, t_sdlcontext context);
+
+/* simpleimage.c */
+void	loadpngs(t_sdlcontext	*sdl);
 
 /* FILE_OPEN.c */
 

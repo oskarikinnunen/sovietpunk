@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP_PNG.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:11:21 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 19:47:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/25 23:51:58 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ typedef struct s_pngdata
 /* PNG.C */
 /* \brief parses a png image
 */
-void	pngparse(t_pngdata *data);
+void	pngparse(t_pngdata *data, char *filename);
 
 #endif
