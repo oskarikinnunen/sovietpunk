@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/26 03:07:45 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/30 00:52:42 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #define RAY_LENGTH	200
 #define WALLSCALE	2
 #define GAMESCALE	40
-#define RENDERSCALE	40
+#define RENDERSCALE	20
 
 //TODO make this generic and move to helper file
 static void	drawrect(SDL_Renderer *r, int *crd)
@@ -58,30 +58,43 @@ void	render2Dmap(t_sdlcontext context, uint32_t *map)
 
 static void DrawLineWithRenderScale(SDL_Renderer *r, int *origin, int *dest)
 {
-	int f = (RENDERSCALE / GAMESCALE);
+	float f = ((float)RENDERSCALE / (float)GAMESCALE);
 	SDL_RenderDrawLine(r, origin[X] * f, origin[Y] * f,
 							dest[X] * f, dest[Y] * f);
 }
 
-int	raycast_len(int *crd, int *dst, t_gamecontext gc) //TODO use int[2] as params?
+//TODO: implement dda
+int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as params?
 {
-	int			len;
 	t_bresenham	b;
+	int			l_crd[2];
+	float		d_dst[2]; //DISTANCE, not destination in this context, TODO: rename
 
+	//ft_bzero(l_crd, sizeof(int [2]));
+	ft_bzero(d_dst, sizeof(float [2]));
+
+	
+	d_dst[X] = 1 / dst[X];
+
+	/*
 	ft_bzero(&b, sizeof(t_bresenham));
 	populate_bresenham(&b, crd, dst);
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
 			&& b.local[Y] > 0 && b.local[Y] < MAPSIZE * GAMESCALE)
 	{
-		step_bresenham_x(&b);
-		step_bresenham_y(&b);
-		if (gc.map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
+		step_bresenham(&b);
+		if (gc->map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
+		{
+			//store lastwall index to access texture
+			//calculate stripindex fr
+			gc->lastwall = (b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE);
+			gc->tex_x = (b.local[Y] / GAMESCALE) - b.local[Y];
+			// calculate relative location from current tile
 			break;
-	}
-	DrawLineWithRenderScale(gc.sdlcontext->renderer, crd, b.local);
-	len = sqrt((crd[X] - b.local[X]) * (crd[X] - b.local[X]) + //TODO: make v2dist function
-				(crd[Y] - b.local[Y]) * (crd[Y] - b.local[Y]));
-	return len;
+		}
+	}*/
+	DrawLineWithRenderScale(gc->sdlcontext->renderer, crd, b.local);
+	return (v2dist(crd, b.local));
 }
 
 int		calc_wallheight(int wall)
@@ -112,16 +125,6 @@ void	rendergame(t_sdlcontext sdl, int *walls, int max)
 
 //int	deltatime
 
-int v2dist(int *v, int *ov)
-{
-	return (
-			sqrt(
-			(v[X] - ov[X]) * (v[X] - ov[X]) +
-			(v[Y] - ov[Y]) * (v[Y] - ov[Y])
-			)
-			);
-}
-
 void moveplayer(t_player *plr, int deltatime)
 {
 	plr->pos[X] += plr->dest[X] * deltatime;
@@ -137,8 +140,8 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 	float		scan_angle;
 
 	scan_h = 0;
-	scan_angle = angle;
-	SDL_SetRenderDrawColor(sdl->renderer, 20, 20, 255, 255);
+	scan_angle = angle + 1.57;
+	SDL_SetRenderDrawColor(sdl->renderer, 20, 20, 255, 120);
 	while (scan_h < 512)
 	{
 		scan_angle += 0.0025; //512 * 0.005 is under 1 rad
@@ -146,7 +149,11 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 		ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[X] += (int)playerpos[X];
 		ray_d[Y] += (int)playerpos[Y];
-		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, gc);
+		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc);
+		//int tex_x = ((ray_d[X] - playerpos[X])) / GAMESCALE;
+		if (scan_h < 30)
+			printf("%i tex %i \n", scan_h, gc.tex_x);
+		//use lastwall index to get current texture, 
 		scan_h++;
 	}
 	return (wallheights);

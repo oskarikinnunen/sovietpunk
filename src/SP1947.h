@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/26 02:41:29 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/29 21:37:34 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,12 @@ typedef struct s_gamecontext
 	t_player		player;
 	Uint32			map[MAPSIZE * MAPSIZE];
 	t_clock			clock;
+	u_int32_t		lastwall;
+	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
 }	t_gamecontext;
+
+/* v2.c */
+int		v2dist(int *v, int *ov);
 
 /* eventloop.c */
 int		eventloop(t_gamecontext *gc);
