@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/29 22:31:30 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/30 03:48:51 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void	playerinput(SDL_Keycode kc, t_player *plr)
 	plr->rot -= (kc == SDLK_RIGHT) * TURNSPEED;
 	if (kc == SDLK_UP)
 	{
-		plr->dest[X] = -sin(plr->angle - 0.83); //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
-		plr->dest[Y] = -cos(plr->angle - 0.83);
+		plr->dest[X] = sin(plr->angle + 0.83); //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
+		plr->dest[Y] = cos(plr->angle + 0.83);
 	}
 	if (kc == SDLK_DOWN)
 	{
-		plr->dest[X] = sin(plr->angle - 0.83);
-		plr->dest[Y] = cos(plr->angle - 0.83);
+		plr->dest[X] = -sin(plr->angle + 0.83);
+		plr->dest[Y] = -cos(plr->angle + 0.83);
 	}
 	plr->dest[X] *= MOVESPEED;
 	plr->dest[Y] *= MOVESPEED;

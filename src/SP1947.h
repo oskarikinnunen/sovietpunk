@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/29 21:37:34 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/30 04:27:23 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define Y 1
 
 # define TURNSPEED	0.002f
-# define MOVESPEED	0.1f
+# define MOVESPEED	0.025f
 # define MAPSIZE	16
 //Yeah yeah it's unauthentic to have the player coordinates as floating points,
 // my brain hurt doing the integer so math so f it
@@ -84,6 +84,7 @@ int		eventloop(t_gamecontext *gc);
 void	gameloop(t_gamecontext *gc);
 
 /* image.c */
+Uint32	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext context, int x, int y);
 void	drawimagescaled(t_sdlcontext context, int p[2], int tid, int scale);
 

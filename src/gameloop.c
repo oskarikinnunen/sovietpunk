@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/30 00:52:42 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/30 04:25:48 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #define GAMESCALE	40
 #define RENDERSCALE	20
 
+#include "assert.h"
 //TODO make this generic and move to helper file
 static void	drawrect(SDL_Renderer *r, int *crd)
 {
@@ -71,12 +72,12 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as 
 	float		d_dst[2]; //DISTANCE, not destination in this context, TODO: rename
 
 	//ft_bzero(l_crd, sizeof(int [2]));
-	ft_bzero(d_dst, sizeof(float [2]));
+	/*ft_bzero(d_dst, sizeof(float [2]));
 
 	
-	d_dst[X] = 1 / dst[X];
+	d_dst[X] = 1 / dst[X];*/
 
-	/*
+	
 	ft_bzero(&b, sizeof(t_bresenham));
 	populate_bresenham(&b, crd, dst);
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
@@ -92,7 +93,15 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as 
 			// calculate relative location from current tile
 			break;
 		}
-	}*/
+	}
+	gc->tex_x = b.local[X] % GAMESCALE;
+	assert(gc->tex_x <= GAMESCALE && gc->tex_x >= 0);
+	if (b.local[X] % GAMESCALE == 0 || b.local[X] % GAMESCALE == GAMESCALE - 1) {
+		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 122, 0, 122, 255);
+		gc->tex_x = b.local[Y] % GAMESCALE;
+	}
+	else
+		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 0, 0, 255, 255);
 	DrawLineWithRenderScale(gc->sdlcontext->renderer, crd, b.local);
 	return (v2dist(crd, b.local));
 }
@@ -113,12 +122,30 @@ void	rendergame(t_sdlcontext sdl, int *walls, int max)
 	while (i < max)
 	{
 		wallheight = 0;
-		if (walls[i] < MAPSIZE * GAMESCALE)
-			wallheight = (MAPSIZE * GAMESCALE) - (walls[i]);
+		//if (walls[i] < MAPSIZE * GAMESCALE)
+		wallheight = (MAPSIZE * GAMESCALE) - (walls[i] & 0xFFFF);
 		wallheight /= 4;
-		SDL_RenderDrawLine(sdl.renderer,
+		int ii = 0;
+		int index = ((float)(walls[i] >> 16) / 40.0f) * sdl.images[1].size[X];
+		assert(walls[i] >> 16 >= 0 && walls[i] >> 16 <= GAMESCALE);
+		float ystep = (sdl.images->size[X] / wallheight);
+		while (ii < wallheight)
+		{
+			int r = (sdl.images[1].data[index] & 0xFF);
+			int g = (sdl.images[1].data[index] >> 8 & 0xFF);
+			int b = (sdl.images[1].data[index] >> 16 & 0xFF);
+			SDL_SetRenderDrawColor(sdl.renderer, r, g, b, 255);
+			SDL_RenderDrawPoint(sdl.renderer, i + offset, ii + offset);
+			//index += sdl.images->size[X];
+			index += sdl.images->size[X] * ystep; // Use sampleimage instead plz, will fix it prolly
+			/*if (index > sdl.images->size[X])
+				index = index + (index % sdl.images->size[X]);*/
+			ii++;
+		}
+		
+		/*SDL_RenderDrawLine(sdl.renderer,
 			i + offset, offset - wallheight,
-			i + offset, offset + wallheight);
+			i + offset, offset + wallheight);*/
 		i++;
 	}
 }
@@ -144,12 +171,13 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 	SDL_SetRenderDrawColor(sdl->renderer, 20, 20, 255, 120);
 	while (scan_h < 512)
 	{
-		scan_angle += 0.0025; //512 * 0.005 is under 1 rad
+		scan_angle -= 0.0025; //512 * 0.005 is under 1 rad
 		ray_d[X] = sin(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[X] += (int)playerpos[X];
 		ray_d[Y] += (int)playerpos[Y];
 		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc);
+		wallheights[scan_h] += (gc.tex_x << 16);
 		//int tex_x = ((ray_d[X] - playerpos[X])) / GAMESCALE;
 		if (scan_h < 30)
 			printf("%i tex %i \n", scan_h, gc.tex_x);
