@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/26 00:00:44 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/30 21:51:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 		ptr++;
 		count++;
 	}
-	printf("found %i pixels in image \n", count);	
+	printf("found %i pixels in image \n", count);
 	/*printf("first pixel %i second pixel %i \n", png->data[0], png->data[1]);*/
 }
 

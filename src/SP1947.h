@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/30 04:27:23 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/31 04:12:46 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 #include "libft.h"
 //#include "SP_PNG.h"
 
+# define FPSCOUNTER
 # define WINDOW_W 720
 # define WINDOW_H 720
 # define X 0
 # define Y 1
 
-# define TURNSPEED	0.002f
-# define MOVESPEED	0.025f
+# define TURNSPEED	0.003f
+# define MOVESPEED	0.075f
 # define MAPSIZE	16
 //Yeah yeah it's unauthentic to have the player coordinates as floating points,
 // my brain hurt doing the integer so math so f it
@@ -69,6 +70,7 @@ typedef struct s_gamecontext
 	t_sdlcontext	*sdlcontext;
 	t_player		player;
 	Uint32			map[MAPSIZE * MAPSIZE];
+	//Uint32			lmap[MAPSIZE * MAPSIZE];
 	t_clock			clock;
 	u_int32_t		lastwall;
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable

@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 20:57:09 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/10 23:39:56 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/31 00:03:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,7 @@ void	update_deltatime(t_clock *c)
 	time_now = SDL_GetTicks();
 	c->delta = time_now - c->prev_time;
 	c->prev_time = time_now;
+	#ifdef FPSCOUNTER
+		printf("FPS: %i\n", 1000 / c->delta);
+	#endif
 }

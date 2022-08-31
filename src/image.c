@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/26 02:47:22 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/08/31 03:07:26 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	int	index;
 
 	index = ix + (iy * img.size[Y]);
+	index = ft_clamp(index, 0, img.length);
 	return (img.data[index]);
 }
 

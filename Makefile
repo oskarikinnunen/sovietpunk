@@ -6,7 +6,7 @@
 #    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/08/29 20:23:16 by okinnune         ###   ########.fr        #
+#    Updated: 2022/08/31 00:05:45 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ PWD= $(shell pwd)
 
 all: $(OBJ) $(SDL2) $(LIBFT) src/SP1947.h
 	$(CC) $(OBJ) -o $(NAME) `libs/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBFT) -lm
+
+$(OBJ): src/SP1947.h
 
 $(SDL2):
 	cd SDL2-2.0.22/build && ../configure --prefix=$(PWD)/libs/ && make install
