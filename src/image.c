@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/31 03:07:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/01 04:14:24 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	return (img.data[index]);
 }
 
-void	drawimagescaled(t_sdlcontext context, int p[2], int tid, int scale)
+void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 {
 	int			iy;
 	int			ix;
@@ -34,14 +34,15 @@ void	drawimagescaled(t_sdlcontext context, int p[2], int tid, int scale)
 	//tid = tid - 1;
 	if (tid > 2)
 		tid = 2;
-	img = context.images[tid];
+	img = context->images[tid];
 	while (iy++ <= scale)
 	{
 		while (ix++ < scale)
 		{
 			color = samplecolor(img, ix * (img.size[X] / scale) + iy * (img.size[X] / scale), iy * (img.size[Y] / scale));
-			SDL_SetRenderDrawColor(context.renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);
-			SDL_RenderDrawPoint(context.renderer, ix + p[X], iy + p[Y]);
+			((int *)context->surface->pixels)[ix + p[X] + (iy + p[Y]) * WINDOW_W] = color;
+			//SDL_SetRenderDrawColor(context.renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);
+			//SDL_RenderDrawPoint(context.renderer, ix + p[X], iy + p[Y]);
 		}
 		ix = 0;
 	}

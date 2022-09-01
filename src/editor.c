@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/26 02:41:37 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/01 04:13:48 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		isnonempty(u_int32_t *mapdata, int *crd)
 	int local[2];
 }
 
-void	drawmapstate(t_sdlcontext	context, t_mapeddata ed)
+void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL DRAW
 {
 	int	crd[2];
 
@@ -46,7 +46,7 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed)
 	{
 		while (crd[X] < MAPSIZE)
 		{
-			SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 101);
+			/*SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 101);
 			if (crd[X] == ed.cursor[X] && crd[Y] == ed.cursor[Y])
 				SDL_SetRenderDrawColor(context.renderer, 255, 0, 0, 255);
 			else if (ed.mapdata[crd[X] + crd[Y] * TILESIZE] != 0)
@@ -56,7 +56,7 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed)
 					ed.mapdata[crd[X] + crd[Y] * TILESIZE] - 1, //Make its own function? with clamp or somsom
 					TILESIZE);
 			drawrect(context.renderer,
-				(int[2]){crd[X] + crd[X] * TILESIZE, crd[Y] + crd[Y] * TILESIZE});
+				(int[2]){crd[X] + crd[X] * TILESIZE, crd[Y] + crd[Y] * TILESIZE});*/ 
 			crd[X]++;
 		}
 		crd[X] = 0;

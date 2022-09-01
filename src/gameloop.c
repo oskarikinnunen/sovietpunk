@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/01 01:05:25 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/01 08:01:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	drawrect(SDL_Renderer *r, int *crd)
 	}
 }
 
-void	render2Dmap(t_sdlcontext context, uint32_t *map)
+void	render2Dmap(t_sdlcontext *context, uint32_t *map)
 {
 	int	crd[2];
 
@@ -43,13 +43,13 @@ void	render2Dmap(t_sdlcontext context, uint32_t *map)
 	{
 		while (crd[X] < MAPSIZE * RENDERSCALE)
 		{
-			SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 255);
+			//SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 255);
 			if (map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] != 0) {
-				SDL_SetRenderDrawColor(context.renderer, 255, 255, 0, 255);
+				//SDL_SetRenderDrawColor(context->renderer, 255, 255, 0, 255);
 				drawimagescaled(context, crd, map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] - 1,
 				RENDERSCALE);
 			}
-			drawrect(context.renderer, crd);
+			//drawrect(context.renderer, crd);
 			crd[X] += RENDERSCALE;
 		}
 		crd[X] = 0;
@@ -64,32 +64,52 @@ static void DrawLineWithRenderScale(SDL_Renderer *r, int *origin, int *dest)
 							dest[X] * f, dest[Y] * f);
 }
 
-//TODO: implement dda
-int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as params?
+int	floorcast(int **floor, t_bresenham *b, int h) //This assumes your eyeball is dragging the floor,
+{	//TODO: vertical optimized raycast to find which pixels are actually seen
+	float	step;
+	int		left;
+	int		i;
+
+	//left = ((50 * 512) / (h));
+	//left = 255 - (512);
+	left = 255 - ((50 * 512) / (h));
+	step = (float)(h) / (float)(left);
+	//step *= 50;
+	//step = step;
+	//floor[0][420] = INT_MAX;
+	//assert((int)(step * left) == h);
+	//assert(v2dist(b->local, b->target) == h);
+	//assert(left >= 0);
+	i = 0;
+	while (i < left)
+	{
+		while (v2dist(b->local, b->target) > (step * (left - i))) {
+			step_bresenham(b);
+		}
+		//SDL_drawl
+		//printf("dist %i \n", v2dist(b->local, b->target));
+		//floor[0][i] = 0;
+		floor[0][i] = ((b->local[Y] % GAMESCALE) & 0xFF) + ((b->local[X] % GAMESCALE) << 8);
+		//assert(b->local[Y] % GAMESCALE == (floor[0][i] >> 8));
+		//if (b->local[Y] % GAMESCALE != )
+		/*if (i == 100)
+			printf("floory %i \n", (floor[0][i] >> 8));*/
+		i++;
+	}
+	//printf("stepped dist %i \n", v2dist(b->local, b.));
+	//assert(v2dist(b->local, b->target) == h);
+}
+
+int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor) //TODO use int[2] as params?
 {
 	static t_bresenham	b;
-	int			l_crd[2];
-	float		d_dst[2]; //DISTANCE, not destination in this context, TODO: rename
 
-	//ft_bzero(l_crd, sizeof(int [2]));
-	/*ft_bzero(d_dst, sizeof(float [2]));
-
-	
-	d_dst[X] = 1 / dst[X];*/
-
-	
-	ft_bzero(&b, sizeof(t_bresenham));
+	ft_bzero(&b, sizeof(t_bresenham)); //not needed?
 	populate_bresenham(&b, crd, dst);
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
 			&& b.local[Y] > 0 && b.local[Y] < MAPSIZE * GAMESCALE)
 	{
 		step_bresenham(&b);
-		/*if (gc->map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
-		{
-			gc->tex_x = (b.local[Y] / GAMESCALE) - b.local[Y];
-			break;
-		}
-		step_bresenham_y(&b);*/
 		if (gc->map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
 		{
 			gc->tex_x = (b.local[Y] / GAMESCALE) - b.local[Y];
@@ -97,6 +117,8 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as 
 		}
 	}
 	gc->tex_x = b.local[X] % GAMESCALE;
+	
+	//Track floor texture position somehow but only for the remaining height pixels?
 	//assert(gc->tex_x <= GAMESCALE && gc->tex_x >= 0);
 	if (b.local[X] % GAMESCALE == 0 || b.local[X] % GAMESCALE == GAMESCALE - 1) {
 		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 122, 0, 122, 255);
@@ -105,7 +127,12 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as 
 	else
 		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 0, 0, 255, 255);
 	DrawLineWithRenderScale(gc->sdlcontext->renderer, crd, b.local);
-	return (v2dist(crd, b.local));
+	int h = v2dist(crd, b.local);
+	populate_bresenham(&b, b.local, crd);
+	assert(h == v2dist(b.local, b.target));
+	floorcast(&floor, &b, h);
+	//printf("floor %i %i \n", (floor[2] & 0xFF), (floor[2] >> 8));
+	return (h);
 }
 
 int		calc_wallheight(int wall)
@@ -113,13 +140,13 @@ int		calc_wallheight(int wall)
 	return (((RAY_LENGTH * GAMESCALE) - wall) * WALLSCALE);
 }
 
-void	rendergame(t_sdlcontext sdl, int *walls, int max)
+void	rendergame(t_sdlcontext *sdl, int *walls, int max)
 {
 	int	i;
 	int offset = 300;
 	int wallheight;
 
-	SDL_SetRenderDrawColor(sdl.renderer, 255, 0, 0, 10);
+	//SDL_SetRenderDrawColor(sdl.renderer, 255, 0, 0, 10);
 	i = 0;
 	while (i < max)
 	{
@@ -130,24 +157,21 @@ void	rendergame(t_sdlcontext sdl, int *walls, int max)
 		//wallheight = 512 - (((walls[i] & 0xFFFF) * 1.41f) / 64); //Figure out what is the correlation between euc distance and width of texture? to get correct relative height
 		float iy = 0.0f;
 		float ty = 0.0f;
-		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl.images[1].size[X];
+		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl->images[1].size[X];
 		//assert(walls[i] >> 16 >= 0 && walls[i] >> 16 <= GAMESCALE);
-		float ystep = ((float)sdl.images[1].size[Y] / (float)wallheight);
+		float ystep = ((float)sdl->images[1].size[Y] / (float)wallheight);
 		while (iy < wallheight - 1 && wallheight != 0)
 		{
-			Uint32 clr = samplecolor(sdl.images[1], ix + (iy * ystep), (int)(iy * ystep));
+			Uint32 clr = samplecolor(sdl->images[1], ix + (iy * ystep), (int)(iy * ystep));
 			float mul = ft_clampf((float)((float)wallheight / (float)128), 0, 1.0f);
 			int r = (clr & 0xFF) * mul * mul;
 			int g = (clr >> 8 & 0xFF) * mul;
 			int b = (clr >> 16 & 0xFF) * mul;
-			SDL_SetRenderDrawColor(sdl.renderer, r, g, b, 255);
-			SDL_RenderDrawPoint(sdl.renderer, i + 100, 300 + (iy - (wallheight / 2)));
-			//index += sdl.images->size[X];
+			int ind = ft_clamp(i + 100 + (int)(300 + iy - (wallheight / 2)) * WINDOW_W, 0, WINDOW_H * WINDOW_W);
+			clr = b + (g << 8) + (r << 16);
+			//((int *)sdl->surface->pixels)[ind] = clr;
 			iy++;
-			/*if (index > sdl.images->size[X])
-				index = index + (index % sdl.images->size[X]);*/
 		}
-		
 		/*SDL_RenderDrawLine(sdl.renderer,
 			i + offset, offset - wallheight,
 			i + offset, offset + wallheight);*/
@@ -172,47 +196,26 @@ void moveplayer(t_player *plr, int deltatime, int *map)
 	plr->angle += plr->rot * deltatime;
 }
 
-void floorcast(t_sdlcontext sdl, float pos[2], float ang[2])
+void	render_floor(t_sdlcontext *sdl, int *floor, int ix, int h)
 {
-	float	step[2];
-	int		x;
-	int		y;
-	int		p;
-	float	row;
+	int	iy = 0;
 
-	y = 0;
-	
-	while (y < 512)
+	int wh = (50 * 512) / h;
+	while (iy < 255 - wh)
 	{
-		x = 0;
-		p = y - 256; //TODO: unhardcode
-		if (p == 0) p += 1;
-		row = 256.0f / (float)p;
-		step[X] = row / 512.0f;
-		step[Y] = row / 512.0f;
-		float floor[2];
-		floor[X] = pos[X] / GAMESCALE + (row * cos(ang[0]));
-		floor[Y] = pos[Y] / GAMESCALE + (row * sin(ang[0]));
-		while (x < 512)
-		{
-			int t[2];
-			t[X] = (int)(sdl.images->size[X] * (floor[X] - floorf(floor[X])));
-			t[Y] = (int)(sdl.images->size[X] * (floor[Y] - floorf(floor[Y])));
-			floor[X] += step[X];
-			floor[Y] += step[Y];
-			int clr = samplecolor(sdl.images[1], t[X], t[Y] *  sdl.images->size[X]);
-			SDL_SetRenderDrawColor(sdl.renderer, clr & 0xFF, clr >> 8 & 0xFF, clr >> 16 & 0xFF, 255);
-			SDL_RenderDrawPoint(sdl.renderer, x + 100 , y + 100);
-			x++;
-		}
-		y++;
+		int x = (floor[iy] & 0xFF) * (128 / GAMESCALE); //TODO replace with real texture size;
+		int y = (floor[iy] >> 8) * (128 / GAMESCALE);
+		int clr = samplecolor(sdl->images[1], x + y, x);
+		((int *)sdl->surface->pixels)[ix + 100 + (iy + (255 - wh)) * WINDOW_W] = clr;
+		iy++;
 	}
-
+	printf("ix %i \n", ix);
 }
 
 int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext gc) //TODO: remove sdl context, only used for debug?
 {
-	static int	wallheights[512];
+	static int			wallheights[512];
+	static int			floor_tex[512];
 	int					scan_h;
 	int32_t				ray_d[2];
 	float				scan_angle;
@@ -228,15 +231,17 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 		ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[X] += (int)playerpos[X];
 		ray_d[Y] += (int)playerpos[Y];
-		//wallheights[scan_h] = raycast_len((int[2]){playerpos[X] + ((255 - scan_h) / 20 * cos(scan_angle)), playerpos[Y] - ((255 - scan_h) / 20 * sin(scan_angle))}, ray_d, &gc);
-		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc);
+		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc, floor_tex);
 		wallheights[scan_h] += (gc.tex_x << 16);
+		//printf("floor2 %i %i \n\n", (floor_tex[2] & 0xFF), (floor_tex[2] >> 8));
 		//int tex_x = ((ray_d[X] - playerpos[X])) / GAMESCALE;
 		/*if (scan_h < 30)
 			printf("%i tex %i \n", scan_h, gc.tex_x);*/
 		//use lastwall index to get current texture, 
+		render_floor(sdl, floor_tex, scan_h, wallheights[scan_h] & 0xFFFF);
 		scan_h++;
 	}
+	
 	return (wallheights);
 }
 
@@ -286,10 +291,15 @@ void	gameloop(t_gamecontext *gc)
 		SDL_RenderClear(gc->sdlcontext->renderer);
 		moveplayer(&gc->player, gc->clock.delta, gc->map);
 		update_deltatime(&gc->clock);
-		render2Dmap(*gc->sdlcontext, gc->map);
-		rendergame(*gc->sdlcontext,
+		
+		//SDL_LockSurface(gc->sdlcontext->surface);
+		rendergame(gc->sdlcontext,
 			raycast(gc->player.pos, gc->player.angle, gc->sdlcontext, *gc),
 			512);
-		SDL_RenderPresent(gc->sdlcontext->renderer);
+		//render2Dmap(gc->sdlcontext, gc->map);
+		//SDL_RenderCopy(gc->sdlcontext->renderer, gc->sdlcontext->tex, NULL, NULL);
+		//SDL_UnlockSurface(gc->sdlcontext->surface);
+		SDL_UpdateWindowSurface(gc->sdlcontext->window);
+		//SDL_RenderPresent(gc->sdlcontext->renderer);
 	}
 }

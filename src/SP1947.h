@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/31 04:12:46 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/01 04:12:15 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	gameloop(t_gamecontext *gc);
 /* image.c */
 Uint32	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext context, int x, int y);
-void	drawimagescaled(t_sdlcontext context, int p[2], int tid, int scale);
+void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
 
 /* deltatime.c */
 void	update_deltatime(t_clock *c);
