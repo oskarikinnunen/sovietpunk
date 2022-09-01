@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/26 02:42:47 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/01 00:46:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	loadpngs(t_sdlcontext	*sdl)
 	
 	//nullcheck
 	pngparse(png_stack, "textures/tex2finalUC.png");
-	pngparse(&png_stack[1], "textures/grassuc.png");
+	pngparse(&png_stack[1], "textures/walluc2.png");
 	pngparse(&png_stack[2], "textures/spawn.png");
 
 	//Converting png to simpleimg

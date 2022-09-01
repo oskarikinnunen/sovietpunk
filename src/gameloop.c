@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/31 05:25:44 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/01 01:05:25 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void DrawLineWithRenderScale(SDL_Renderer *r, int *origin, int *dest)
 //TODO: implement dda
 int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as params?
 {
-	t_bresenham	b;
+	static t_bresenham	b;
 	int			l_crd[2];
 	float		d_dst[2]; //DISTANCE, not destination in this context, TODO: rename
 
@@ -83,13 +83,13 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as 
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
 			&& b.local[Y] > 0 && b.local[Y] < MAPSIZE * GAMESCALE)
 	{
-		step_bresenham_x(&b);
-		if (gc->map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
+		step_bresenham(&b);
+		/*if (gc->map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
 		{
 			gc->tex_x = (b.local[Y] / GAMESCALE) - b.local[Y];
 			break;
 		}
-		step_bresenham_y(&b);
+		step_bresenham_y(&b);*/
 		if (gc->map[(b.local[Y] / GAMESCALE) * MAPSIZE + (b.local[X] / GAMESCALE)] != 0)
 		{
 			gc->tex_x = (b.local[Y] / GAMESCALE) - b.local[Y];
@@ -97,7 +97,7 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc) //TODO use int[2] as 
 		}
 	}
 	gc->tex_x = b.local[X] % GAMESCALE;
-	assert(gc->tex_x <= GAMESCALE && gc->tex_x >= 0);
+	//assert(gc->tex_x <= GAMESCALE && gc->tex_x >= 0);
 	if (b.local[X] % GAMESCALE == 0 || b.local[X] % GAMESCALE == GAMESCALE - 1) {
 		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 122, 0, 122, 255);
 		gc->tex_x = b.local[Y] % GAMESCALE;
@@ -131,8 +131,8 @@ void	rendergame(t_sdlcontext sdl, int *walls, int max)
 		float iy = 0.0f;
 		float ty = 0.0f;
 		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl.images[1].size[X];
-		assert(walls[i] >> 16 >= 0 && walls[i] >> 16 <= GAMESCALE);
-		float ystep = ((float)sdl.images->size[Y] / (float)wallheight);
+		//assert(walls[i] >> 16 >= 0 && walls[i] >> 16 <= GAMESCALE);
+		float ystep = ((float)sdl.images[1].size[Y] / (float)wallheight);
 		while (iy < wallheight - 1 && wallheight != 0)
 		{
 			Uint32 clr = samplecolor(sdl.images[1], ix + (iy * ystep), (int)(iy * ystep));
@@ -187,12 +187,12 @@ void floorcast(t_sdlcontext sdl, float pos[2], float ang[2])
 		x = 0;
 		p = y - 256; //TODO: unhardcode
 		if (p == 0) p += 1;
-		row = 256 / p;
-		step[X] = row * (sin(ang[0]) - sin(ang[1])) / 512;
-		step[Y] = row * (cos(ang[0]) - cos(ang[1])) / 512;
+		row = 256.0f / (float)p;
+		step[X] = row / 512.0f;
+		step[Y] = row / 512.0f;
 		float floor[2];
-		floor[X] = row * cos(ang[0]);
-		floor[Y] = row * sin(ang[0]);
+		floor[X] = pos[X] / GAMESCALE + (row * cos(ang[0]));
+		floor[Y] = pos[Y] / GAMESCALE + (row * sin(ang[0]));
 		while (x < 512)
 		{
 			int t[2];
@@ -200,9 +200,9 @@ void floorcast(t_sdlcontext sdl, float pos[2], float ang[2])
 			t[Y] = (int)(sdl.images->size[X] * (floor[Y] - floorf(floor[Y])));
 			floor[X] += step[X];
 			floor[Y] += step[Y];
-			int clr = samplecolor(*sdl.images, t[X]+  t[Y], t[Y]);
+			int clr = samplecolor(sdl.images[1], t[X], t[Y] *  sdl.images->size[X]);
 			SDL_SetRenderDrawColor(sdl.renderer, clr & 0xFF, clr >> 8 & 0xFF, clr >> 16 & 0xFF, 255);
-			//SDL_RenderDrawPoint(sdl.renderer, x + 100 , y + 300);
+			SDL_RenderDrawPoint(sdl.renderer, x + 100 , y + 100);
 			x++;
 		}
 		y++;
@@ -213,13 +213,13 @@ void floorcast(t_sdlcontext sdl, float pos[2], float ang[2])
 int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext gc) //TODO: remove sdl context, only used for debug?
 {
 	static int	wallheights[512];
-	int			scan_h;
-	int32_t		ray_d[2];
-	float		scan_angle;
+	int					scan_h;
+	int32_t				ray_d[2];
+	float				scan_angle;
 
 	scan_h = 0;
 	scan_angle = angle + 1.57;
-	floorcast(*sdl, gc.player.pos, (float [2]){scan_angle, scan_angle - (512 * 0.0022)}); //TODO make fov define
+	//floorcast(*sdl, gc.player.pos, (float [2]){scan_angle, scan_angle - (512 * 0.0022)}); //TODO make fov define
 	SDL_SetRenderDrawColor(sdl->renderer, 20, 20, 255, 120);
 	while (scan_h < 512)
 	{
