@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/02 05:11:17 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/02 06:09:43 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # define Y 1
 
 # define RAYSLICE	0.0022f
-# define FOV		RAYSLICE * 512
-# define WALLTHING	(FOV * 180.0f / PI) * 0.84375 //TODO rename lol
+# define FOV		RAYSLICE * WINDOW_W
+# define WALLTHING	40 //TODO rename lol
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.140f
 # define MAPSIZE	16

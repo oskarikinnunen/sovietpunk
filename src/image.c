@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/01 04:14:24 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/02 06:15:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 		{
 			color = samplecolor(img, ix * (img.size[X] / scale) + iy * (img.size[X] / scale), iy * (img.size[Y] / scale));
 			((int *)context->surface->pixels)[ix + p[X] + (iy + p[Y]) * WINDOW_W] = color;
-			//SDL_SetRenderDrawColor(context.renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);
-			//SDL_RenderDrawPoint(context.renderer, ix + p[X], iy + p[Y]);
+			SDL_SetRenderDrawColor(context->renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);
+			SDL_RenderDrawPoint(context->renderer, ix + p[X], iy + p[Y]);
 		}
 		ix = 0;
 	}

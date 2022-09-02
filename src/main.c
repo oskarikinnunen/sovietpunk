@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/02 04:54:04 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/02 06:13:37 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,19 @@ int	*floortable(t_sdlcontext *sdl)
 	int		ray[2];
 	t_bresenham	b;
 
-	t = ft_memalloc(sizeof(u_int32_t) * 240);
+	t = ft_memalloc(sizeof(u_int32_t) * (WINDOW_H / 2));
 	i = 0;
 	angle = 1.5708f;
 	
 	SDL_SetRenderDrawColor(sdl->renderer, 100,100,100,255);
-	while (i < 240)
+	while (i < WINDOW_H / 2)
 	{
 		angle += RAYSLICE; //FOV STEP constant
 		ray[X] = sin(angle) * 2000 * 64; 
 		ray[Y] = cos(angle) * 2000 * 64;						//
-		ray[Y] += 32;
-		populate_bresenham(&b, (int[2]){0, 32}, ray);
+		int height = 32;
+		ray[Y] += height;
+		populate_bresenham(&b, (int[2]){0, height}, ray);
 		
 		SDL_RenderPresent(sdl->renderer);
 		while(b.local[Y] > 0)
@@ -69,7 +70,6 @@ void	createsdlcontext(t_sdlcontext *context)
 		printf("Couldn't create SDL2 window :("); //error exit
 	printf("sdl context and init \n");
 	context->surface = SDL_GetWindowSurface(context->window);
-	SDL_PixelFormat *f =  SDL_AllocFormat(SDL_PIXELFORMAT_ABGR32);
 	//context->surface = SDL_ConvertSurface(context->surface, f, 0);
 	//context->tex = SDL_CreateTextureFromSurface(context->renderer, context->surface);
 	//SDL_Pixel

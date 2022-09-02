@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/02 05:16:57 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/02 06:05:26 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	floorcast(int **floor, t_bresenham *b, int h, int *ft) //This assumes your e
 	int		i;
 
 	//left = 255 - ((54 * 512) / (h));
-	left = 254;
+	left = WINDOW_H / 2;
 	step = (float)(h) / (float)(left);
 	
 	i = 0;
@@ -133,7 +133,7 @@ void	rendergame(t_sdlcontext *sdl, int *walls, int max)
 		wallheight = 0;
 		//if (walls[i] < MAPSIZE * GAMESCALE)
 		if ((walls[i] & 0xFFFF) != 0)
-			wallheight = (WALLTHING * 512) / (walls[i] & 0xFFFF);
+			wallheight = (WALLTHING * WINDOW_W) / (walls[i] & 0xFFFF);
 		float iy = 0.0f;
 		float ty = 0.0f;
 		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl->images[1].size[X];
@@ -146,7 +146,7 @@ void	rendergame(t_sdlcontext *sdl, int *walls, int max)
 			int r = (clr & 0xFF) * mul * mul;
 			int g = (clr >> 8 & 0xFF) * mul;
 			int b = (clr >> 16 & 0xFF) * mul;
-			int ind = ft_clamp(i + 100 + (int)(300 + iy - (wallheight / 2)) * WINDOW_W, 0, WINDOW_H * WINDOW_W);
+			int ind = ft_clamp(i + (int)(300 + iy - (wallheight / 2)) * WINDOW_W, 0, WINDOW_H * WINDOW_W);
 			clr = b + (g << 8) + (r << 16);
 			((int *)sdl->surface->pixels)[ind] = clr;
 			iy++;
@@ -180,19 +180,19 @@ void	render_floor(t_sdlcontext *sdl, int *floor, int ix, int h)
 	int	iy = 0;
 
 	//assert ((int)WALLTHING == 54);
-	int wh = ((int)WALLTHING * 512) / h;
-	while (iy < 255)
+	int wh = ((int)WALLTHING * WINDOW_W) / h;
+	while (iy < (WINDOW_H / 2) - 1)
 	{
 		int x = (floor[iy] & 0xFF) * (128 / GAMESCALE); //TODO replace with real texture size;
 		int y = (floor[iy] >> 8) * (128 / GAMESCALE);
 		int clr = samplecolor(sdl->images[1], x + y, x);
-		float mul = 0.25f + ((float)iy / 255.0f);
+		float mul = 0.25f + (float)iy / (float)(WINDOW_H / 2);
 		int r = (clr & 0xFF) * mul * mul;
 		int g = (clr >> 8 & 0xFF) * mul;
 		int b = (clr >> 16 & 0xFF) * mul;
 		clr = (b & 0xFF) + (g << 8) + (r << 16);
-		((int *)sdl->surface->pixels)[ix + 100 + (iy + 300) * WINDOW_W] = clr;
-		((int *)sdl->surface->pixels)[ix + 100 + (300 - iy) * WINDOW_W] = clr;
+		((int *)sdl->surface->pixels)[ix + (iy + 300) * WINDOW_W] = clr;
+		((int *)sdl->surface->pixels)[ix + ft_clamp((300 - iy), 0, WINDOW_H) * WINDOW_W] = clr;
 		iy++;
 	}
 	//printf("ix %i \n", ix);
@@ -200,8 +200,8 @@ void	render_floor(t_sdlcontext *sdl, int *floor, int ix, int h)
 
 int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext gc) //TODO: remove sdl context, only used for debug?
 {
-	static int			wallheights[512];
-	static int			floor_tex[512];
+	static int			wallheights[WINDOW_W];
+	static int			floor_tex[WINDOW_W];
 	int					scan_h;
 	int32_t				ray_d[2];
 	float				scan_angle;
@@ -209,7 +209,7 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 	scan_h = 0;
 	scan_angle = angle + 1.57;
 	//floorcast(*sdl, gc.player.pos, (float [2]){scan_angle, scan_angle - (512 * 0.0022)}); //TODO make fov define
-	while (scan_h < 512)
+	while (scan_h < WINDOW_W)
 	{
 		scan_angle -= RAYSLICE; //512 * 0.005 is under 1 rad
 		ray_d[X] = sin(scan_angle) * RAY_LENGTH * GAMESCALE;
@@ -281,7 +281,7 @@ void	gameloop(t_gamecontext *gc)
 		}
 		rendergame(gc->sdlcontext,
 			raycast(gc->player.pos, gc->player.angle, gc->sdlcontext, *gc),
-			512);
+			WINDOW_W);
 			
 		//render2Dmap(gc->sdlcontext, gc->map);
 		//SDL_RenderCopy(gc->sdlcontext->renderer, gc->sdlcontext->tex, NULL, NULL);
