@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/01 04:12:15 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/02 05:11:17 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@
 # define X 0
 # define Y 1
 
+# define RAYSLICE	0.0022f
+# define FOV		RAYSLICE * 512
+# define WALLTHING	(FOV * 180.0f / PI) * 0.84375 //TODO rename lol
 # define TURNSPEED	0.003f
-# define MOVESPEED	0.075f
+# define MOVESPEED	0.140f
 # define MAPSIZE	16
 //Yeah yeah it's unauthentic to have the player coordinates as floating points,
 // my brain hurt doing the integer so math so f it
@@ -56,6 +59,7 @@ typedef struct s_sdlcontext
 	SDL_Renderer			*renderer;
 	//struct	s_pngdata		*textures; //convert pngdarta into simpleimages
 	t_simpleimg				*images;
+	int						*ft; //floortable
 	//struct	s_fdf			*objects;
 }	t_sdlcontext;
 

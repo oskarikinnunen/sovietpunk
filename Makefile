@@ -6,7 +6,7 @@
 #    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/09/01 04:16:41 by okinnune         ###   ########.fr        #
+#    Updated: 2022/09/02 04:41:46 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c ob
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
-CFLAGS += -g $(INCLUDE) -ldl -lpthread -lm -O2
+CFLAGS += -g $(INCLUDE) -ldl -lpthread -lm
 PWD= $(shell pwd)
 
 all: $(OBJ) $(SDL2) $(LIBFT) src/SP1947.h

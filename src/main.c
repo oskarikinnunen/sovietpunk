@@ -6,11 +6,53 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/01 04:09:25 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/02 04:54:04 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
+#include "bresenham.h"
+
+int	*floortable(t_sdlcontext *sdl)
+{
+	int		*t;
+	int		i;
+	float	angle;
+	int		ray[2];
+	t_bresenham	b;
+
+	t = ft_memalloc(sizeof(u_int32_t) * 240);
+	i = 0;
+	angle = 1.5708f;
+	
+	SDL_SetRenderDrawColor(sdl->renderer, 100,100,100,255);
+	while (i < 240)
+	{
+		angle += RAYSLICE; //FOV STEP constant
+		ray[X] = sin(angle) * 2000 * 64; 
+		ray[Y] = cos(angle) * 2000 * 64;						//
+		ray[Y] += 32;
+		populate_bresenham(&b, (int[2]){0, 32}, ray);
+		
+		SDL_RenderPresent(sdl->renderer);
+		while(b.local[Y] > 0)
+			step_bresenham(&b);
+		# define SCL 5
+		SDL_RenderDrawLine(sdl->renderer, (0 + 100) / SCL, (32 + 100) / SCL, (b.local[X] + 100) / SCL, (b.local[Y] + 100) / SCL);
+		t[i] = b.local[X];
+		i++;
+	}
+	printf("exit ft \n");
+	//i = 240;
+	/*while (i > 1)
+	{
+		//t[i] = ft_abs(t[i] - t[i - 1]);
+		printf("diff %i \n", t[i]);
+		i--;
+	}*/
+	//SDL_Delay(5000);
+	return (t);
+}
 
 void	createsdlcontext(t_sdlcontext *context)
 {
@@ -31,7 +73,7 @@ void	createsdlcontext(t_sdlcontext *context)
 	//context->surface = SDL_ConvertSurface(context->surface, f, 0);
 	//context->tex = SDL_CreateTextureFromSurface(context->renderer, context->surface);
 	//SDL_Pixel
-	
+	context->ft = floortable(context);
 	int i = 0;
 	//SDL_UpdateWindowSurface(context->window);
 }
