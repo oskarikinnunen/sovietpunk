@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/02 06:09:43 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:53:30 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@
 //#include "SP_PNG.h"
 
 # define FPSCOUNTER
-# define WINDOW_W 720
+# define WINDOW_W 1080
 # define WINDOW_H 720
 # define X 0
 # define Y 1
 
-# define RAYSLICE	0.0022f
+# define RAYSLICE	0.0018f
 # define FOV		RAYSLICE * WINDOW_W
-# define WALLTHING	40 //TODO rename lol
+# define WALLTHING	30 //TODO rename lol
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.140f
 # define MAPSIZE	16
@@ -78,6 +78,7 @@ typedef struct s_gamecontext
 	t_clock			clock;
 	u_int32_t		lastwall;
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
+	u_int32_t		camv[2];
 }	t_gamecontext;
 
 /* v2.c */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameloop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/02 06:05:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/05 20:00:03 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,36 +64,28 @@ static void DrawLineWithRenderScale(SDL_Renderer *r, int *origin, int *dest)
 							dest[X] * f, dest[Y] * f);
 }
 
-int	floorcast(int **floor, t_bresenham *b, int h, int *ft) //This assumes your eyeball is dragging the floor,
-{	//TODO: vertical optimized raycast to find which pixels are actually seen
+int	floorcast(int **floor, t_bresenham *b, int h, int *ft)
+{
 	float	step;
 	int		left;
 	int		i;
 
-	//left = 255 - ((54 * 512) / (h));
 	left = WINDOW_H / 2;
 	step = (float)(h) / (float)(left);
 	
 	i = 0;
-	int ss = 0;
-	while (i < left)
+	while (i++ < left)
 	{
-		ss = ft[i];
-		//printf("ss %i \n");
-		while (v2dist(b->local, b->target) > ss)
+		while (v2dist(b->local, b->target) > ft[i])
 			if (step_bresenham(b)) break;
 		floor[0][i] = ((b->local[Y] % GAMESCALE) & 0xFF) + ((b->local[X] % GAMESCALE) << 8);
-		i++;
 	}
-	//printf("stepped dist %i \n", v2dist(b->local, b.));
-	//assert(v2dist(b->local, b->target) == h);
 }
 
 int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor) //TODO use int[2] as params?
 {
 	static t_bresenham	b;
 
-	ft_bzero(&b, sizeof(t_bresenham)); //not needed?
 	populate_bresenham(&b, crd, dst);
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
 			&& b.local[Y] > 0 && b.local[Y] < MAPSIZE * GAMESCALE)
@@ -110,7 +102,6 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor) //TODO us
 		gc->tex_x = b.local[Y] % GAMESCALE;
 	int h = v2dist(crd, b.local);
 	populate_bresenham(&b, b.local, crd);
-	//assert(h == v2dist(b.local, b.target));
 	floorcast(&floor, &b, h, gc->sdlcontext->ft);
 	return (h);
 }
@@ -191,6 +182,7 @@ void	render_floor(t_sdlcontext *sdl, int *floor, int ix, int h)
 		int g = (clr >> 8 & 0xFF) * mul;
 		int b = (clr >> 16 & 0xFF) * mul;
 		clr = (b & 0xFF) + (g << 8) + (r << 16);
+		
 		((int *)sdl->surface->pixels)[ix + (iy + 300) * WINDOW_W] = clr;
 		((int *)sdl->surface->pixels)[ix + ft_clamp((300 - iy), 0, WINDOW_H) * WINDOW_W] = clr;
 		iy++;
@@ -216,9 +208,11 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 		ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[X] += (int)playerpos[X];
 		ray_d[Y] += (int)playerpos[Y];
+		//Set camera plane vector and use in raycastlen. TODO: fix global state issue
+		//SDL_RenderDrawLine(sdl->renderer)
 		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc, floor_tex);
 		wallheights[scan_h] += (gc.tex_x << 16);
-		render_floor(sdl, floor_tex, scan_h, wallheights[scan_h] & 0xFFFF);
+		//render_floor(sdl, floor_tex, scan_h, wallheights[scan_h] & 0xFFFF);
 		scan_h++;
 	}
 	
@@ -274,16 +268,12 @@ void	gameloop(t_gamecontext *gc)
 		moveplayer(&gc->player, gc->clock.delta, gc->map);
 		update_deltatime(&gc->clock);
 		//SDL_LockSurface(gc->sdlcontext->surface);
-		if (SDL_MUSTLOCK(gc->sdlcontext->surface))
-		{
-			printf("needs lock");
-			exit(0);
-		}
+		
 		rendergame(gc->sdlcontext,
 			raycast(gc->player.pos, gc->player.angle, gc->sdlcontext, *gc),
 			WINDOW_W);
 			
-		//render2Dmap(gc->sdlcontext, gc->map);
+		render2Dmap(gc->sdlcontext, gc->map);
 		//SDL_RenderCopy(gc->sdlcontext->renderer, gc->sdlcontext->tex, NULL, NULL);
 		//SDL_UnlockSurface(gc->sdlcontext->surface);
 		SDL_UpdateWindowSurface(gc->sdlcontext->window);

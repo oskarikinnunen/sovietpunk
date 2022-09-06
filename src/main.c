@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/02 06:13:37 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/05 20:07:19 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,25 @@ void	createsdlcontext(t_sdlcontext *context)
 	context->window = SDL_CreateWindow("SovietPunk 1947",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
-	context->renderer = SDL_CreateRenderer(context->window, -1, SDL_RENDERER_ACCELERATED); //Read documentation to find out if surface is created aswell!
+	/*context->renderer = SDL_CreateRenderer(context->window, -1, SDL_RENDERER_ACCELERATED); //Read documentation to find out if surface is created aswell!
 	if (context->renderer == NULL)
-		printf("Still null? \n"); //Error exit
+		printf("Still null? \n"); //Error exit */
 	if (context->window == NULL)
 		printf("Couldn't create SDL2 window :("); //error exit
 	printf("sdl context and init \n");
+	
 	context->surface = SDL_GetWindowSurface(context->window);
-	//context->surface = SDL_ConvertSurface(context->surface, f, 0);
-	//context->tex = SDL_CreateTextureFromSurface(context->renderer, context->surface);
-	//SDL_Pixel
+	//context->surface = SDL_ConvertSurfaceFormat(context->surface, SDL_PIXELFORMAT_ARGB32, 0); //WHY NO WORK
+	
+	
+	if (context->surface == NULL)
+		(printf("WTH SURFACE NULL"), exit(0));
+	
+	
+	SDL_LockSurface(context->surface);
+	
+	printf("%s \n", SDL_GetError());
+	//exit(0);
 	context->ft = floortable(context);
 	int i = 0;
 	//SDL_UpdateWindowSurface(context->window);

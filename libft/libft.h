@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:57:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/04/26 18:18:03 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/05 17:41:06 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void			ft_putnbr_fd(int n, int fd);
 int				ft_digitcount(int n);/*extra*/
 int				ft_pow(int n, int p);/*extra*/
 int				ft_abs(int n);/*extra*/
+float			ft_absf(float f);
 int				ft_sqrt(int nb);/*extra*/
 int				ft_clamp(int val, int min, int max);
 int				ft_min(int i1, int i2);
