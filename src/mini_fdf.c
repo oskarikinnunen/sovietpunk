@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 16:44:53 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 22:02:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	fdf_drawskeleton(t_fdf fdf)
 
 	//populate_bresenham(&b)
 	i = 0;
-	printf("faces in obj %i verts %i \n", fdf.obj->f_count, fdf.obj->v_count);
+	//printf("faces in obj %i verts %i \n", fdf.obj->f_count, fdf.obj->v_count);
 	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
 	while (i < fdf.obj->f_count)
 	{
@@ -126,7 +126,7 @@ int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 	fdf->view[X] = 0;
 	fdf->view[Y] = 0;
 	calc_matrices(fdf);
-	printf("matrices %f %f %f \n", fdf->matrices[Y][X][X], fdf->matrices[Y][X][Y], fdf->matrices[Y][X][Z]);
+	//printf("matrices %f %f %f \n", fdf->matrices[Y][X][X], fdf->matrices[Y][X][Y], fdf->matrices[Y][X][Z]);
 	return (1);
 }
 
@@ -143,9 +143,9 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
-		v3_add(fdf->verts[i], (float [3]) {120, 120, 0});
+		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 350, 0});
 		i++;
 	}
-	//ft_bzero(fdf->img->data_addr, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
+	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
 	fdf_drawskeleton(*fdf);
 }

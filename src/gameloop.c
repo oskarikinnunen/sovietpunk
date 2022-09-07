@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 19:03:02 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 21:46:36 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,9 +275,10 @@ void	gameloop(t_gamecontext gc)
 	t_obj	o;
 	parse_obj(&o);
 	fdf_init(gc.sdlcontext->objs, &gc.sdlcontext->images[3], &o);
-	fdf_update(gc.sdlcontext->objs);
-	gc.sdlcontext->objs->crd[X] = (int)gc.player.pos[X] - 20;
+	gc.sdlcontext->objs->crd[X] = (int)gc.player.pos[X] + 120;
 	gc.sdlcontext->objs->crd[Y] = (int)gc.player.pos[Y] - 20;
+	//gc.sdlcontext->objs->view[X] = -90.0f;
+
 	while (1)
 	{
 		if (eventloop(&gc))
@@ -285,9 +286,9 @@ void	gameloop(t_gamecontext gc)
 		//SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 0, 0, 0, 255);
 		//SDL_RenderClear(gc->sdlcontext->renderer);
 		//SDL_RenderPresent(gc->sdlcontext->renderer);
-		
-		moveplayer(&gc.player, gc.clock.delta, gc.map);
 		update_deltatime(&gc.clock);
+		moveplayer(&gc.player, gc.clock.delta, gc.map);
+		
 		//SDL_LockSurface(gc->sdlcontext->surface);
 		
 		rendergame(gc.sdlcontext,

@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/30 03:48:51 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 21:24:05 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ void	playerinput(SDL_Keycode kc, t_player *plr)
 	{
 		plr->dest[X] = -sin(plr->angle + 0.83);
 		plr->dest[Y] = -cos(plr->angle + 0.83);
+	}
+	if (kc == SDLK_a)
+	{
+		plr->dest[X] = -sin(plr->angle - 0.83);
+		plr->dest[Y] = -cos(plr->angle - 0.83);
+	}
+	if (kc == SDLK_d)
+	{
+		plr->dest[X] = sin(plr->angle - 0.83);
+		plr->dest[Y] = cos(plr->angle - 0.83);
 	}
 	plr->dest[X] *= MOVESPEED;
 	plr->dest[Y] *= MOVESPEED;

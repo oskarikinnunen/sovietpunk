@@ -92,7 +92,7 @@ void	parse_obj(t_obj *obj)
 {
 	int		fd;
 
-	fd = file_open("teapot.obj");
+	fd = file_open("tea3.obj");
 	ft_bzero(obj, sizeof(t_obj));
 	get_vertices(obj, fd);
 	close(fd);

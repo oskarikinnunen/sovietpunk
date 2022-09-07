@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 18:48:45 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 21:20:54 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 	int			iy;
 	int			ix;
 	int			color;
+	float		scalar;
 	t_simpleimg	img;
 
 	iy = 0;
@@ -37,12 +38,13 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 	//	tid = 2;
 	
 	img = context->images[tid];
+	scalar = ((float)img.size[X] / (float)scale);
 	while (iy++ <= scale)
 	{
 		while (ix++ < scale)
 		{
 			//color = samplecolor(img, ix * (img.size[X] / scale) + iy * (img.size[X] / scale), iy * (img.size[Y] / scale));
-			color = samplecolor(img, ix * (img.size[X] / scale), iy * (img.size[Y] / scale));
+			color = samplecolor(img, (float)ix * scalar, (float)iy * scalar);
 			int index = ix + p[X] + (iy + p[Y]) * WINDOW_W;
 			index = ft_clamp(index, 0, WINDOW_H * WINDOW_W);
 			if (color != 0 || ix == 1 || ix == scale -1)
