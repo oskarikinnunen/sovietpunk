@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fdf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/27 02:36:57 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 16:44:53 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	draw_line(t_simpleimg *si, t_bresenham b)
 	while (b_res != 1)
 	{
 		offset = b.local[X] + (b.local[Y] * si->size[X]);
-		if (b.local[X] < si->size[X] && b.local[X] > 0 &&
-			b.local[Y] < si->size[Y] && b.local[Y] > 0 && offset < (si->length / sizeof(Uint32)))
+		if (/*b.local[X] < si->size[X] && b.local[X] > 0 &&
+			b.local[Y] < si->size[Y] && b.local[Y] > 0 && */ offset < si->length)
 			si->data[offset] = INT_MAX;
 		//printf("b localx %i, target = %i\n", b.local[X], b.target[X]);
 		//printf("b localx %i \n", b.target[X]);
@@ -143,7 +143,7 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
-		v3_add(fdf->verts[i], (float [3]) {58, 58, 0});
+		v3_add(fdf->verts[i], (float [3]) {120, 120, 0});
 		i++;
 	}
 	//ft_bzero(fdf->img->data_addr, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));

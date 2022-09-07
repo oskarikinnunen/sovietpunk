@@ -64,7 +64,7 @@
 #define HAVE_ICONV_H 1
 #define HAVE_INTTYPES_H 1
 #define HAVE_LIMITS_H 1
-/* #undef HAVE_MALLOC_H */
+#define HAVE_MALLOC_H 1
 #define HAVE_MATH_H 1
 #define HAVE_MEMORY_H 1
 #define HAVE_SIGNAL_H 1
@@ -77,7 +77,7 @@
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_WCHAR_H 1
 /* #undef HAVE_PTHREAD_NP_H */
-#define HAVE_LIBUNWIND_H 1
+/* #undef HAVE_LIBUNWIND_H */
 
 /* C library functions */
 #define HAVE_DLOPEN 1
@@ -100,8 +100,8 @@
 #define HAVE_MEMMOVE 1
 #define HAVE_MEMCMP 1
 #define HAVE_WCSLEN 1
-#define HAVE_WCSLCPY 1
-#define HAVE_WCSLCAT 1
+/* #undef HAVE_WCSLCPY */
+/* #undef HAVE_WCSLCAT */
 /* #undef HAVE__WCSDUP */
 #define HAVE_WCSDUP 1
 #define HAVE_WCSSTR 1
@@ -112,8 +112,8 @@
 #define HAVE_WCSNCASECMP 1
 /* #undef HAVE__WCSNICMP */
 #define HAVE_STRLEN 1
-#define HAVE_STRLCPY 1
-#define HAVE_STRLCAT 1
+/* #undef HAVE_STRLCPY */
+/* #undef HAVE_STRLCAT */
 /* #undef HAVE__STRREV */
 /* #undef HAVE__STRUPR */
 /* #undef HAVE__STRLWR */
@@ -189,23 +189,23 @@
 #define HAVE_TANF 1
 #define HAVE_TRUNC 1
 #define HAVE_TRUNCF 1
-/* #undef HAVE_FOPEN64 */
+#define HAVE_FOPEN64 1
 #define HAVE_FSEEKO 1
-/* #undef HAVE_FSEEKO64 */
+#define HAVE_FSEEKO64 1
 #define HAVE_SIGACTION 1
 #define HAVE_SA_SIGACTION 1
 #define HAVE_SETJMP 1
 #define HAVE_NANOSLEEP 1
 #define HAVE_SYSCONF 1
-#define HAVE_SYSCTLBYNAME 1
-/* #undef HAVE_CLOCK_GETTIME */
+/* #undef HAVE_SYSCTLBYNAME */
+#define HAVE_CLOCK_GETTIME 1
 /* #undef HAVE_GETPAGESIZE */
 #define HAVE_MPROTECT 1
 #define HAVE_ICONV 1
 #define HAVE_PTHREAD_SETNAME_NP 1
 /* #undef HAVE_PTHREAD_SET_NAME_NP */
-/* #undef HAVE_SEM_TIMEDWAIT */
-/* #undef HAVE_GETAUXVAL */
+#define HAVE_SEM_TIMEDWAIT 1
+#define HAVE_GETAUXVAL 1
 /* #undef HAVE_ELF_AUX_INFO */
 #define HAVE_POLL 1
 #define HAVE__EXIT 1
@@ -220,10 +220,10 @@
 /* #undef HAVE_ALTIVEC_H */
 /* #undef HAVE_DBUS_DBUS_H */
 /* #undef HAVE_FCITX */
-/* #undef HAVE_SYS_INOTIFY_H */
-/* #undef HAVE_INOTIFY_INIT */
-/* #undef HAVE_INOTIFY_INIT1 */
-/* #undef HAVE_INOTIFY */
+#define HAVE_SYS_INOTIFY_H 1
+#define HAVE_INOTIFY_INIT 1
+#define HAVE_INOTIFY_INIT1 1
+#define HAVE_INOTIFY 1
 /* #undef HAVE_IBUS_IBUS_H */
 #define HAVE_IMMINTRIN_H 1
 /* #undef HAVE_LIBUDEV_H */
@@ -275,7 +275,7 @@
 /* #undef SDL_AUDIO_DRIVER_ANDROID */
 /* #undef SDL_AUDIO_DRIVER_ARTS */
 /* #undef SDL_AUDIO_DRIVER_ARTS_DYNAMIC */
-#define SDL_AUDIO_DRIVER_COREAUDIO 1
+/* #undef SDL_AUDIO_DRIVER_COREAUDIO */
 #define SDL_AUDIO_DRIVER_DISK 1
 /* #undef SDL_AUDIO_DRIVER_DSOUND */
 #define SDL_AUDIO_DRIVER_DUMMY 1
@@ -292,7 +292,7 @@
 /* #undef SDL_AUDIO_DRIVER_NAS_DYNAMIC */
 /* #undef SDL_AUDIO_DRIVER_NETBSD */
 /* #undef SDL_AUDIO_DRIVER_OPENSLES */
-/* #undef SDL_AUDIO_DRIVER_OSS */
+#define SDL_AUDIO_DRIVER_OSS 1
 /* #undef SDL_AUDIO_DRIVER_OSS_SOUNDCARD_H */
 /* #undef SDL_AUDIO_DRIVER_PAUDIO */
 /* #undef SDL_AUDIO_DRIVER_PIPEWIRE */
@@ -308,18 +308,18 @@
 /* #undef SDL_AUDIO_DRIVER_OS2 */
 
 /* Enable various input drivers */
-/* #undef SDL_INPUT_LINUXEV */
+#define SDL_INPUT_LINUXEV 1
 /* #undef SDL_INPUT_FBSDKBIO */
-/* #undef SDL_INPUT_LINUXKD */
+#define SDL_INPUT_LINUXKD 1
 /* #undef SDL_INPUT_WSCONS */
 /* #undef SDL_JOYSTICK_HAIKU */
 /* #undef SDL_JOYSTICK_DINPUT */
 /* #undef SDL_JOYSTICK_WGI */
 /* #undef SDL_JOYSTICK_XINPUT */
 /* #undef SDL_JOYSTICK_DUMMY */
-#define SDL_JOYSTICK_IOKIT 1
+/* #undef SDL_JOYSTICK_IOKIT */
 /* #undef SDL_JOYSTICK_MFI */
-/* #undef SDL_JOYSTICK_LINUX */
+#define SDL_JOYSTICK_LINUX 1
 /* #undef SDL_JOYSTICK_ANDROID */
 /* #undef SDL_JOYSTICK_OS2 */
 /* #undef SDL_JOYSTICK_USBHID */
@@ -330,8 +330,8 @@
 #define SDL_JOYSTICK_VIRTUAL 1
 /* #undef SDL_HAPTIC_DUMMY */
 /* #undef SDL_HAPTIC_ANDROID */
-/* #undef SDL_HAPTIC_LINUX */
-#define SDL_HAPTIC_IOKIT 1
+#define SDL_HAPTIC_LINUX 1
+/* #undef SDL_HAPTIC_IOKIT */
 /* #undef SDL_HAPTIC_DINPUT */
 /* #undef SDL_HAPTIC_XINPUT */
 
@@ -365,7 +365,7 @@
 
 /* Enable various video drivers */
 /* #undef SDL_VIDEO_DRIVER_HAIKU */
-#define SDL_VIDEO_DRIVER_COCOA 1
+/* #undef SDL_VIDEO_DRIVER_COCOA */
 /* #undef SDL_VIDEO_DRIVER_DIRECTFB */
 /* #undef SDL_VIDEO_DRIVER_DIRECTFB_DYNAMIC */
 #define SDL_VIDEO_DRIVER_DUMMY 1
@@ -377,7 +377,7 @@
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_CURSOR */
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_XKBCOMMON */
 /* #undef SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_LIBDECOR */
-/* #undef SDL_VIDEO_DRIVER_X11 */
+#define SDL_VIDEO_DRIVER_X11 1
 /* #undef SDL_VIDEO_DRIVER_RPI */
 /* #undef SDL_VIDEO_DRIVER_KMSDRM */
 /* #undef SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC */
@@ -385,8 +385,8 @@
 /* #undef SDL_VIDEO_DRIVER_ANDROID */
 /* #undef SDL_VIDEO_DRIVER_EMSCRIPTEN */
 /* #undef SDL_VIDEO_DRIVER_OFFSCREEN */
-/* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC */
-/* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT */
+#define SDL_VIDEO_DRIVER_X11_DYNAMIC "libX11.so.6"
+#define SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT "libXext.so.6"
 /* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XCURSOR */
 /* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XINERAMA */
 /* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XINPUT2 */
@@ -395,17 +395,17 @@
 /* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XSS */
 /* #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XVIDMODE */
 /* #undef SDL_VIDEO_DRIVER_X11_XCURSOR */
-/* #undef SDL_VIDEO_DRIVER_X11_XDBE */
+#define SDL_VIDEO_DRIVER_X11_XDBE 1
 /* #undef SDL_VIDEO_DRIVER_X11_XINERAMA */
 /* #undef SDL_VIDEO_DRIVER_X11_XINPUT2 */
 /* #undef SDL_VIDEO_DRIVER_X11_XINPUT2_SUPPORTS_MULTITOUCH */
 /* #undef SDL_VIDEO_DRIVER_X11_XFIXES */
 /* #undef SDL_VIDEO_DRIVER_X11_XRANDR */
 /* #undef SDL_VIDEO_DRIVER_X11_XSCRNSAVER */
-/* #undef SDL_VIDEO_DRIVER_X11_XSHAPE */
+#define SDL_VIDEO_DRIVER_X11_XSHAPE 1
 /* #undef SDL_VIDEO_DRIVER_X11_XVIDMODE */
-/* #undef SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS */
-/* #undef SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM */
+#define SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS 1
+#define SDL_VIDEO_DRIVER_X11_HAS_XKBKEYCODETOKEYSYM 1
 /* #undef SDL_VIDEO_DRIVER_NACL */
 /* #undef SDL_VIDEO_DRIVER_VIVANTE */
 /* #undef SDL_VIDEO_DRIVER_VIVANTE_VDK */
@@ -415,18 +415,18 @@
 
 /* #undef SDL_VIDEO_RENDER_D3D */
 /* #undef SDL_VIDEO_RENDER_D3D11 */
-#define SDL_VIDEO_RENDER_OGL 1
+/* #undef SDL_VIDEO_RENDER_OGL */
 /* #undef SDL_VIDEO_RENDER_OGL_ES */
 #define SDL_VIDEO_RENDER_OGL_ES2 1
 /* #undef SDL_VIDEO_RENDER_DIRECTFB */
-#define SDL_VIDEO_RENDER_METAL 1
+/* #undef SDL_VIDEO_RENDER_METAL */
 
 /* Enable OpenGL support */
-#define SDL_VIDEO_OPENGL 1
+/* #undef SDL_VIDEO_OPENGL */
 /* #undef SDL_VIDEO_OPENGL_ES */
 #define SDL_VIDEO_OPENGL_ES2 1
 /* #undef SDL_VIDEO_OPENGL_BGL */
-#define SDL_VIDEO_OPENGL_CGL 1
+/* #undef SDL_VIDEO_OPENGL_CGL */
 #define SDL_VIDEO_OPENGL_EGL 1
 /* #undef SDL_VIDEO_OPENGL_GLX */
 /* #undef SDL_VIDEO_OPENGL_WGL */
@@ -437,12 +437,12 @@
 #define SDL_VIDEO_VULKAN 1
 
 /* Enable Metal support */
-#define SDL_VIDEO_METAL 1
+/* #undef SDL_VIDEO_METAL */
 
 /* Enable system power support */
-/* #undef SDL_POWER_LINUX */
+#define SDL_POWER_LINUX 1
 /* #undef SDL_POWER_WINDOWS */
-#define SDL_POWER_MACOSX 1
+/* #undef SDL_POWER_MACOSX */
 /* #undef SDL_POWER_HAIKU */
 /* #undef SDL_POWER_ANDROID */
 /* #undef SDL_POWER_EMSCRIPTEN */
@@ -451,10 +451,10 @@
 /* Enable system filesystem support */
 /* #undef SDL_FILESYSTEM_ANDROID */
 /* #undef SDL_FILESYSTEM_HAIKU */
-#define SDL_FILESYSTEM_COCOA 1
+/* #undef SDL_FILESYSTEM_COCOA */
 /* #undef SDL_FILESYSTEM_DUMMY */
 /* #undef SDL_FILESYSTEM_RISCOS */
-/* #undef SDL_FILESYSTEM_UNIX */
+#define SDL_FILESYSTEM_UNIX 1
 /* #undef SDL_FILESYSTEM_WINDOWS */
 /* #undef SDL_FILESYSTEM_NACL */
 /* #undef SDL_FILESYSTEM_EMSCRIPTEN */
@@ -478,7 +478,7 @@
 #define DYNAPI_NEEDS_DLOPEN 1
 
 /* Enable ime support */
-/* #undef SDL_USE_IME */
+#define SDL_USE_IME 1
 
 /* Enable dynamic udev support */
 /* #undef SDL_UDEV_DYNAMIC */

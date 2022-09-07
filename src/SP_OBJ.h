@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP_OBJ.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 20:45:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 17:13:29 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SP_OBJ_H
 
 #include "libft.h"
+#include "inttypes.h"
 
 typedef struct s_obj
 {
@@ -40,6 +41,9 @@ typedef struct s_fdf
 	int			*depth;
 	float		**verts;
 	float		matrices[2][3][3];
+	u_int32_t	screenspace[2];
+	u_int32_t	scale;
+	u_int32_t	crd[2];
 	float		view[2];
 }	t_fdf;
 

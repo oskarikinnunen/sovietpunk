@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   gameloop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/05 20:00:03 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:03:02 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
+#include "SP_OBJ.h"
 #include "bresenham.h"
 #define RAY_LENGTH	200
 #define WALLSCALE	2
@@ -64,7 +65,7 @@ static void DrawLineWithRenderScale(SDL_Renderer *r, int *origin, int *dest)
 							dest[X] * f, dest[Y] * f);
 }
 
-int	floorcast(int **floor, t_bresenham *b, int h, int *ft)
+int	floorcast(int **floor, t_bresenham *b, int h, t_gamecontext *gc)
 {
 	float	step;
 	int		left;
@@ -76,9 +77,18 @@ int	floorcast(int **floor, t_bresenham *b, int h, int *ft)
 	i = 0;
 	while (i++ < left)
 	{
-		while (v2dist(b->local, b->target) > ft[i])
+		while (v2dist(b->local, b->target) > gc->sdlcontext->ft[i])
 			if (step_bresenham(b)) break;
 		floor[0][i] = ((b->local[Y] % GAMESCALE) & 0xFF) + ((b->local[X] % GAMESCALE) << 8);
+		if (gc->sdlcontext->objs->crd[X] == b->local[X] && gc->sdlcontext->objs->crd[Y] == b->local[Y])
+		{
+			//gc->sdlcontext->objs->screenspace[X] = gc->v[X];
+			gc->sdlcontext->objs->screenspace[Y] = (WINDOW_H / 2) + i;
+			gc->sdlcontext->objs->scale = (WALLTHING * WINDOW_W) / v2dist((int [2]){gc->player.pos[X],gc->player.pos[Y]}, b->local);
+		}
+		//if 
+		//if current b.local is same as objects, calculate screen space position of object somehow??
+		//screenspace x comes further up in the callstack, in raycast, i == y screen space coordinate
 	}
 }
 
@@ -102,7 +112,7 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor) //TODO us
 		gc->tex_x = b.local[Y] % GAMESCALE;
 	int h = v2dist(crd, b.local);
 	populate_bresenham(&b, b.local, crd);
-	floorcast(&floor, &b, h, gc->sdlcontext->ft);
+	floorcast(&floor, &b, h, gc);
 	return (h);
 }
 
@@ -122,23 +132,26 @@ void	rendergame(t_sdlcontext *sdl, int *walls, int max)
 	while (i < max)
 	{
 		wallheight = 0;
-		//if (walls[i] < MAPSIZE * GAMESCALE)
 		if ((walls[i] & 0xFFFF) != 0)
 			wallheight = (WALLTHING * WINDOW_W) / (walls[i] & 0xFFFF);
 		float iy = 0.0f;
 		float ty = 0.0f;
 		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl->images[1].size[X];
-		//assert(walls[i] >> 16 >= 0 && walls[i] >> 16 <= GAMESCALE);
 		float ystep = ((float)sdl->images[1].size[Y] / (float)wallheight);
 		while (iy < wallheight - 1 && wallheight != 0)
 		{
-			Uint32 clr = samplecolor(sdl->images[1], ix + (iy * ystep), (int)(iy * ystep));
-			float mul = ft_clampf((float)((float)wallheight / (float)128), 0, 1.0f);
+			//Uint32 clr = samplecolor(sdl->images[1], ix + (iy * ystep), (int)(iy * ystep));
+			Uint32 clr = sdl->images[1].data[(int)(ix + iy * ystep) + (int)(iy * ystep) * sdl->images[1].size[X]];
+			//float mul = ft_clampf((float)((float)wallheight / (float)128), 0, 1.0f);
+			float mul  = (float)((float)wallheight / 128.0f) < 1.0f ? (float)((float)wallheight / 128.0f) : 1.0f;
 			int r = (clr & 0xFF) * mul * mul;
 			int g = (clr >> 8 & 0xFF) * mul;
 			int b = (clr >> 16 & 0xFF) * mul;
-			int ind = ft_clamp(i + (int)(300 + iy - (wallheight / 2)) * WINDOW_W, 0, WINDOW_H * WINDOW_W);
-			clr = b + (g << 8) + (r << 16);
+			int ind = i + (int)(300 + iy - (wallheight / 2)) * WINDOW_W;
+			if (ind < 0) ind = 0;
+			if (ind > WINDOW_H * WINDOW_W) ind = WINDOW_H * WINDOW_W;
+			//int ind = i + (int)(300 + iy - (wallheight / 2)) * WINDOW_W;
+			//clr = b + (g << 8) + (r << 16);
 			((int *)sdl->surface->pixels)[ind] = clr;
 			iy++;
 		}
@@ -201,6 +214,7 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 	scan_h = 0;
 	scan_angle = angle + 1.57;
 	//floorcast(*sdl, gc.player.pos, (float [2]){scan_angle, scan_angle - (512 * 0.0022)}); //TODO make fov define
+	gc.sdlcontext->objs->screenspace[X] = -200;
 	while (scan_h < WINDOW_W)
 	{
 		scan_angle -= RAYSLICE; //512 * 0.005 is under 1 rad
@@ -208,11 +222,12 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 		ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[X] += (int)playerpos[X];
 		ray_d[Y] += (int)playerpos[Y];
+		gc.v[X] = scan_h;
 		//Set camera plane vector and use in raycastlen. TODO: fix global state issue
 		//SDL_RenderDrawLine(sdl->renderer)
 		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc, floor_tex);
 		wallheights[scan_h] += (gc.tex_x << 16);
-		//render_floor(sdl, floor_tex, scan_h, wallheights[scan_h] & 0xFFFF);
+		render_floor(sdl, floor_tex, scan_h, wallheights[scan_h] & 0xFFFF);
 		scan_h++;
 	}
 	
@@ -224,7 +239,7 @@ void	openmap(t_gamecontext *gc)
 	int	fd;
 
 	fd = open("map", O_RDONLY);
-	read(fd, gc->map, MAPSIZE * MAPSIZE * sizeof(u_int32_t));
+	(void)!read(fd, gc->map, MAPSIZE * MAPSIZE * sizeof(u_int32_t));
 	close(fd);
 }
 
@@ -250,33 +265,42 @@ void	spawnplayer(t_gamecontext *gc)
 	gc->player.angle = 0;
 }
 
-void	gameloop(t_gamecontext *gc)
+void	gameloop(t_gamecontext gc)
 {
 	int i;
 
-	openmap(gc);
-	spawnplayer(gc);
-	
+	openmap(&gc);
+	spawnplayer(&gc);
+	gc.sdlcontext->objs = ft_memalloc(sizeof(t_fdf)); //TODO: nullcheck and move to another function
+	t_obj	o;
+	parse_obj(&o);
+	fdf_init(gc.sdlcontext->objs, &gc.sdlcontext->images[3], &o);
+	fdf_update(gc.sdlcontext->objs);
+	gc.sdlcontext->objs->crd[X] = (int)gc.player.pos[X] - 20;
+	gc.sdlcontext->objs->crd[Y] = (int)gc.player.pos[Y] - 20;
 	while (1)
 	{
-		if (eventloop(gc))
+		if (eventloop(&gc))
 			return ;
-		SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 0, 0, 0, 255);
+		//SDL_SetRenderDrawColor(gc->sdlcontext->renderer, 0, 0, 0, 255);
 		//SDL_RenderClear(gc->sdlcontext->renderer);
 		//SDL_RenderPresent(gc->sdlcontext->renderer);
 		
-		moveplayer(&gc->player, gc->clock.delta, gc->map);
-		update_deltatime(&gc->clock);
+		moveplayer(&gc.player, gc.clock.delta, gc.map);
+		update_deltatime(&gc.clock);
 		//SDL_LockSurface(gc->sdlcontext->surface);
 		
-		rendergame(gc->sdlcontext,
-			raycast(gc->player.pos, gc->player.angle, gc->sdlcontext, *gc),
+		rendergame(gc.sdlcontext,
+			raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc),
 			WINDOW_W);
 			
-		render2Dmap(gc->sdlcontext, gc->map);
+		//render2Dmap(gc.sdlcontext, gc.map);
+		renderobj(&gc);
+		drawimagescaled(gc.sdlcontext, gc.sdlcontext->objs->screenspace, 3, gc.sdlcontext->objs->scale);
+		//drawimagescaled(gc.sdlcontext, gc.sdlcontext->objs->screenspace, 3, 200);
 		//SDL_RenderCopy(gc->sdlcontext->renderer, gc->sdlcontext->tex, NULL, NULL);
 		//SDL_UnlockSurface(gc->sdlcontext->surface);
-		SDL_UpdateWindowSurface(gc->sdlcontext->window);
+		SDL_UpdateWindowSurface(gc.sdlcontext->window);
 		
 	}
 }

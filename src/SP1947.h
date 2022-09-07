@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/05 17:53:30 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 18:37:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SP1947_H
 
 #include "../libs/include/SDL2/SDL.h"
+#include "SP_OBJ.h"
 #include <stdlib.h>
 #include <fcntl.h>
 #include <math.h>
@@ -21,14 +22,14 @@
 //#include "SP_PNG.h"
 
 # define FPSCOUNTER
-# define WINDOW_W 1080
-# define WINDOW_H 720
+# define WINDOW_W 720
+# define WINDOW_H 540
 # define X 0
 # define Y 1
 
 # define RAYSLICE	0.0018f
 # define FOV		RAYSLICE * WINDOW_W
-# define WALLTHING	30 //TODO rename lol
+# define WALLTHING	48 //TODO rename lol
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.140f
 # define MAPSIZE	16
@@ -59,6 +60,7 @@ typedef struct s_sdlcontext
 	SDL_Renderer			*renderer;
 	//struct	s_pngdata		*textures; //convert pngdarta into simpleimages
 	t_simpleimg				*images;
+	t_fdf					*objs;
 	int						*ft; //floortable
 	//struct	s_fdf			*objects;
 }	t_sdlcontext;
@@ -78,8 +80,11 @@ typedef struct s_gamecontext
 	t_clock			clock;
 	u_int32_t		lastwall;
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
-	u_int32_t		camv[2];
+	u_int32_t		v[2];
 }	t_gamecontext;
+
+/* obj_render.c */
+void	renderobj(t_gamecontext *gc);
 
 /* v2.c */
 int		v2dist(int *v, int *ov);
@@ -88,11 +93,11 @@ int		v2dist(int *v, int *ov);
 int		eventloop(t_gamecontext *gc);
 
 /* gameloop.c */
-void	gameloop(t_gamecontext *gc);
+void	gameloop(t_gamecontext gc);
 
 /* image.c */
 Uint32	samplecolor(t_simpleimg img, int ix, int iy);
-void	drawimage(t_sdlcontext context, int x, int y);
+void	drawimage(t_sdlcontext *context, int x, int y);
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
 
 /* deltatime.c */

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
+#    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/09/05 20:06:54 by okinnune         ###   ########.fr        #
+#    Updated: 2022/09/07 18:37:11 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,11 @@ LIBFT= libft/libft.a
 SDL2= libs/lib/libSDL2.a
 SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
 		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c \
-		v2.c
+		v2.c obj_render.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
-CFLAGS += -g $(INCLUDE) -ldl -lpthread -lm -O3
+CFLAGS += -g $(INCLUDE) -ldl -lpthread -lm -O2
 PWD= $(shell pwd)
 
 all: $(OBJ) $(SDL2) $(LIBFT) src/SP1947.h

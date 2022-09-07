@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/01 00:46:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/07 17:12:05 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ void	loadpngs(t_sdlcontext	*sdl)
 	pngparse(&png_stack[2], "textures/spawn.png");
 
 	//Converting png to simpleimg
-	sdl->images	= ft_memalloc(sizeof(t_simpleimg) * 3);
+	sdl->images	= ft_memalloc(sizeof(t_simpleimg) * 4); //4th one is for mini_fdf
+	sdl->images[3].data = ft_memalloc(sizeof(Uint32) * 400 * 400);
+	sdl->images[3].size[X] = 400;
+	sdl->images[3].size[Y] = 400;
+	sdl->images[3].length = 400 * 400;
+
 	pngtosimpleimg(png_stack, sdl->images);
 	pngtosimpleimg(&png_stack[1], &sdl->images[1]); //TODO LOOP
 	pngtosimpleimg(&png_stack[2], &sdl->images[2]);
