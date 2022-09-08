@@ -41,7 +41,7 @@ void	read_vertex(int *v3, char *line)
 		i++;
 	}
 	free(vstrs);
-	printf("v content x %i y%i z%i \n", v3[X], v3[Y], v3[Z]);
+	//printf("v content x %i y%i z%i \n", v3[X], v3[Y], v3[Z]);
 }
 
 void	read_face(int *v3, char *line)
@@ -59,7 +59,7 @@ void	read_face(int *v3, char *line)
 		i++;
 	}
 	free(fstrs);
-	printf("f content %i->%i->%i \n", v3[X] + 1, v3[Y] + 1, v3[Z] + 1);
+	//printf("f content %i->%i->%i \n", v3[X] + 1, v3[Y] + 1, v3[Z] + 1);
 }
 
 void	get_vertices(t_obj *obj, int fd)
@@ -88,12 +88,60 @@ void	get_vertices(t_obj *obj, int fd)
 	
 }
 
+uint32_t	get_color(char *line)
+{
+	char	**strs;
+	int		i;
+	int		clr;
+
+	strs = ft_strsplit(line, ' ');
+	i = 0;
+	clr = 0;
+	while (i < 3)
+	{
+		clr += ((int)(atof(strs[i]) * 255.0f) & 0xFF) << (8 * i);
+		i++;
+	}
+	printf("clr %i %i %i \n", clr & 0xFF, (clr >> 8) & 0xFF, (clr >> 16) & 0xFF);
+}
+
+void	get_materials(t_obj *obj, int fd)
+{
+	char	*line;
+	int		i;
+
+	i = -1;
+	obj->mtlnames = ft_memalloc(sizeof(char *) * 4); //check null
+	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * 4); //TODO: find out allocation length from file
+	while (ft_get_next_line(fd, &line)) 
+	{
+		if (ft_strncmp(line, "newmtl", 6) == 0)
+		{
+			i++;
+			obj->mtlnames[i] = ft_strnew(20); //TODO do properly
+			ft_strcpy(obj->mtlnames[i], line + 7); //TODO: UNSAFEEEE
+			printf("mat found %s \n", obj->mtlnames[i]);
+		}
+		if (ft_strncmp(line, "Kd", 2) == 0)
+			obj->mtlcolors[i] = get_color(line + 3);
+		free(line);
+		//if newmat, alloc
+	}
+}
+
 void	parse_obj(t_obj *obj)
 {
 	int		fd;
 
-	fd = file_open("tea3.obj");
 	ft_bzero(obj, sizeof(t_obj));
+	//load mtl
+	fd = file_open("crash2.mtl");
+	get_materials(obj, fd);
+	close(fd);
+	//exit(0);
+	//load obj
+	fd = file_open("crash2.obj");
 	get_vertices(obj, fd);
 	close(fd);
+	
 }

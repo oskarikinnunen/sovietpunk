@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 17:13:29 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/09 00:37:33 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@
 
 typedef struct s_obj
 {
-	int	**verts;
-	int	**faces;
-	int	v_count;
-	int	f_count;
+	char		**mtlnames;
+	uint32_t	*mtlcolors;
+	int		**verts;
+	int		**faces;
+	int		v_count;
+	int		f_count;
 }	t_obj;
 
 /*typedef struct s_img_info
