@@ -6,17 +6,19 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
 
-# Make data base, printed on Tue Sep  6 18:14:01 2022
+# Make data base, printed on Thu Sep  8 22:35:39 2022
 
 # Variables
 
- 
+# environment
+VSCODE_GIT_ASKPASS_MAIN = /Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
 # makefile (from `Makefile', line 22)
 OBJ = $(SRC:.c=.o)
 # makefile (from `Makefile', line 21)
@@ -36,23 +38,27 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/bin/make
 # makefile (from `Makefile', line 24)
-CFLAGS = -g $(INCLUDE) -ldl -lpthread -lm -O3
+CFLAGS = -g $(INCLUDE) -ldl -lpthread -lm -O2
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # makefile (from `Makefile', line 18)
-SRCFILES = main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c v2.c
+SRCFILES = main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c v2.c obj_render.c
 # environment
-VSCODE_CWD = /
+VSCODE_INJECTION = 1
 # environment
-Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.U2GFs1uXYh/Render
+VSCODE_CWD = /Users/okinnune/sovietpunk
 # environment
-PATH = /Users/okinnune/.brew/bin:/Users/okinnune/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.C3u0YXryU8/Render
+# environment
+PATH = /Users/okinnune/.brew/bin:/Users/okinnune/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/okinnune/.brew/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+# environment
+ZDOTDIR = /var/folders/zz/zyxvpxvq6csfxvn_n0000kmr0004n6/T/vscode-zsh
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.1N2BwCVKQB/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.yoHsLWmSaz/Listeners
 # automatic
 %F = $(notdir $%)
 # makefile (from `Makefile', line 25)
@@ -60,13 +66,15 @@ PWD = $(shell pwd)
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
-MANPATH = :/Users/okinnune/man/man1
+MANPATH = /usr/share/man:/usr/local/share/man:/Users/okinnune/man/man1:/Users/okinnune/man/man1
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /Users/okinnune
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
+# environment
+VSCODE_CLI = 1
 # environment
 VSCODE_CODE_CACHE_PATH = /Users/okinnune/Library/Application Support/Code/CachedData/784b0177c56c607789f9638da7b6bf3230d47a8c
 # environment
@@ -78,13 +86,17 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # environment
+MAKELEVEL := 0
+# environment
 XPC_FLAGS = 0x0
+# environment
+COLORTERM = truecolor
 # default
 MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
 # environment
-SHLVL = 1
+SHLVL = 3
 # makefile (from `Makefile', line 16)
 LIBFT = libft/libft.a
 # makefile (from `Makefile', line 23)
@@ -105,6 +117,10 @@ SDL2 = libs/lib/libSDL2.a
 %D = $(patsubst %/,%,$(dir $%))
 # default
 MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# environment
+VSCODE_GIT_ASKPASS_EXTRA_ARGS = --ms-enable-electron-run-as-node
+# environment
+TERM_PROGRAM = vscode
 # default
 .VARIABLES := 
 # environment
@@ -114,6 +130,8 @@ TMPDIR = /var/folders/zz/zyxvpxvq6csfxvn_n0000kmr0004n6/T/
 # environment
 VSCODE_IPC_HOOK = /Users/okinnune/Library/Application Support/Code/1.71.0-main.sock
 # environment
+VSCODE_GIT_ASKPASS_NODE = /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper
+# environment
 MallocNanoZone = 0
 # makefile
 MAKEFLAGS = Rrqp
@@ -122,13 +140,19 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = com.microsoft.VSCode.1196
+TERM_PROGRAM_VERSION = 1.71.0
+# environment
+XPC_SERVICE_NAME = 0
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
 +F = $(notdir $+)
 # environment
 __CF_USER_TEXT_ENCODING = 0x12A6:0x0:0x0
+# environment
+COMMAND_MODE = unix2003
+# environment
+GIT_ASKPASS = /Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh
 # default
 MAKEFILES := 
 # environment
@@ -137,6 +161,8 @@ PROMPT_COMMAND = echo -ne "\033]0;$PWD\007"
 <F = $(notdir $<)
 # environment
 LC_ALL = C
+# environment
+SECURITYSESSIONID = 186a7
 # automatic
 ^F = $(notdir $^)
 # default
@@ -144,13 +170,15 @@ SUFFIXES :=
 # default
 .INCLUDE_DIRS = /usr/local/include
 # environment
-MAKELEVEL := 0
+VSCODE_GIT_IPC_HANDLE = /var/folders/zz/zyxvpxvq6csfxvn_n0000kmr0004n6/T/vscode-git-fded1e7e95.sock
 # environment
 LANG = C
 # environment
-VSCODE_PID = 12869
+TERM = xterm-256color
+# environment
+VSCODE_PID = 3814
 # variable set hash-table stats:
-# Load=68/1024=7%, Rehash=0, Collisions=7/114=6%
+# Load=83/1024=8%, Rehash=0, Collisions=9/129=7%
 
 # Pattern-specific Variable Values
 
@@ -158,9 +186,9 @@ VSCODE_PID = 12869
 
 # Directories
 
-# . (device 16777227, inode 1349486): 18 files, no impossibilities.
+# . (device 16777227, inode 1349486): 29 files, no impossibilities.
 
-# 18 files, no impossibilities in 1 directories.
+# 29 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -176,7 +204,15 @@ src/gameloop.o: src/SP1947.h
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-all: src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
+src/obj_render.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+all: src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
 #  Command-line target.
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: `'
@@ -190,15 +226,15 @@ all: src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawl
 # automatic
 # * := 
 # automatic
-# + := src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
+# + := src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
 # automatic
 # | := 
 # automatic
 # < := src/main.o
 # automatic
-# ^ := src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
+# ^ := src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
 # automatic
-# ? := src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
+# ? := src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o libs/lib/libSDL2.a libft/libft.a src/SP1947.h
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=4/17=24%
 #  commands to execute (from `Makefile', line 28):
@@ -222,6 +258,7 @@ src/main.o: src/SP1947.h
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 src/error.o: src/SP1947.h
+ 
 #  Implicit rule search has been done.
 #  Last modified 2022-09-05 20:06:59
 #  File has been updated.
@@ -246,7 +283,7 @@ src/png.o: src/SP1947.h
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-09-05 20:06:54
+#  Last modified 2022-09-08 22:33:52
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -271,7 +308,7 @@ src/file_open.o: src/SP1947.h
 # Not a target:
 src/SP1947.h:
 #  Implicit rule search has been done.
-#  Last modified 2022-09-05 17:53:30
+#  Last modified 2022-09-08 22:33:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -279,7 +316,7 @@ src/SP1947.h:
 
 libft/libft.a:
 #  Implicit rule search has not been done.
-#  Last modified 2022-09-05 20:07:02
+#  Last modified 2022-09-08 22:33:53
 #  File has been updated.
 #  Successfully updated.
 #  commands to execute (from `Makefile', line 47):
@@ -289,7 +326,6 @@ libft/libft.a:
 src/image.o: src/SP1947.h
 #  Implicit rule search has been done.
 #  Last modified 2022-09-05 20:07:00
- 
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -297,7 +333,7 @@ src/image.o: src/SP1947.h
 
 libs/lib/libSDL2.a:
 #  Implicit rule search has not been done.
-#  Last modified 2022-09-05 16:57:27
+#  Last modified 2022-09-08 22:33:54
 #  File has been updated.
 #  Successfully updated.
 #  commands to execute (from `Makefile', line 33):
@@ -392,7 +428,7 @@ src/simpleimg.o: src/SP1947.h
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # files hash-table stats:
-# Load=25/1024=2%, Rehash=0, Collisions=0/74=0%
+# Load=26/1024=3%, Rehash=0, Collisions=0/77=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -404,6 +440,6 @@ src/simpleimg.o: src/SP1947.h
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Sep  6 18:14:01 2022
+# Finished Make data base on Thu Sep  8 22:35:39 2022
 
  

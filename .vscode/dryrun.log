@@ -1,25 +1,25 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/okinnune/sovietpunk'
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/main.o src/main.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/editor.o src/editor.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/main.o src/main.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/editor.o src/editor.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/png.o src/png.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/error.o src/error.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/file_open.o src/file_open.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/fdf_drawline.o src/fdf_drawline.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/mini_fdf.o src/mini_fdf.c
  
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/png.o src/png.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/error.o src/error.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/file_open.o src/file_open.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/fdf_drawline.o src/fdf_drawline.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/mini_fdf.o src/mini_fdf.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/obj.o src/obj.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/image.o src/image.c
- 
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/gameloop.o src/gameloop.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/deltatime.o src/deltatime.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/eventloop.o src/eventloop.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/editor_eventloop.o src/editor_eventloop.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/simpleimg.o src/simpleimg.c
-gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/v2.o src/v2.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/obj.o src/obj.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/image.o src/image.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/gameloop.o src/gameloop.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/deltatime.o src/deltatime.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/eventloop.o src/eventloop.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/editor_eventloop.o src/editor_eventloop.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/simpleimg.o src/simpleimg.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/v2.o src/v2.c
+gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O2   -c -o src/obj_render.o src/obj_render.c
  
 cd SDL2-2.0.22/build && ../configure --prefix=/Users/okinnune/sovietpunk/libs/ && make install
 make -C libft
-gcc src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o -o SovietPunk1947 `libs/bin/sdl2-config --cflags --libs` -Ilib/include/SDL2/ -Isrc -Ilibft libft/libft.a -lm
+gcc src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o -o SovietPunk1947 `libs/bin/sdl2-config --cflags --libs` -Ilib/include/SDL2/ -Isrc -Ilibft libft/libft.a -lm
 make: Leaving directory `/Users/okinnune/sovietpunk'
  
