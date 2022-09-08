@@ -1,16 +1,16 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/okinnune/sovietpunk'
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/main.o src/main.c
- 
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/editor.o src/editor.c
+ 
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/png.o src/png.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/error.o src/error.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/file_open.o src/file_open.c
- 
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/fdf_drawline.o src/fdf_drawline.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/mini_fdf.o src/mini_fdf.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/obj.o src/obj.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/image.o src/image.c
+ 
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/gameloop.o src/gameloop.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/deltatime.o src/deltatime.c
 gcc -g -Ilib/include/SDL2/ -Isrc -Ilibft -ldl -lpthread -lm -O3   -c -o src/eventloop.o src/eventloop.c

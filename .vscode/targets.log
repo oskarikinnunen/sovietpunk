@@ -6,11 +6,13 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
 
-# Make data base, printed on Tue Sep  6 15:27:38 2022
+# Make data base, printed on Tue Sep  6 18:14:01 2022
 
 # Variables
 
+ 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
@@ -42,7 +44,7 @@ SRCFILES = main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c o
 # environment
 VSCODE_CWD = /
 # environment
-Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.Eem4bxHE2Y/Render
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.U2GFs1uXYh/Render
 # environment
 PATH = /Users/okinnune/.brew/bin:/Users/okinnune/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
 # environment
@@ -50,7 +52,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.IaAFd7DO8e/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.1N2BwCVKQB/Listeners
 # automatic
 %F = $(notdir $%)
 # makefile (from `Makefile', line 25)
@@ -120,7 +122,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = com.microsoft.VSCode.2512
+XPC_SERVICE_NAME = com.microsoft.VSCode.1196
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -146,7 +148,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 92365
+VSCODE_PID = 12869
 # variable set hash-table stats:
 # Load=68/1024=7%, Rehash=0, Collisions=7/114=6%
 
@@ -273,7 +275,6 @@ src/SP1947.h:
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
- 
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 libft/libft.a:
@@ -288,6 +289,7 @@ libft/libft.a:
 src/image.o: src/SP1947.h
 #  Implicit rule search has been done.
 #  Last modified 2022-09-05 20:07:00
+ 
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -402,6 +404,6 @@ src/simpleimg.o: src/SP1947.h
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Sep  6 15:27:38 2022
+# Finished Make data base on Tue Sep  6 18:14:01 2022
 
  
