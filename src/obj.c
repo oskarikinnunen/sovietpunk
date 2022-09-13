@@ -36,7 +36,7 @@ void	read_vertex(int *v3, char *line)
 	{
 		ft_strreplace(vstrs[i], 'E', '\0');
 		ft_strreplace(vstrs[i], '.', '\0');
-		v3[i] = ft_atoi(vstrs[i]);
+		v3[i] = ft_atoi(vstrs[i]) * 1.6f;
 		free(vstrs[i]);
 		i++;
 	}
@@ -62,6 +62,22 @@ void	read_face(int *v3, char *line)
 	//printf("f content %i->%i->%i \n", v3[X] + 1, v3[Y] + 1, v3[Z] + 1);
 }
 
+uint8_t	materialcolor(char *name, t_obj o) //Returns just the index that can be used to access the color from materials
+{
+	uint8_t	i;
+
+	i = 0;
+	while (i < 4) //TODO: implement obj->c_count etc.
+	{
+		if (ft_strcmp(name, o.mtlnames[i]) == 0)
+			break;
+		i++;
+	}
+	if (i == 4)
+		exit(0);
+	return (i + 1);
+}
+
 void	get_vertices(t_obj *obj, int fd)
 {
 	char	*line;
@@ -69,8 +85,11 @@ void	get_vertices(t_obj *obj, int fd)
 
 	obj->verts = ft_memalloc(sizeof(int **) * 10000); // Do with remalloc
 	obj->faces = ft_memalloc(sizeof(int **) * 10000);
+	obj->colors = ft_memalloc(sizeof(uint8_t *) * 10000);
 	while (ft_get_next_line(fd, &line))
 	{
+		if (ft_strncmp("usemtl", line, 6) == 0)
+			obj->colors[obj->f_count] = materialcolor(line + 7, *obj);
 		if (*line == 'v' && line[1] != 'n')
 		{
 			obj->verts[obj->v_count] = ft_memalloc(sizeof(int *) * 3);
@@ -100,9 +119,13 @@ uint32_t	get_color(char *line)
 	while (i < 3)
 	{
 		clr += ((int)(atof(strs[i]) * 255.0f) & 0xFF) << (8 * i);
+		free(strs[i]);
 		i++;
 	}
+	free(strs);
 	printf("clr %i %i %i \n", clr & 0xFF, (clr >> 8) & 0xFF, (clr >> 16) & 0xFF);
+	return (clr);
+	
 }
 
 void	get_materials(t_obj *obj, int fd)
@@ -123,7 +146,12 @@ void	get_materials(t_obj *obj, int fd)
 			printf("mat found %s \n", obj->mtlnames[i]);
 		}
 		if (ft_strncmp(line, "Kd", 2) == 0)
+		{
+			printf("color index %i ", i);
 			obj->mtlcolors[i] = get_color(line + 3);
+			//printf("color of mat %i  r: %i g: %i b: %i\n", obj->mtlcolors[i], 0 ,0 ,0);
+		}
+			
 		free(line);
 		//if newmat, alloc
 	}
@@ -143,5 +171,5 @@ void	parse_obj(t_obj *obj)
 	fd = file_open("crash2.obj");
 	get_vertices(obj, fd);
 	close(fd);
-	
+	//exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 18:37:01 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/13 16:20:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define FOV		RAYSLICE * WINDOW_W
 # define WALLTHING	48 //TODO rename lol
 # define TURNSPEED	0.003f
-# define MOVESPEED	0.140f
+# define MOVESPEED	0.100f
 # define MAPSIZE	16
 //Yeah yeah it's unauthentic to have the player coordinates as floating points,
 // my brain hurt doing the integer so math so f it

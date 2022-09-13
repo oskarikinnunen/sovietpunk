@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 22:02:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/13 16:33:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,52 +23,133 @@ static void fv3_to_iv3(float *f3, int *i3) //TODO: move to vectors
 	i3[Z] = (int)f3[Z];
 }
 
-void	draw_line(t_simpleimg *si, t_bresenham b)
+void	draw_line(t_simpleimg *si, t_bresenham b, uint32_t c)
 {
-	int				b_res;
 	unsigned int	offset;
-
+	int				b_res;
+	//TODO: finish lol
 	b_res = 0;
 	//
+	//printf("b %i %i trgt: %i %i \n", b.local[X], b.local[Y], b.target[X], b.target[Y]);
 	while (b_res != 1)
 	{
 		offset = b.local[X] + (b.local[Y] * si->size[X]);
 		if (/*b.local[X] < si->size[X] && b.local[X] > 0 &&
 			b.local[Y] < si->size[Y] && b.local[Y] > 0 && */ offset < si->length)
-			si->data[offset] = INT_MAX;
+			si->data[offset] = c;
 		//printf("b localx %i, target = %i\n", b.local[X], b.target[X]);
 		//printf("b localx %i \n", b.target[X]);
 		b_res = step_bresenham(&b);
 	}
 }
 
+void	sort_tris(int tris[3][3])
+{
+	int	s_x;
+	int	s_j;
+	int	temp[3];
+
+	s_x = 0;
+	s_j = 0;
+	while (s_x < 2)
+	{
+		while (s_j < 2 - s_x)
+		{
+			if (tris[s_j][Y] < tris[s_j + 1][Y])
+			{
+				ft_memcpy(temp, tris[s_j], sizeof(int) * 3);
+				ft_memcpy(tris[s_j], tris[s_j + 1], sizeof(int) * 3);
+				ft_memcpy(tris[s_j + 1], temp, sizeof(int) * 3);
+			}
+			s_j++;
+		}
+		s_j = 0;
+		s_x++;
+	}
+}
+
+void	fill_sub_tri(int *tris[3], t_simpleimg *si, int c)
+{
+	t_bresenham	b[2];
+	t_bresenham	bf;
+
+	populate_bresenham(&(b[0]), tris[0], tris[1]);
+	populate_bresenham(&(b[1]), tris[0], tris[2]);
+	while (b[0].local[Y] != tris[1][Y])
+	{
+		populate_bresenham(&bf, b[0].local, b[1].local);
+		draw_line(si, bf, c);
+		while (b[0].local[Y] == b[1].local[Y])
+			step_bresenham(&(b[0]));
+		while (b[1].local[Y] != b[0].local[Y])
+			step_bresenham(&(b[1]));
+	}
+	populate_bresenham(&bf, b[0].local, b[1].local);
+	draw_line(si, bf, c);
+}
+
+
+void	fill_tri(int tri[3][3], t_simpleimg *si, uint32_t c)
+{
+	int		split[3]; 	//Vector that's used to form the subtriangles.
+	int		sorted[3][3];	//Stack memory for the sorted triangles
+	float	lerp;
+	t_bresenham	b;
+
+	sort_tris(ft_memcpy(sorted, tri, sizeof(int [3][3])));
+	lerp = (float)(sorted[1][Y] - sorted[2][Y]) / (float)(sorted[0][Y] - sorted[2][Y]);
+	//lerp = +0.00000001f;
+	split[X] = sorted[2][X] + (lerp * (sorted[0][X] - sorted[2][X]));
+	split[Y] = sorted[1][Y];
+	//printf("split X %i \n", split[X]);
+	split[Z] = sorted[1][Z];
+	fill_sub_tri((int *[3]){(int *)&(sorted[0]), (int *)&(sorted[1]), (int *)&split}, si, c);
+	fill_sub_tri((int *[3]){(int *)&(sorted[2]), (int *)&(sorted[1]), (int *)&split}, si, c);
+	//populate_bresenham(&b, sorted[0], split);
+	//draw_line(si, b, c);
+}
+
 void	fdf_drawskeleton(t_fdf fdf)
 {
 	int	i;
-	int	i3[2][3];
+	int	i3[3][3];
 	t_bresenham	b;
+	uint32_t	c;
 
-	//populate_bresenham(&b)
 	i = 0;
-	//printf("faces in obj %i verts %i \n", fdf.obj->f_count, fdf.obj->v_count);
 	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
 	while (i < fdf.obj->f_count)
 	{
-		//Start vector
+		if (fdf.obj->colors[i] != 0) {
+			c = fdf.obj->mtlcolors[fdf.obj->colors[i] - 1];
+			int cr = (c & 0xFF);
+			int cg = (c >> 8 & 0xFF);
+			int cb = (c >> 16 & 0xFF);
+			c = (cb & 0xFF) + (cg << 8) + (cr << 16);
+		}
+		//get z depth as float, pass to fill_tri and drawline? bitshift to color
+		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
+		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
+		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[2]);
+		//get floating point z?
+		fill_tri(i3, fdf.img, c);
+
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b);
+		draw_line(fdf.img, b, c);
+		
 
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b);
+		draw_line(fdf.img, b, c);
 
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b);
+		draw_line(fdf.img, b, c);
+
 		i++;
 	}
 }
@@ -78,24 +159,39 @@ static void	calc_matrices(t_fdf *fdf)
 	float	angles[2];
 
 	ft_bzero(fdf->matrices, sizeof(float [2][3][3]));
-	angles[X] = ft_degtorad(fdf->view[Y]);
+	//angles[X] = ft_degtorad(fdf->view[Y]);
+	angles[X] = fdf->view[Y];
+	printf("angle %f \n", angles[X]);
+	//doesn't work when abs(angle) < PI / 2
+
 	/*fdf->matrices[0][X][X] = cos(angles[X]);
 	fdf->matrices[0][X][Y] = -sin(angles[X]);
 	fdf->matrices[0][Y][X] = sin(angles[X]);
 	fdf->matrices[0][Y][Y] = cos(angles[X]);
 	fdf->matrices[0][Z][Z] = 1.0;*/
+	//if (ft_absf(angles[X]) < PI / 2.0f)
+		
+	printf("sin %f cos %f \n", sin(angles[X]), cos(angles[X]));
 	fdf->matrices[0][X][X] = cos(angles[X]);
-	fdf->matrices[0][X][Z] = -sin(angles[X]);
+	//fdf->matrices[0][X][Z] = -sin(angles[X]);
 	fdf->matrices[0][Y][X] = sin(angles[X]);
-	fdf->matrices[0][Y][Z] = cos(angles[X]);
+	
+	/*if (ft_absf(angles[X]) < PI / 2.0f)
+	{
+		fdf->matrices[0][X][X] = sin(angles[X]);
+		fdf->matrices[0][Y][X] = cos(angles[X]);
+	}*/
+	
+		
+	//fdf->matrices[0][Y][Z] = cos(angles[X]);
 	fdf->matrices[0][Z][Y] = 1.0;
 	angles[Y] = ft_degtorad(fdf->view[X]);
-	angles[Y] = asin(ft_clampf(tan(angles[Y]), -1.0, 1.0));
+	//angles[Y] = asin(ft_clampf(tan(angles[Y]), -1.0, 1.0));
 	fdf->matrices[1][X][X] = 1.0;
 	fdf->matrices[1][Y][Y] = cos(angles[Y]);
 	fdf->matrices[1][Y][Z] = sin(angles[Y]);
-	fdf->matrices[1][Z][Y] = -sin(angles[Y]);
-	fdf->matrices[1][Z][Z] = cos(angles[Y]);
+	//fdf->matrices[1][Z][Y] = -sin(angles[Y]);
+	//fdf->matrices[1][Z][Z] = cos(angles[Y]);
 	/*fdf->matrices[1][X][X] = 1.0;
 	fdf->matrices[1][Y][Z] = cos(angles[Y]);
 	fdf->matrices[1][Y][Y] = sin(angles[Y]);
@@ -142,8 +238,8 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Y] = (float)fdf->obj->verts[i][Y];
 		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
-		v3_mul(fdf->matrices[Y], fdf->verts[i]);
-		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 350, 0});
+		//v3_mul(fdf->matrices[Y], fdf->verts[i]);
+		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 400, 0});
 		i++;
 	}
 	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));

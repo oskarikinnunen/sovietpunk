@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 22:22:53 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/11 07:50:04 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int		screenspace_y(t_gamecontext *gc, int dist)
 			break;
 		iy++;
 	}
-	return ((WINDOW_H / 2) + iy);
+	return (300 + iy);
+	//return ((WINDOW_H / 2) + iy);
 }
 
 void	renderobj(t_gamecontext *gc)
@@ -58,7 +59,8 @@ void	renderobj(t_gamecontext *gc)
 	fdf->screenspace[Y] = screenspace_y(gc, dist) - (fdf->scale / 2);
 	o_angle = atan2((float)fdf->crd[X] - gc->player.pos[X],
 		(float)fdf->crd[Y] - gc->player.pos[Y]);
-	fdf->view[Y] = o_angle * 180 / PI;
+	fdf->view[Y] = o_angle;// * (180 / PI);
+	
 	fdf_update(fdf);
 
 

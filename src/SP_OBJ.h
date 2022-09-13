@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/09 00:37:33 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/11 05:59:32 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct s_obj
 {
 	char		**mtlnames;
 	uint32_t	*mtlcolors;
+	uint8_t		*colors; //Points to colors in mtlcolors
 	int		**verts;
 	int		**faces;
 	int		v_count;

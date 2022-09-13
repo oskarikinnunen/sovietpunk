@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 21:46:36 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/13 15:37:29 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,6 @@ int	floorcast(int **floor, t_bresenham *b, int h, t_gamecontext *gc)
 		while (v2dist(b->local, b->target) > gc->sdlcontext->ft[i])
 			if (step_bresenham(b)) break;
 		floor[0][i] = ((b->local[Y] % GAMESCALE) & 0xFF) + ((b->local[X] % GAMESCALE) << 8);
-		if (gc->sdlcontext->objs->crd[X] == b->local[X] && gc->sdlcontext->objs->crd[Y] == b->local[Y])
-		{
-			//gc->sdlcontext->objs->screenspace[X] = gc->v[X];
-			gc->sdlcontext->objs->screenspace[Y] = (WINDOW_H / 2) + i;
-			gc->sdlcontext->objs->scale = (WALLTHING * WINDOW_W) / v2dist((int [2]){gc->player.pos[X],gc->player.pos[Y]}, b->local);
-		}
 		//if 
 		//if current b.local is same as objects, calculate screen space position of object somehow??
 		//screenspace x comes further up in the callstack, in raycast, i == y screen space coordinate
@@ -276,7 +270,7 @@ void	gameloop(t_gamecontext gc)
 	parse_obj(&o);
 	fdf_init(gc.sdlcontext->objs, &gc.sdlcontext->images[3], &o);
 	gc.sdlcontext->objs->crd[X] = (int)gc.player.pos[X] + 120;
-	gc.sdlcontext->objs->crd[Y] = (int)gc.player.pos[Y] - 20;
+	gc.sdlcontext->objs->crd[Y] = (int)gc.player.pos[Y] - 200;
 	//gc.sdlcontext->objs->view[X] = -90.0f;
 
 	while (1)
