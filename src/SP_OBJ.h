@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/11 05:59:32 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/13 18:11:08 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_fdf
 {
 	t_obj		*obj;
 	struct s_simpleimg	*img;
-	int			*depth;
+	float		*depth;
 	float		**verts;
 	float		matrices[2][3][3];
 	u_int32_t	screenspace[2];

@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/13 16:33:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/13 18:55:19 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,25 @@ static void fv3_to_iv3(float *f3, int *i3) //TODO: move to vectors
 	i3[Z] = (int)f3[Z];
 }
 
-void	draw_line(t_simpleimg *si, t_bresenham b, uint32_t c)
+void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c)
 {
 	unsigned int	offset;
 	int				b_res;
+	//t_fdf			*fdf;
 	//TODO: finish lol
 	b_res = 0;
 	//
 	//printf("b %i %i trgt: %i %i \n", b.local[X], b.local[Y], b.target[X], b.target[Y]);
 	while (b_res != 1)
 	{
-		offset = b.local[X] + (b.local[Y] * si->size[X]);
-		if (/*b.local[X] < si->size[X] && b.local[X] > 0 &&
-			b.local[Y] < si->size[Y] && b.local[Y] > 0 && */ offset < si->length)
-			si->data[offset] = c;
-		//printf("b localx %i, target = %i\n", b.local[X], b.target[X]);
-		//printf("b localx %i \n", b.target[X]);
+		offset = b.local[X] + (b.local[Y] * fdf->img->size[X]);
+		if (offset < fdf->img->length && fdf->depth[offset] < z)
+			fdf->img->data[offset] = c;
+			//put this z in depth and color the pixel
+		
+		
+		/*if (offset < si->length)
+			si->data[offset] = c;*/
 		b_res = step_bresenham(&b);
 	}
 }
@@ -68,7 +71,7 @@ void	sort_tris(int tris[3][3])
 	}
 }
 
-void	fill_sub_tri(int *tris[3], t_simpleimg *si, int c)
+void	fill_sub_tri(int *tris[3], t_fdf *fdf, float z, int c)
 {
 	t_bresenham	b[2];
 	t_bresenham	bf;
@@ -78,18 +81,18 @@ void	fill_sub_tri(int *tris[3], t_simpleimg *si, int c)
 	while (b[0].local[Y] != tris[1][Y])
 	{
 		populate_bresenham(&bf, b[0].local, b[1].local);
-		draw_line(si, bf, c);
+		draw_line(fdf, bf, z, c);
 		while (b[0].local[Y] == b[1].local[Y])
 			step_bresenham(&(b[0]));
 		while (b[1].local[Y] != b[0].local[Y])
 			step_bresenham(&(b[1]));
 	}
 	populate_bresenham(&bf, b[0].local, b[1].local);
-	draw_line(si, bf, c);
+	draw_line(fdf, bf, z, c);
 }
 
 
-void	fill_tri(int tri[3][3], t_simpleimg *si, uint32_t c)
+void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c)
 {
 	int		split[3]; 	//Vector that's used to form the subtriangles.
 	int		sorted[3][3];	//Stack memory for the sorted triangles
@@ -103,13 +106,29 @@ void	fill_tri(int tri[3][3], t_simpleimg *si, uint32_t c)
 	split[Y] = sorted[1][Y];
 	//printf("split X %i \n", split[X]);
 	split[Z] = sorted[1][Z];
-	fill_sub_tri((int *[3]){(int *)&(sorted[0]), (int *)&(sorted[1]), (int *)&split}, si, c);
-	fill_sub_tri((int *[3]){(int *)&(sorted[2]), (int *)&(sorted[1]), (int *)&split}, si, c);
+	fill_sub_tri((int *[3]){(int *)&(sorted[0]), (int *)&(sorted[1]), (int *)&split}, fdf, z, c);
+	fill_sub_tri((int *[3]){(int *)&(sorted[2]), (int *)&(sorted[1]), (int *)&split}, fdf, z, c);
 	//populate_bresenham(&b, sorted[0], split);
 	//draw_line(si, b, c);
 }
 
-void	fdf_drawskeleton(t_fdf fdf)
+float	z_depth(float **fv3s)
+{
+	float	z;
+	int		i;
+
+	i = 0;
+	z = -10000.0f;
+	while (i < 3)
+	{
+		if (fv3s[i][Z] > z)
+			z = fv3s[i][Z] + 10000.0f;
+		i++;
+	}
+	return (z);
+}
+
+void	fdf_draw(t_fdf fdf)
 {
 	int	i;
 	int	i3[3][3];
@@ -118,6 +137,7 @@ void	fdf_drawskeleton(t_fdf fdf)
 
 	i = 0;
 	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
+	ft_bzero(fdf.depth, sizeof(float) * fdf.img->length);
 	while (i < fdf.obj->f_count)
 	{
 		if (fdf.obj->colors[i] != 0) {
@@ -131,10 +151,15 @@ void	fdf_drawskeleton(t_fdf fdf)
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[2]);
-		//get floating point z?
-		fill_tri(i3, fdf.img, c);
 
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
+		//float **z = &(fdf.verts[fdf.obj->faces[i][0]]);
+		float z = z_depth(&(fdf.verts[fdf.obj->faces[i][0]]));
+		/*c = (int)((z + 10000.0f) / 255.0f);
+		printf("z = %f\n", z);*/
+		//get floating point z?
+		fill_tri(i3, &fdf, z, c);
+
+		/*fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
 		draw_line(fdf.img, b, c);
@@ -148,7 +173,7 @@ void	fdf_drawskeleton(t_fdf fdf)
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b, c);
+		draw_line(fdf.img, b, c);*/
 
 		i++;
 	}
@@ -164,34 +189,19 @@ static void	calc_matrices(t_fdf *fdf)
 	printf("angle %f \n", angles[X]);
 	//doesn't work when abs(angle) < PI / 2
 
-	/*fdf->matrices[0][X][X] = cos(angles[X]);
+	fdf->matrices[0][X][X] = cos(angles[X]);
 	fdf->matrices[0][X][Y] = -sin(angles[X]);
 	fdf->matrices[0][Y][X] = sin(angles[X]);
 	fdf->matrices[0][Y][Y] = cos(angles[X]);
-	fdf->matrices[0][Z][Z] = 1.0;*/
-	//if (ft_absf(angles[X]) < PI / 2.0f)
-		
-	printf("sin %f cos %f \n", sin(angles[X]), cos(angles[X]));
-	fdf->matrices[0][X][X] = cos(angles[X]);
-	//fdf->matrices[0][X][Z] = -sin(angles[X]);
-	fdf->matrices[0][Y][X] = sin(angles[X]);
-	
-	/*if (ft_absf(angles[X]) < PI / 2.0f)
-	{
-		fdf->matrices[0][X][X] = sin(angles[X]);
-		fdf->matrices[0][Y][X] = cos(angles[X]);
-	}*/
-	
-		
-	//fdf->matrices[0][Y][Z] = cos(angles[X]);
-	fdf->matrices[0][Z][Y] = 1.0;
+	fdf->matrices[0][Z][Z] = 1.0f;
+	//fdf->matrices[0][Z][Y] = 1.0f;
 	angles[Y] = ft_degtorad(fdf->view[X]);
 	//angles[Y] = asin(ft_clampf(tan(angles[Y]), -1.0, 1.0));
-	fdf->matrices[1][X][X] = 1.0;
+	fdf->matrices[1][X][X] = 1.0f;
 	fdf->matrices[1][Y][Y] = cos(angles[Y]);
 	fdf->matrices[1][Y][Z] = sin(angles[Y]);
-	//fdf->matrices[1][Z][Y] = -sin(angles[Y]);
-	//fdf->matrices[1][Z][Z] = cos(angles[Y]);
+	fdf->matrices[1][Z][Y] = -sin(angles[Y]);
+	fdf->matrices[1][Z][Z] = cos(angles[Y]);
 	/*fdf->matrices[1][X][X] = 1.0;
 	fdf->matrices[1][Y][Z] = cos(angles[Y]);
 	fdf->matrices[1][Y][Y] = sin(angles[Y]);
@@ -205,7 +215,7 @@ int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 	int	i;
 
 	ft_bzero(fdf, sizeof(t_fdf));
-	fdf->depth = ft_memalloc(sizeof(int *) * object->v_count);
+	fdf->depth = ft_memalloc(sizeof(float) * img->length);
 	fdf->verts = ft_memalloc(sizeof(float *) * object->v_count);
 	fdf->img = img;
 	fdf->obj = object; //TODO: might not work cause this might just be the object variable that's in local scope
@@ -243,5 +253,5 @@ void	fdf_update(t_fdf *fdf)
 		i++;
 	}
 	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
-	fdf_drawskeleton(*fdf);
+	fdf_draw(*fdf);
 }
