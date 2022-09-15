@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/15 19:51:35 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/15 22:39:47 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,16 +157,17 @@ void	fdf_draw(t_fdf fdf)
 		
 		//float z = -(i3[0][Z]) - 1000.0f;
 		
-		float z = -fdf.verts[fdf.obj->faces[i][0]][Z];
+		float z = fdf.verts[fdf.obj->faces[i][0]][Z] * 10.0f;
 		//z -= +300.0f;
-		c = (int)(z / 1.3f) & 0xFF;
+		//c = (int)(z / 1.3f) & 0xFF;
 		printf("z %f \n", z);
-		z = -1000.0f;
+		z = -10000.0f;
+		
 		/*if (z <= -1020.0f)
 			c = INT_MAX;*/
 		fill_tri(i3, &fdf, z, c);
 
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
+		/*fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
 		draw_line(&fdf, b, 0, c);
@@ -180,7 +181,7 @@ void	fdf_draw(t_fdf fdf)
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, 0, c);
+		draw_line(&fdf, b, 0, c);*/
 
 		i++;
 	}
@@ -204,13 +205,24 @@ static void	calc_matrices(t_fdf *fdf)
 
 	//These only affect z
 	//fdf->matrices[0][X][Z] = 1.0f;
-	fdf->matrices[0][Z][Z] = 1.0f;
+	fdf->matrices[0][Y][Z] = 1.0f;
+	//fdf->matrices[0][Z][Z] = 1.0f;
+	
+	//fdf->matrices[0][Y][Z] = 1.0f;
 	//fdf->matrices[0][Y][Z] = sin(angles[X]);
 	//fdf->matrices[0][X][Z] = -cos(angles[X]);
 
 	angles[Y] = ft_degtorad(fdf->view[X]);
 	
-
+	fdf->matrices[1][X][X] = 1.0f;
+	fdf->matrices[1][Y][Y] = 1.0f;
+	fdf->matrices[1][Z][Z] = 1.0f;
+	//fdf->matrices[1][Y][Z] = -sin(angles[X]);
+	
+	//fdf->matrices[1][Y][Z] = -1.0f;
+	
+	//fdf->matrices[1][X][Z] = sin(angles[X]);
+	
 	/*
 	fdf->matrices[1][X][X] = 1.0f;
 	fdf->matrices[1][Y][Y] = cos(angles[Y]);
@@ -220,13 +232,12 @@ static void	calc_matrices(t_fdf *fdf)
 	*/
 	
 	//CORRECT ROTATINO, WRONG Z?
-	fdf->matrices[1][X][X] = 1.0f;
+	/*fdf->matrices[1][X][X] = 1.0f;
 	fdf->matrices[1][Y][Y] = cos(angles[Y]);
 
 	fdf->matrices[1][Y][Z] = 1.0f;
 
-	//fdf->matrices[1][Z][Y] = sin(angles[Y]);
-	fdf->matrices[1][Z][Z] = 1.0f;
+	fdf->matrices[1][Z][Z] = 1.0f;*/
 	
 }
 
@@ -269,7 +280,7 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Y] = (float)fdf->obj->verts[i][Y];
 		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
-		//v3_mul(fdf->matrices[Y], fdf->verts[i]);
+		v3_mul(fdf->matrices[Y], fdf->verts[i]);
 		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 400, 0});
 		i++;
 	}
