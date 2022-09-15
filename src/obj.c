@@ -15,7 +15,7 @@
 #include "SP1947.h"
 #include "v3lib.h"
 
-#define MC 12 //MATERIAL COUNt
+#define MC 10 //MATERIAL COUNt
 
 int	file_open(char *filename) //TODO: use sp_fileopen
 {
@@ -38,7 +38,7 @@ void	read_vertex(int *v3, char *line)
 	{
 		ft_strreplace(vstrs[i], 'E', '\0');
 		//ft_strreplace(vstrs[i], '.', '\0');
-		v3[i] = atof(vstrs[i]) * 16.0f;//ft_atoi(vstrs[i]) * 13.0f;
+		v3[i] = atof(vstrs[i]) * 14.0f;//ft_atoi(vstrs[i]) * 13.0f;
 		free(vstrs[i]);
 		i++;
 	}
