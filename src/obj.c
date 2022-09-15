@@ -36,7 +36,7 @@ void	read_vertex(int *v3, char *line)
 	{
 		ft_strreplace(vstrs[i], 'E', '\0');
 		ft_strreplace(vstrs[i], '.', '\0');
-		v3[i] = ft_atoi(vstrs[i]) * 1.6f;
+		v3[i] = ft_atoi(vstrs[i]) * 13.0f;
 		free(vstrs[i]);
 		i++;
 	}
@@ -67,13 +67,13 @@ uint8_t	materialcolor(char *name, t_obj o) //Returns just the index that can be 
 	uint8_t	i;
 
 	i = 0;
-	while (i < 4) //TODO: implement obj->c_count etc.
+	while (i < 8) //TODO: implement obj->mtl_count etc.
 	{
 		if (ft_strcmp(name, o.mtlnames[i]) == 0)
 			break;
 		i++;
 	}
-	if (i == 4)
+	if (i == 8)
 		exit(0);
 	return (i + 1);
 }
@@ -134,8 +134,8 @@ void	get_materials(t_obj *obj, int fd)
 	int		i;
 
 	i = -1;
-	obj->mtlnames = ft_memalloc(sizeof(char *) * 4); //check null
-	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * 4); //TODO: find out allocation length from file
+	obj->mtlnames = ft_memalloc(sizeof(char *) * 8); //check null
+	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * 8); //TODO: find out allocation length from file
 	while (ft_get_next_line(fd, &line)) 
 	{
 		if (ft_strncmp(line, "newmtl", 6) == 0)
@@ -163,12 +163,12 @@ void	parse_obj(t_obj *obj)
 
 	ft_bzero(obj, sizeof(t_obj));
 	//load mtl
-	fd = file_open("crash2.mtl");
+	fd = file_open("animtests/enemy_soviet_000000.mtl");
 	get_materials(obj, fd);
 	close(fd);
 	//exit(0);
 	//load obj
-	fd = file_open("crash2.obj");
+	fd = file_open("animtests/enemy_soviet_000000.obj");
 	get_vertices(obj, fd);
 	close(fd);
 	//exit(0);

@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/13 18:55:19 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/15 17:11:41 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c)
 	while (b_res != 1)
 	{
 		offset = b.local[X] + (b.local[Y] * fdf->img->size[X]);
-		if (offset < fdf->img->length && fdf->depth[offset] < z)
+		if (offset < fdf->img->length && (fdf->depth[offset] < z || z == 0))
 			fdf->img->data[offset] = c;
 			//put this z in depth and color the pixel
 		
@@ -148,32 +148,30 @@ void	fdf_draw(t_fdf fdf)
 			c = (cb & 0xFF) + (cg << 8) + (cr << 16);
 		}
 		//get z depth as float, pass to fill_tri and drawline? bitshift to color
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
+		/*fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[2]);
 
 		//float **z = &(fdf.verts[fdf.obj->faces[i][0]]);
 		float z = z_depth(&(fdf.verts[fdf.obj->faces[i][0]]));
-		/*c = (int)((z + 10000.0f) / 255.0f);
-		printf("z = %f\n", z);*/
 		//get floating point z?
-		fill_tri(i3, &fdf, z, c);
+		fill_tri(i3, &fdf, z, c);*/
 
-		/*fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
+		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b, c);
+		draw_line(&fdf, b, 0, c);
 		
 
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b, c);
+		draw_line(&fdf, b, 0, c);
 
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(fdf.img, b, c);*/
+		draw_line(&fdf, b, 0, c);
 
 		i++;
 	}
@@ -190,11 +188,11 @@ static void	calc_matrices(t_fdf *fdf)
 	//doesn't work when abs(angle) < PI / 2
 
 	fdf->matrices[0][X][X] = cos(angles[X]);
-	fdf->matrices[0][X][Y] = -sin(angles[X]);
+	fdf->matrices[0][X][Z] = -sin(angles[X]);
 	fdf->matrices[0][Y][X] = sin(angles[X]);
-	fdf->matrices[0][Y][Y] = cos(angles[X]);
-	fdf->matrices[0][Z][Z] = 1.0f;
-	//fdf->matrices[0][Z][Y] = 1.0f;
+	fdf->matrices[0][Y][Z] = cos(angles[X]);
+	fdf->matrices[0][Z][Y] = 1.0;
+
 	angles[Y] = ft_degtorad(fdf->view[X]);
 	//angles[Y] = asin(ft_clampf(tan(angles[Y]), -1.0, 1.0));
 	fdf->matrices[1][X][X] = 1.0f;
@@ -249,7 +247,7 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
 		//v3_mul(fdf->matrices[Y], fdf->verts[i]);
-		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 400, 0});
+		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 300, 0});
 		i++;
 	}
 	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
