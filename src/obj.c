@@ -35,8 +35,8 @@ void	read_vertex(int *v3, char *line)
 	while (i < 3)
 	{
 		ft_strreplace(vstrs[i], 'E', '\0');
-		ft_strreplace(vstrs[i], '.', '\0');
-		v3[i] = ft_atoi(vstrs[i]) * 13.0f;
+		//ft_strreplace(vstrs[i], '.', '\0');
+		v3[i] = atof(vstrs[i]) * 16.0f;//ft_atoi(vstrs[i]) * 13.0f;
 		free(vstrs[i]);
 		i++;
 	}
@@ -90,7 +90,7 @@ void	get_vertices(t_obj *obj, int fd)
 	{
 		if (ft_strncmp("usemtl", line, 6) == 0)
 			obj->colors[obj->f_count] = materialcolor(line + 7, *obj);
-		if (*line == 'v' && line[1] != 'n')
+		if (*line == 'v' && line[1] != 'n' && line[1] != 't')
 		{
 			obj->verts[obj->v_count] = ft_memalloc(sizeof(int *) * 3);
 			read_vertex(obj->verts[obj->v_count], line);
@@ -168,7 +168,7 @@ void	parse_obj(t_obj *obj)
 	close(fd);
 	//exit(0);
 	//load obj
-	fd = file_open("animtests/enemy_soviet_000000.obj");
+	fd = file_open("animtests/sovietyf_nzd.obj");
 	get_vertices(obj, fd);
 	close(fd);
 	//exit(0);

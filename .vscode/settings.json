@@ -4,7 +4,8 @@
 		"sp1947.h": "c",
 		"array": "c",
 		"string": "c",
-		"string_view": "c"
+		"string_view": "c",
+		"libft.h": "c"
 	},
 	"C_Cpp.errorSquiggles": "Disabled"
 }
