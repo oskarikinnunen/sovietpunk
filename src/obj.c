@@ -15,6 +15,8 @@
 #include "SP1947.h"
 #include "v3lib.h"
 
+#define MC 12 //MATERIAL COUNt
+
 int	file_open(char *filename) //TODO: use sp_fileopen
 {
 	int	fd;
@@ -73,7 +75,7 @@ uint8_t	materialcolor(char *name, t_obj o) //Returns just the index that can be 
 			break;
 		i++;
 	}
-	if (i == 8)
+	if (i == MC)
 		exit(0);
 	return (i + 1);
 }
@@ -134,8 +136,8 @@ void	get_materials(t_obj *obj, int fd)
 	int		i;
 
 	i = -1;
-	obj->mtlnames = ft_memalloc(sizeof(char *) * 8); //check null
-	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * 8); //TODO: find out allocation length from file
+	obj->mtlnames = ft_memalloc(sizeof(char *) * MC); //check null
+	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * MC); //TODO: find out allocation length from file
 	while (ft_get_next_line(fd, &line)) 
 	{
 		if (ft_strncmp(line, "newmtl", 6) == 0)
@@ -151,7 +153,6 @@ void	get_materials(t_obj *obj, int fd)
 			obj->mtlcolors[i] = get_color(line + 3);
 			//printf("color of mat %i  r: %i g: %i b: %i\n", obj->mtlcolors[i], 0 ,0 ,0);
 		}
-			
 		free(line);
 		//if newmat, alloc
 	}
@@ -163,12 +164,12 @@ void	parse_obj(t_obj *obj)
 
 	ft_bzero(obj, sizeof(t_obj));
 	//load mtl
-	fd = file_open("animtests/enemy_soviet_000000.mtl");
+	fd = file_open("animtests/cyborg/cy_000000.mtl");
 	get_materials(obj, fd);
 	close(fd);
 	//exit(0);
 	//load obj
-	fd = file_open("animtests/sovietyf_nzd.obj");
+	fd = file_open("animtests/cyborg/cy_000000.obj");
 	get_vertices(obj, fd);
 	close(fd);
 	//exit(0);
