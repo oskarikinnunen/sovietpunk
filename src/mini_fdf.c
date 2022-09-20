@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/15 22:39:47 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/20 16:40:04 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,21 @@ float	z_depth(float **fv3s)
 	return (z);
 }
 
+void	anim(t_fdf *fdf)
+{
+	static uint32_t	tick;
+
+	tick += fdf->clock->delta;
+	if (tick > 20)
+	{
+		fdf->curframe++;
+		if (fdf->curframe >= 4)
+			fdf->curframe = 0;
+		tick = 0;
+	}
+		
+}
+
 void	fdf_draw(t_fdf fdf)
 {
 	int	i;
@@ -139,6 +154,7 @@ void	fdf_draw(t_fdf fdf)
 	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
 	ft_bzero(fdf.depth, sizeof(float) * fdf.img->length);
 	printf("verts %i faces %i \n", fdf.obj->v_count, fdf.obj->f_count);
+	anim(&fdf);
 	while (i < fdf.obj->f_count)
 	{
 		if (fdf.obj->colors[i] != 0) {
@@ -148,26 +164,18 @@ void	fdf_draw(t_fdf fdf)
 			int cb = (c >> 16 & 0xFF);
 			c = (cb & 0xFF) + (cg << 8) + (cr << 16);
 		}
-		//get z depth as float, pass to fill_tri and drawline? bitshift to color
+		
+		/*
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[2]);
-
-		//float **z = &(fdf.verts[fdf.obj->faces[i][0]]);
-		
-		//float z = -(i3[0][Z]) - 1000.0f;
-		
+		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[2]);		
 		float z = fdf.verts[fdf.obj->faces[i][0]][Z] * 10.0f;
-		//z -= +300.0f;
-		//c = (int)(z / 1.3f) & 0xFF;
+
 		printf("z %f \n", z);
 		z = -10000.0f;
-		
-		/*if (z <= -1020.0f)
-			c = INT_MAX;*/
-		fill_tri(i3, &fdf, z, c);
+		fill_tri(i3, &fdf, z, c);*/
 
-		/*fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
+		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
 		draw_line(&fdf, b, 0, c);
@@ -181,7 +189,7 @@ void	fdf_draw(t_fdf fdf)
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, 0, c);*/
+		draw_line(&fdf, b, 0, c);
 
 		i++;
 	}
@@ -242,6 +250,7 @@ static void	calc_matrices(t_fdf *fdf)
 }
 
 //TODO: fdf_init: allocates the memory and handles errors if that fails
+#include "assert.h"
 int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 {
 	int	i;
@@ -250,7 +259,10 @@ int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 	fdf->depth = ft_memalloc(sizeof(float) * img->length);
 	fdf->verts = ft_memalloc(sizeof(float *) * object->v_count);
 	fdf->img = img;
-	fdf->obj = object; //TODO: might not work cause this might just be the object variable that's in local scope
+	fdf->obj = &object[0]; //TODO: might not work cause this might just be the object variable that's in local scope
+	assert(object[0].v_count == object[1].v_count);
+	assert(object[0].f_count == object[1].f_count);
+	assert(object[0].m_count == object[1].m_count);
 	if (fdf->depth == NULL || fdf->verts == NULL)
 		return (-1);
 	i = 0;
@@ -274,6 +286,7 @@ void	fdf_update(t_fdf *fdf)
 
 	i = 0;
 	calc_matrices(fdf);
+	//fdf->obj = &fdf->obj[3];
 	while (i < fdf->obj->v_count)
 	{
 		fdf->verts[i][X] = (float)fdf->obj->verts[i][X];

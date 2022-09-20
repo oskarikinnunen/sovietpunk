@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 17:12:05 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/20 12:48:29 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	loadpngs(t_sdlcontext	*sdl)
 	//pngs = ft_memalloc(2 * sizeof(t_pngdata));
 	
 	//nullcheck
-	pngparse(png_stack, "textures/tex2finalUC.png");
-	pngparse(&png_stack[1], "textures/walluc2.png");
+	pngparse(png_stack, "tex/wallu.png");
+	pngparse(&png_stack[1], "tex/flooruc.png"); //Floor is in 1, wall in 0?
 	pngparse(&png_stack[2], "textures/spawn.png");
 
 	//Converting png to simpleimg

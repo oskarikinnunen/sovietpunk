@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/11 07:50:04 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/19 14:02:33 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	renderobj(t_gamecontext *gc)
 	int		dist;
 	t_fdf	*fdf;
 
-	fdf = gc->sdlcontext->objs; //TODO do as param or iterate through the objects;
+	fdf = gc->sdlcontext->fdfs; //TODO do as param or iterate through the objects;
 
 	angle = gc->player.angle + 1.57f;
 	scan_h = 0;

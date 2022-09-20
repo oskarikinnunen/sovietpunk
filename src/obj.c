@@ -69,14 +69,17 @@ uint8_t	materialcolor(char *name, t_obj o) //Returns just the index that can be 
 	uint8_t	i;
 
 	i = 0;
-	while (i < 8) //TODO: implement obj->mtl_count etc.
+	while (i < o.m_count) //TODO: implement obj->mtl_count etc.
 	{
 		if (ft_strcmp(name, o.mtlnames[i]) == 0)
 			break;
 		i++;
 	}
-	if (i == MC)
+	if (i == MC) {
+		printf("exceed m count %i \n", i);
 		exit(0);
+	}
+		
 	return (i + 1);
 }
 
@@ -156,21 +159,70 @@ void	get_materials(t_obj *obj, int fd)
 		free(line);
 		//if newmat, alloc
 	}
+	obj->m_count = i;
+}
+
+void	cpy_materials(t_obj *dst, t_obj *src)
+{
+	int	i;
+	//dst->colors = ft_memalloc(sizeof(uint8_t *) * 10000);
+	dst->mtlcolors = ft_memalloc(sizeof(uint32_t) * MC);
+	dst->mtlnames = ft_memalloc(sizeof (char *) * MC);
+	ft_memcpy(dst->mtlcolors, src->mtlcolors, src->m_count * sizeof(uint32_t));
+	//ft_memcpy(dst->colors, src->colors, src->f_count * sizeof(uint8_t));
+	i = 0;
+	while (i < src->m_count)
+	{
+		dst->mtlnames[i] = ft_strnew(20); //TODO: protect
+		ft_strcpy(dst->mtlnames[i], src->mtlnames[i]);
+		i++;
+	}
+	dst->m_count = src->m_count;
+}
+
+void	parse_anim(t_obj *obj, char *name, int framecount)
+{
+	int		i;
+	int		fd;
+	char	oname[100];
+
+	i = 0;
+	ft_bzero(oname, sizeof(char[100]));
+	ft_strcat(ft_strcpy(oname, name), "_0000");
+	while (i < framecount)
+	{
+		ft_strcpy(name, oname);
+		if (i < 10)
+			ft_strcat(name, "0");
+		ft_strcat(ft_strcat(name, ft_itoa(i)), ".obj");
+		printf("name '%s' \n", name);
+		fd = file_open(name);
+		if (i != 0)
+			cpy_materials(&obj[i], &obj[0]);
+		//ft_memcpy(&obj[i], &obj[0], sizeof(t_obj)); //Won't work because v_count needs to start
+													// from zero according to get_vertice
+		/* */
+		get_vertices(&(obj[i]), fd);
+		close(fd);
+		i++;
+	}
 }
 
 void	parse_obj(t_obj *obj)
 {
 	int		fd;
+	char	name[100]; //TODO: is safe? should be
 
-	ft_bzero(obj, sizeof(t_obj));
-	//load mtl
+	//mtl
+	ft_bzero(obj, sizeof(t_obj [20]));
 	fd = file_open("animtests/cyborg/cy_000000.mtl");
 	get_materials(obj, fd);
 	close(fd);
+	//obj
+	ft_bzero(name, sizeof(char[100]));
+	ft_strcat(name, "animtests/cyborg/cy");
+	parse_anim(obj, name, 5);
+	printf("m count %i \n", obj->m_count);
 	//exit(0);
-	//load obj
-	fd = file_open("animtests/cyborg/cy_000000.obj");
-	get_vertices(obj, fd);
-	close(fd);
-	//exit(0);
+	//close(fd);
 }

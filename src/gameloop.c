@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/15 17:03:18 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/20 12:44:49 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,12 @@ void	rendergame(t_sdlcontext *sdl, int *walls, int max)
 			wallheight = (WALLTHING * WINDOW_W) / (walls[i] & 0xFFFF);
 		float iy = 0.0f;
 		float ty = 0.0f;
-		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl->images[1].size[X];
-		float ystep = ((float)sdl->images[1].size[Y] / (float)wallheight);
+		int ix = ((float)(walls[i] >> 16) / 64.0f) * sdl->images[0].size[X];
+		float ystep = ((float)sdl->images[0].size[Y] / (float)wallheight);
 		while (iy < wallheight - 1 && wallheight != 0)
 		{
 			//Uint32 clr = samplecolor(sdl->images[1], ix + (iy * ystep), (int)(iy * ystep));
-			Uint32 clr = sdl->images[1].data[(int)(ix + iy * ystep) + (int)(iy * ystep) * sdl->images[1].size[X]];
+			Uint32 clr = sdl->images[0].data[(int)(ix + iy * ystep) + (int)(iy * ystep) * sdl->images[1].size[X]];
 			//float mul = ft_clampf((float)((float)wallheight / (float)128), 0, 1.0f);
 			float mul  = (float)((float)wallheight / 128.0f) < 1.0f ? (float)((float)wallheight / 128.0f) : 1.0f;
 			int r = (clr & 0xFF) * mul * mul;
@@ -208,7 +208,7 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 	scan_h = 0;
 	scan_angle = angle + 1.57;
 	//floorcast(*sdl, gc.player.pos, (float [2]){scan_angle, scan_angle - (512 * 0.0022)}); //TODO make fov define
-	gc.sdlcontext->objs->screenspace[X] = -200;
+	gc.sdlcontext->fdfs->screenspace[X] = -200;
 	while (scan_h < WINDOW_W)
 	{
 		scan_angle -= RAYSLICE; //512 * 0.005 is under 1 rad
@@ -265,14 +265,8 @@ void	gameloop(t_gamecontext gc)
 
 	openmap(&gc);
 	spawnplayer(&gc);
-	gc.sdlcontext->objs = ft_memalloc(sizeof(t_fdf)); //TODO: nullcheck and move to another function
-	t_obj	o;
-	parse_obj(&o);
-	fdf_init(gc.sdlcontext->objs, &gc.sdlcontext->images[3], &o);
-	gc.sdlcontext->objs->crd[X] = (int)gc.player.pos[X] + 120;
-	gc.sdlcontext->objs->crd[Y] = (int)gc.player.pos[Y] - 200;
 	//gc.sdlcontext->objs->view[X] = -90.0f;
-
+	printf("gameloop!");
 	while (1)
 	{
 		if (eventloop(&gc))
@@ -291,7 +285,7 @@ void	gameloop(t_gamecontext gc)
 			
 		//render2Dmap(gc.sdlcontext, gc.map);
 		renderobj(&gc);
-		drawimagescaled(gc.sdlcontext, gc.sdlcontext->objs->screenspace, 3, gc.sdlcontext->objs->scale);
+		drawimagescaled(gc.sdlcontext, gc.sdlcontext->fdfs->screenspace, 3, gc.sdlcontext->fdfs->scale);
 		//drawimagescaled(gc.sdlcontext, gc.sdlcontext->objs->screenspace, 3, 200);
 		//SDL_RenderCopy(gc->sdlcontext->renderer, gc->sdlcontext->tex, NULL, NULL);
 		//SDL_UnlockSurface(gc->sdlcontext->surface);

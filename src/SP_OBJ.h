@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/13 18:11:08 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/20 16:38:15 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ typedef struct s_obj
 	char		**mtlnames;
 	uint32_t	*mtlcolors;
 	uint8_t		*colors; //Points to colors in mtlcolors
-	int		**verts;
-	int		**faces;
-	int		v_count;
-	int		f_count;
+	uint32_t	m_count;
+	int32_t		**verts;
+	uint32_t	**faces;
+	uint32_t	v_count;
+	uint32_t	f_count;
 }	t_obj;
 
 /*typedef struct s_img_info
@@ -39,15 +40,18 @@ typedef struct s_obj
 
 typedef struct s_fdf
 {
-	t_obj		*obj;
 	struct s_simpleimg	*img;
-	float		*depth;
-	float		**verts;
-	float		matrices[2][3][3];
-	u_int32_t	screenspace[2];
-	u_int32_t	scale;
-	u_int32_t	crd[2];
-	float		view[2];
+	struct s_clock		*clock;
+	t_obj				*obj;
+	int					curframe;
+	float				*depth;
+	float				**verts;
+	float				matrices[2][3][3];
+	float				view[2];
+	u_int32_t			frames;
+	u_int32_t			screenspace[2];
+	u_int32_t			scale;
+	u_int32_t			crd[2];
 }	t_fdf;
 
 void	parse_obj(t_obj *obj);

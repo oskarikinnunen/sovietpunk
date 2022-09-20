@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/13 16:20:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/19 14:03:00 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_sdlcontext
 	SDL_Renderer			*renderer;
 	//struct	s_pngdata		*textures; //convert pngdarta into simpleimages
 	t_simpleimg				*images;
-	t_fdf					*objs;
+	t_fdf					*fdfs;
 	int						*ft; //floortable
 	//struct	s_fdf			*objects;
 }	t_sdlcontext;
