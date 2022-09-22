@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 21:20:54 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/22 19:50:00 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 			color = samplecolor(img, (float)ix * scalar, (float)iy * scalar);
 			int index = ix + p[X] + (iy + p[Y]) * WINDOW_W;
 			index = ft_clamp(index, 0, WINDOW_H * WINDOW_W);
-			if (color != 0 || ix == 1 || ix == scale -1)
+			if (color != 0 || ix == 1 || ix == scale -1 && ix + p[X] > 0 && ix + p[X] < WINDOW_W)
 				((int *)context->surface->pixels)[index] = color;
 			
 			//SDL_SetRenderDrawColor(context->renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);

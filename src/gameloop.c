@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/20 12:44:49 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/22 19:51:23 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,12 @@ void	rendergame(t_sdlcontext *sdl, int *walls, int max)
 			//Uint32 clr = samplecolor(sdl->images[1], ix + (iy * ystep), (int)(iy * ystep));
 			Uint32 clr = sdl->images[0].data[(int)(ix + iy * ystep) + (int)(iy * ystep) * sdl->images[1].size[X]];
 			//float mul = ft_clampf((float)((float)wallheight / (float)128), 0, 1.0f);
-			float mul  = (float)((float)wallheight / 128.0f) < 1.0f ? (float)((float)wallheight / 128.0f) : 1.0f;
+			float mul  = (float)((float)wallheight / DARKNESS) < 1.0f ? (float)((float)wallheight / DARKNESS) : 1.0f; //TODO: 500.0f define
 			int r = (clr & 0xFF) * mul * mul;
 			int g = (clr >> 8 & 0xFF) * mul;
 			int b = (clr >> 16 & 0xFF) * mul;
-			int ind = i + (int)(300 + iy - (wallheight / 2)) * WINDOW_W;
+			clr = (b & 0xFF) + ((g & 0xFF) << 8) + ((r & 0xFF) << 16);
+			int ind = i + (int)(WINDOW_H / 2 + iy - (wallheight / 2)) * WINDOW_W;
 			if (ind < 0) ind = 0;
 			if (ind > WINDOW_H * WINDOW_W) ind = WINDOW_H * WINDOW_W;
 			//int ind = i + (int)(300 + iy - (wallheight / 2)) * WINDOW_W;
@@ -184,14 +185,15 @@ void	render_floor(t_sdlcontext *sdl, int *floor, int ix, int h)
 		int x = (floor[iy] & 0xFF) * (128 / GAMESCALE); //TODO replace with real texture size;
 		int y = (floor[iy] >> 8) * (128 / GAMESCALE);
 		int clr = samplecolor(sdl->images[1], x + y, x);
-		float mul = 0.25f + (float)iy / (float)(WINDOW_H / 2);
+		//float mul = 0.25f + (float)iy / (float)(WINDOW_H / 2);
+		float mul  = (float)((float)iy * 2.0f / DARKNESS) < 1.0f ? (float)((float)iy * 2.0f / DARKNESS) : 1.0f;
 		int r = (clr & 0xFF) * mul * mul;
 		int g = (clr >> 8 & 0xFF) * mul;
 		int b = (clr >> 16 & 0xFF) * mul;
 		clr = (b & 0xFF) + (g << 8) + (r << 16);
 		
-		((int *)sdl->surface->pixels)[ix + (iy + 300) * WINDOW_W] = clr;
-		((int *)sdl->surface->pixels)[ix + ft_clamp((300 - iy), 0, WINDOW_H) * WINDOW_W] = clr;
+		((int *)sdl->surface->pixels)[ix + (iy + WINDOW_H / 2) * WINDOW_W] = clr;
+		((int *)sdl->surface->pixels)[ix + ft_clamp((WINDOW_H / 2 - iy), 0, WINDOW_H) * WINDOW_W] = clr;
 		iy++;
 	}
 	//printf("ix %i \n", ix);
@@ -265,8 +267,6 @@ void	gameloop(t_gamecontext gc)
 
 	openmap(&gc);
 	spawnplayer(&gc);
-	//gc.sdlcontext->objs->view[X] = -90.0f;
-	printf("gameloop!");
 	while (1)
 	{
 		if (eventloop(&gc))
@@ -283,8 +283,9 @@ void	gameloop(t_gamecontext gc)
 			raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc),
 			WINDOW_W);
 			
-		//render2Dmap(gc.sdlcontext, gc.map);
+		
 		renderobj(&gc);
+		
 		drawimagescaled(gc.sdlcontext, gc.sdlcontext->fdfs->screenspace, 3, gc.sdlcontext->fdfs->scale);
 		//drawimagescaled(gc.sdlcontext, gc.sdlcontext->objs->screenspace, 3, 200);
 		//SDL_RenderCopy(gc->sdlcontext->renderer, gc->sdlcontext->tex, NULL, NULL);

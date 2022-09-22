@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/20 14:25:31 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/21 14:36:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,8 @@ int	main(int argc, char **args)
 	//obj load
 	ft_bzero(objs, sizeof (t_obj [20]));
 	parse_obj(objs);
-	gc.sdlcontext->fdfs->obj = objs;
-	//printf("clr obj1 %i %i %i \n", objs[1].mtlcolors[720] & 0xFF, objs[1].mtlcolors[720] << 8 & 0xFF, objs[1].mtlcolors[720] << 16 & 0xFF);
-	//printf("clr obj0 %i %i %i \n", objs[0].mtlcolors[720] & 0xFF, objs[0].mtlcolors[720] << 8 & 0xFF, objs[0].mtlcolors[720] << 16 & 0xFF);
-	//exit(0);
-	fdf_init(gc.sdlcontext->fdfs, &gc.sdlcontext->images[3], &objs[1]);
-	fdfs->clock = gc.clock;
+	fdf_init(gc.sdlcontext->fdfs, &gc.sdlcontext->images[3], objs);
+	fdfs->clock = &gc.clock;
 	gc.sdlcontext->fdfs->crd[X] = 420;
 	gc.sdlcontext->fdfs->crd[Y] = 512;
 	

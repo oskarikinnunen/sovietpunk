@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/20 16:40:04 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/22 18:56:46 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,13 @@ void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c)
 	while (b_res != 1)
 	{
 		offset = b.local[X] + (b.local[Y] * fdf->img->size[X]);
-		if (offset < fdf->img->length && fdf->depth[offset] >= z)
+		if (offset < fdf->img->length && fdf->depth[offset] <= z)
+		{
+			//printf("z overwrote %f with %f\n", fdf->depth[offset], z);
+			fdf->depth[offset] = z;
 			fdf->img->data[offset] = c;
+		}
+			
 			//put this z in depth and color the pixel
 		
 		
@@ -133,10 +138,13 @@ void	anim(t_fdf *fdf)
 	static uint32_t	tick;
 
 	tick += fdf->clock->delta;
-	if (tick > 20)
+	//printf("tick %i frame %i \n", tick, fdf->curframe);
+	fdf->frames = 19;
+	if (tick > 100)
 	{
 		fdf->curframe++;
-		if (fdf->curframe >= 4)
+		
+		if (fdf->curframe >= fdf->frames - 1)
 			fdf->curframe = 0;
 		tick = 0;
 	}
@@ -151,46 +159,54 @@ void	fdf_draw(t_fdf fdf)
 	uint32_t	c;
 
 	i = 0;
+	fdf.crd[X] = 420;
+	fdf.crd[Y] = 512;
 	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
 	ft_bzero(fdf.depth, sizeof(float) * fdf.img->length);
-	printf("verts %i faces %i \n", fdf.obj->v_count, fdf.obj->f_count);
-	anim(&fdf);
+	float mul  = (float)((float)fdf.scale / DARKNESS) < 1.0f ? (float)((float)fdf.scale / DARKNESS) : 1.0f;
+
 	while (i < fdf.obj->f_count)
 	{
 		if (fdf.obj->colors[i] != 0) {
 			c = fdf.obj->mtlcolors[fdf.obj->colors[i] - 1];
-			int cr = (c & 0xFF);
-			int cg = (c >> 8 & 0xFF);
-			int cb = (c >> 16 & 0xFF);
+			int cr, cg, cb;
+			if (fdf.obj->colors[i] != 4)
+			{
+				cr = (c & 0xFF) * mul * mul;
+				cg = (c >> 8 & 0xFF) * mul;
+				cb = (c >> 16 & 0xFF) * mul;
+			} else {
+				cr = (c & 0xFF);
+				cg = (c >> 8 & 0xFF);
+				cb = (c >> 16 & 0xFF);
+			}
+			
 			c = (cb & 0xFF) + (cg << 8) + (cr << 16);
 		}
 		
-		/*
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[2]);		
-		float z = fdf.verts[fdf.obj->faces[i][0]][Z] * 10.0f;
-
-		printf("z %f \n", z);
-		z = -10000.0f;
-		fill_tri(i3, &fdf, z, c);*/
-
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[0]);
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[1]);
-		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, 0, c);
 		
+		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][0]], i3[0]);
+		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][1]], i3[1]);
+		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][2]], i3[2]);		
+		float z = -fdf.verts[fdf.obj[fdf.curframe].faces[i][0]][Z];
+		
+		z += 10000.0f;
+		fill_tri(i3, &fdf, z, c);
 
+		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][0]], i3[0]);
+		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][1]], i3[1]);
+		populate_bresenham(&b, i3[0], i3[1]);
+		draw_line(&fdf, b, z, c);
+		
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, 0, c);
+		draw_line(&fdf, b, z, c);
 
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
 		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, 0, c);
-
+		draw_line(&fdf, b, z, c);
 		i++;
 	}
 }
@@ -202,42 +218,43 @@ static void	calc_matrices(t_fdf *fdf)
 	ft_bzero(fdf->matrices, sizeof(float [2][3][3]));
 	//angles[X] = ft_degtorad(fdf->view[Y]);
 	angles[X] = fdf->view[Y];
-	printf("angle %f \n", angles[X]);
-	//doesn't work when abs(angle) < PI / 2
 
-	fdf->matrices[0][X][X] = cos(angles[X]);
-	
+	/*fdf->matrices[0][X][X] = cos(angles[X]);
 	fdf->matrices[0][Y][X] = sin(angles[X]);
-	
-	fdf->matrices[0][Z][Y] = 1.0;
+	fdf->matrices[0][Z][Y] = 1.0f;
+	fdf->matrices[0][Y][Z] = 1.0f;*/
 
-	//These only affect z
-	//fdf->matrices[0][X][Z] = 1.0f;
-	fdf->matrices[0][Y][Z] = 1.0f;
-	//fdf->matrices[0][Z][Z] = 1.0f;
-	
-	//fdf->matrices[0][Y][Z] = 1.0f;
-	//fdf->matrices[0][Y][Z] = sin(angles[X]);
-	//fdf->matrices[0][X][Z] = -cos(angles[X]);
+	fdf->matrices[0][X][X] = 1.0f;
 
-	angles[Y] = ft_degtorad(fdf->view[X]);
+	fdf->matrices[0][Y][Y] = 1.0f;
+	fdf->matrices[0][Z][Z] = 1.0f;
+	//fdf->matrices[0][X][Z] = cos(angles[X]);
+	//fdf->matrices[0][Y][Z] = sin(angles[Y]);
 	
-	fdf->matrices[1][X][X] = 1.0f;
-	fdf->matrices[1][Y][Y] = 1.0f;
-	fdf->matrices[1][Z][Z] = 1.0f;
-	//fdf->matrices[1][Y][Z] = -sin(angles[X]);
 	
-	//fdf->matrices[1][Y][Z] = -1.0f;
+	fdf->matrices[1][X][X] = cos(angles[X]);
+	fdf->matrices[1][Y][X] = sin(angles[X]);
 	
-	//fdf->matrices[1][X][Z] = sin(angles[X]);
+	fdf->matrices[1][Z][Y] = 1.0f;
+
+	//float ff = acos(ft_clampf(tan(angles[X]), -1.0f, 1.0f));
+	//printf("ff %f \n", ff);
+	fdf->matrices[1][Y][Z] = cos(angles[X]);
+	fdf->matrices[1][X][Z] = -sin(angles[X]); // actually correct
+	//fdf->matrices[1][Y][Z] = -cos(ff); //Correct (almost, not all angles)
 	
-	/*
-	fdf->matrices[1][X][X] = 1.0f;
-	fdf->matrices[1][Y][Y] = cos(angles[Y]);
-	fdf->matrices[1][Y][Z] = sin(angles[Y]);
-	fdf->matrices[1][Z][Y] = sin(angles[Y]);
-	fdf->matrices[1][Z][Z] = -cos(angles[Y]);
-	*/
+	
+
+	
+	//fdf->matrices[1][Y][Z] = asin(ft_clampf(tan(angles[X]), -1.0f, 1.0f));
+	//fdf->matrices[1][Y][Z] = asin(angles[X]);
+	
+	//fdf->matrices[1][Z][Y] = 1.0f;
+	
+	//fdf->matrices[1][Z][X] = (angles[X]);
+	//fdf->matrices[1][Z][Z] = 1.0f;
+	//fdf->matrices[1][Y][Z] = 1.0f;
+	//fdf->matrices[1][Z][Y] = 1.0f;
 	
 	//CORRECT ROTATINO, WRONG Z?
 	/*fdf->matrices[1][X][X] = 1.0f;
@@ -259,10 +276,7 @@ int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 	fdf->depth = ft_memalloc(sizeof(float) * img->length);
 	fdf->verts = ft_memalloc(sizeof(float *) * object->v_count);
 	fdf->img = img;
-	fdf->obj = &object[0]; //TODO: might not work cause this might just be the object variable that's in local scope
-	assert(object[0].v_count == object[1].v_count);
-	assert(object[0].f_count == object[1].f_count);
-	assert(object[0].m_count == object[1].m_count);
+	fdf->obj = &object[0];
 	if (fdf->depth == NULL || fdf->verts == NULL)
 		return (-1);
 	i = 0;
@@ -287,16 +301,18 @@ void	fdf_update(t_fdf *fdf)
 	i = 0;
 	calc_matrices(fdf);
 	//fdf->obj = &fdf->obj[3];
+	anim(fdf);
 	while (i < fdf->obj->v_count)
 	{
-		fdf->verts[i][X] = (float)fdf->obj->verts[i][X];
-		fdf->verts[i][Y] = (float)fdf->obj->verts[i][Y];
-		fdf->verts[i][Z] = (float)fdf->obj->verts[i][Z];
+		fdf->verts[i][X] = (float)fdf->obj[fdf->curframe].verts[i][X];
+		fdf->verts[i][Y] = (float)fdf->obj[fdf->curframe].verts[i][Y];
+		fdf->verts[i][Z] = (float)fdf->obj[fdf->curframe].verts[i][Z];
 		v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
 		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 400, 0});
 		i++;
 	}
 	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
+	
 	fdf_draw(*fdf);
 }

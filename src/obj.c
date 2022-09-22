@@ -199,9 +199,6 @@ void	parse_anim(t_obj *obj, char *name, int framecount)
 		fd = file_open(name);
 		if (i != 0)
 			cpy_materials(&obj[i], &obj[0]);
-		//ft_memcpy(&obj[i], &obj[0], sizeof(t_obj)); //Won't work because v_count needs to start
-													// from zero according to get_vertice
-		/* */
 		get_vertices(&(obj[i]), fd);
 		close(fd);
 		i++;
@@ -221,7 +218,7 @@ void	parse_obj(t_obj *obj)
 	//obj
 	ft_bzero(name, sizeof(char[100]));
 	ft_strcat(name, "animtests/cyborg/cy");
-	parse_anim(obj, name, 5);
+	parse_anim(obj, name, 19);
 	printf("m count %i \n", obj->m_count);
 	//exit(0);
 	//close(fd);

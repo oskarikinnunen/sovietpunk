@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/19 14:03:00 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/22 19:36:51 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@
 //#include "SP_PNG.h"
 
 # define FPSCOUNTER
-# define WINDOW_W 720
-# define WINDOW_H 540
+# define WINDOW_W 800
+# define WINDOW_H 600
 # define X 0
 # define Y 1
+
+# define DARKNESS 1000.0f
 
 # define RAYSLICE	0.0018f
 # define FOV		RAYSLICE * WINDOW_W
