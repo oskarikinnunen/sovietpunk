@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/22 19:54:27 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/24 02:24:35 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	renderobj(t_gamecontext *gc)
 	o_angle = atan2((float)fdf->crd[X] - gc->player.pos[X],
 		(float)fdf->crd[Y] - gc->player.pos[Y]);
 	fdf->view[Y] = o_angle;// * (180 / PI);
-	printf("%f angle\n", o_angle);
 	fdf->clock = &gc->clock;
 	fdf_update(fdf);
 

@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   deltatime.c                                        :+:      :+:    :+:   */
+/*   shade.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/10 20:57:09 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 21:00:55 by okinnune         ###   ########.fr       */
+/*   Created: 2022/09/26 17:26:45 by okinnune          #+#    #+#             */
+/*   Updated: 2022/09/26 17:48:57 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 
-void	update_deltatime(t_clock *c)
+u_int32_t	shade(u_int32_t clr, int wallheight)
 {
-	Uint32			time_now;
-	static	Uint32	prev_fpstime;
+	float		mul;
+	uint32_t	final;
 
-	time_now = SDL_GetTicks();
-	c->delta = time_now - c->prev_time;
-	c->prev_time = time_now;
-	#ifdef FPSCOUNTER
-	
-	if (time_now >= prev_fpstime + 1000) {
-		printf("FPS: %i\n", 1000 / c->delta);
-		prev_fpstime = time_now;
-	}
-	#endif
+	mul = (float)wallheight / DARKNESS;
+	if (mul > 1.0f)
+		mul = 1.0f;
+	final = (clr & 0xFF) * mul;
+	final += (uint32_t)((clr >> 8 & 0xFF) * mul) << 8;
+	final += (uint32_t)((clr >> 16 & 0xFF) * mul * mul) << 16;
+	return (final);
 }

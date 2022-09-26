@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/22 18:56:46 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/26 17:47:34 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,8 @@ void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c)
 	split[Z] = sorted[1][Z];
 	fill_sub_tri((int *[3]){(int *)&(sorted[0]), (int *)&(sorted[1]), (int *)&split}, fdf, z, c);
 	fill_sub_tri((int *[3]){(int *)&(sorted[2]), (int *)&(sorted[1]), (int *)&split}, fdf, z, c);
-	/*populate_bresenham(&b, sorted[0], split);
-	draw_line(fdf, b, z, c);*/
+	//populate_bresenham(&b, sorted[0], split);
+	//draw_line(fdf, b, z, c);
 }
 
 float	z_depth(float **fv3s)
@@ -167,46 +167,24 @@ void	fdf_draw(t_fdf fdf)
 
 	while (i < fdf.obj->f_count)
 	{
+		int cf = fdf.curframe;
+		float z =	-fdf.verts[fdf.obj[cf].faces[i][0]][Z] +
+					-fdf.verts[fdf.obj[cf].faces[i][1]][Z] + 
+					-fdf.verts[fdf.obj[cf].faces[i][2]][Z];
 		if (fdf.obj->colors[i] != 0) {
 			c = fdf.obj->mtlcolors[fdf.obj->colors[i] - 1];
-			int cr, cg, cb;
 			if (fdf.obj->colors[i] != 4)
-			{
-				cr = (c & 0xFF) * mul * mul;
-				cg = (c >> 8 & 0xFF) * mul;
-				cb = (c >> 16 & 0xFF) * mul;
-			} else {
-				cr = (c & 0xFF);
-				cg = (c >> 8 & 0xFF);
-				cb = (c >> 16 & 0xFF);
-			}
-			
-			c = (cb & 0xFF) + (cg << 8) + (cr << 16);
+				c = shade(c, fdf.scale);
 		}
-		
-		
-		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][0]], i3[0]);
-		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][1]], i3[1]);
-		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][2]], i3[2]);		
-		float z = -fdf.verts[fdf.obj[fdf.curframe].faces[i][0]][Z];
-		
+		fv3_to_iv3(fdf.verts[fdf.obj[cf].faces[i][0]], i3[0]);
+		fv3_to_iv3(fdf.verts[fdf.obj[cf].faces[i][1]], i3[1]);
+		fv3_to_iv3(fdf.verts[fdf.obj[cf].faces[i][2]], i3[2]);
+		z *= 10.0f;
 		z += 10000.0f;
 		fill_tri(i3, &fdf, z, c);
-
-		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][0]], i3[0]);
-		fv3_to_iv3(fdf.verts[fdf.obj[fdf.curframe].faces[i][1]], i3[1]);
-		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, z, c);
-		
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][1]], i3[0]);
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[1]);
-		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, z, c);
-
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][2]], i3[0]);
-		fv3_to_iv3(fdf.verts[fdf.obj->faces[i][0]], i3[1]);
-		populate_bresenham(&b, i3[0], i3[1]);
-		draw_line(&fdf, b, z, c);
+		draw_line(&fdf, (populate_bresenham(&b, i3[0], i3[1]), b), z, c);
+		draw_line(&fdf, (populate_bresenham(&b, i3[1], i3[2]), b), z, c);
+		draw_line(&fdf, (populate_bresenham(&b, i3[2], i3[0]), b), z, c);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/22 19:36:51 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/26 20:57:52 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 
 # define RAYSLICE	0.0018f
 # define FOV		RAYSLICE * WINDOW_W
-# define WALLTHING	48 //TODO rename lol
+# define WALLTHING	44 //TODO rename lol
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.100f
 # define MAPSIZE	16
@@ -84,6 +84,9 @@ typedef struct s_gamecontext
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
 	u_int32_t		v[2];
 }	t_gamecontext;
+
+/* shade.c */
+u_int32_t	shade(u_int32_t color, int wallheight);
 
 /* obj_render.c */
 void	renderobj(t_gamecontext *gc);

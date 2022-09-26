@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/30 21:51:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/26 17:23:56 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@ Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
 	i = 0;
 	while (ft_strncmp(ptr, "bKGD", 4) != 0 && ft_strncmp(ptr, "tIME", 4) != 0)
 	{
-		png->palette.plte[i] = *ptr + (*(ptr + 1) << 8) + (*(ptr + 2) << 16);
+		//png->palette.plte[i] = *ptr + (*(ptr + 1) << 8) + (*(ptr + 2) << 16);
+		png->palette.plte[i] = (*ptr << 16) + (*(ptr + 1) << 8) + (*(ptr + 2));
+		//png->palette.plte[i] = *(ptr + 2);
 		ptr += 3;
-		/*png->palette.plte[i] = *(Uint64 *)ptr;*/
 		i++;
-		//printf("i %i \n", i);
-		//ptr++;
 	}
 	png->palette.length = i;
 	printf("pal len %i \n", png->palette.length);

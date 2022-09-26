@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/21 14:36:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/26 20:50:59 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	*floortable(t_sdlcontext *sdl)
 	while (i < WINDOW_H / 2)
 	{
 		angle += RAYSLICE; //FOV STEP constant
-		ray[X] = sin(angle) * 2000 * 64; 
-		ray[Y] = cos(angle) * 2000 * 64;						//
+		ray[X] = sin(angle) * 64 * 1000; 
+		ray[Y] = cos(angle) * 64 * 1000;						//
 		int height = 32;
 		ray[Y] += height;
 		populate_bresenham(&b, (int[2]){0, height}, ray);
 		
 		SDL_RenderPresent(sdl->renderer);
-		while(b.local[Y] > 0)
+		while(b.local[Y] > -1)
 			step_bresenham(&b);
 		# define SCL 5
 		SDL_RenderDrawLine(sdl->renderer, (0 + 100) / SCL, (32 + 100) / SCL, (b.local[X] + 100) / SCL, (b.local[Y] + 100) / SCL);
@@ -73,12 +73,11 @@ void	createsdlcontext(t_sdlcontext *context)
 	context->surface = SDL_GetWindowSurface(context->window);
 	//context->surface = SDL_ConvertSurfaceFormat(context->surface, SDL_PIXELFORMAT_ARGB32, 0); //WHY NO WORK
 	
-	
 	if (context->surface == NULL)
 		(printf("WTH SURFACE NULL"), exit(0));
 	
 	
-	SDL_LockSurface(context->surface);
+	//SDL_LockSurface(context->surface);
 	
 	printf("%s \n", SDL_GetError());
 	//exit(0);

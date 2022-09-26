@@ -112,6 +112,8 @@ void	get_vertices(t_obj *obj, int fd)
 	
 }
 
+
+//color is reversed cuz I'm too lazy to change the sdl format
 uint32_t	get_color(char *line)
 {
 	char	**strs;
@@ -123,7 +125,7 @@ uint32_t	get_color(char *line)
 	clr = 0;
 	while (i < 3)
 	{
-		clr += ((int)(atof(strs[i]) * 255.0f) & 0xFF) << (8 * i);
+		clr += ((int)(atof(strs[i]) * 255.0f) & 0xFF) << (8 * (2 - i));
 		free(strs[i]);
 		i++;
 	}

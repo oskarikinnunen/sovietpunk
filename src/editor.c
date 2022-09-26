@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/06 16:46:18 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/26 20:07:25 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,21 @@
 
 //TODO: draw text, update map state, whatever youll figure it out
 
-void	drawrect(SDL_Renderer *r, int crd[2])
+void	drawrect(uint32_t *pxls, int crd[2], int clr)
 {
 	int	i;
 
 	i = 0;
 	while (i < TILESIZE)
 	{
-		SDL_RenderDrawPoint(r, crd[X] + i, crd[Y]);
+		pxls[crd[X] + i + crd[Y] * WINDOW_W] = clr;
+		pxls[crd[X] + (crd[Y] + i) * WINDOW_W] = clr;
+		pxls[crd[X] + TILESIZE + (crd[Y] + i) * WINDOW_W] = clr;
+		pxls[crd[X] + i + (crd[Y] + TILESIZE) * WINDOW_W] = clr;
+		/*SDL_RenderDrawPoint(r, crd[X] + i, crd[Y]);
 		SDL_RenderDrawPoint(r, crd[X], crd[Y] + i);
 		SDL_RenderDrawPoint(r, crd[X] + i, crd[Y] + TILESIZE);
-		SDL_RenderDrawPoint(r, crd[X] + TILESIZE, crd[Y] + i);
+		SDL_RenderDrawPoint(r, crd[X] + TILESIZE, crd[Y] + i);*/
 		i++;
 	}
 }
@@ -39,6 +43,7 @@ int		isnonempty(u_int32_t *mapdata, int *crd)
 
 void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL DRAW
 {
+	int	clr;
 	int	crd[2];
 
 	ft_bzero(crd, sizeof(int [2]));
@@ -46,17 +51,18 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL
 	{
 		while (crd[X] < MAPSIZE)
 		{
-			SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 101);
+			clr = INT_MAX;
 			if (crd[X] == ed.cursor[X] && crd[Y] == ed.cursor[Y])
-				SDL_SetRenderDrawColor(context.renderer, 255, 0, 0, 255);
+				clr = 0xFF << 8;
 			else if (ed.mapdata[crd[X] + crd[Y] * TILESIZE] != 0)
 				drawimagescaled(&context,
 					(int [2]){crd[X] + crd[X] * TILESIZE,
 					crd[Y] + crd[Y] * TILESIZE},
-					ed.mapdata[crd[X] + crd[Y] * TILESIZE] - 1, //Make its own function? with clamp or somsom
+					ed.mapdata[crd[X] + crd[Y] * TILESIZE], //Make its own function? with clamp or somsom
 					TILESIZE);
-			drawrect(context.renderer,
-				(int[2]){crd[X] + crd[X] * TILESIZE, crd[Y] + crd[Y] * TILESIZE});
+			drawrect((uint32_t *)context.surface->pixels,
+				(int[2]){crd[X] + crd[X] * TILESIZE, crd[Y] + crd[Y] * TILESIZE},
+				clr);
 			crd[X]++;
 		}
 		crd[X] = 0;
@@ -81,13 +87,12 @@ void	mapcreator(char *mapname, t_sdlcontext sdl)
 	//loadpngs(&sdl);
 	while (1)
 	{
-		SDL_SetRenderDrawColor(sdl.renderer, 0, 0, 0, 255);
-		SDL_RenderClear(sdl.renderer);
 		if (ed_eventloop(&ed))
 			break ;
 		drawmapstate(sdl, ed); //draw map state
 		//drawimage(sdl, 40, 40);
-		SDL_RenderPresent(sdl.renderer);
+		//SDL_RenderPresent(sdl.renderer);
+		SDL_UpdateWindowSurface(sdl.window);
 	}
 	printf("wrote %lu b in file\n", write(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE));
 	close(fd);
