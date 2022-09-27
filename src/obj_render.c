@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/24 02:24:35 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:05:27 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ void	renderobj(t_gamecontext *gc)
 
 	fdf = gc->sdlcontext->fdfs; //TODO do as param or iterate through the objects;
 
-	angle = gc->player.angle + 1.57f;
+	angle = gc->player.angle + FOV;
 	scan_h = 0;
 	
 	dist = v2dist(fdf->crd, (int [2]){gc->player.pos[X], gc->player.pos[Y]});
-	fdf->scale = (WALLTHING * WINDOW_W) / dist;
+	fdf->scale = WALLTHING / dist;
 	fdf->screenspace[X] = +300000;
 	fdf->screenspace[Y] = screenspace_y(gc, dist) - (fdf->scale / 2);
 	o_angle = atan2((float)fdf->crd[X] - gc->player.pos[X],

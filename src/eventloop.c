@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/07 21:24:05 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:04:29 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,29 @@ int	ismovement(SDL_KeyCode code)
 
 void	playerinput(SDL_Keycode kc, t_player *plr)
 {
+	float	angle;
 	plr->rot = (kc == SDLK_LEFT) * TURNSPEED;
 	plr->rot -= (kc == SDLK_RIGHT) * TURNSPEED;
+	angle = RAYSLICE * (WINDOW_W / 2);
 	if (kc == SDLK_UP)
 	{
-		plr->dest[X] = sin(plr->angle + 0.83); //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
-		plr->dest[Y] = cos(plr->angle + 0.83);
+		plr->dest[X] = sin(plr->angle + angle); //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
+		plr->dest[Y] = cos(plr->angle + angle);
 	}
 	if (kc == SDLK_DOWN)
 	{
-		plr->dest[X] = -sin(plr->angle + 0.83);
-		plr->dest[Y] = -cos(plr->angle + 0.83);
+		plr->dest[X] = -sin(plr->angle + angle);
+		plr->dest[Y] = -cos(plr->angle + angle);
 	}
 	if (kc == SDLK_a)
 	{
-		plr->dest[X] = -sin(plr->angle - 0.83);
-		plr->dest[Y] = -cos(plr->angle - 0.83);
+		plr->dest[X] = -sin(plr->angle - RAD90 + angle);
+		plr->dest[Y] = -cos(plr->angle - RAD90 + angle);
 	}
 	if (kc == SDLK_d)
 	{
-		plr->dest[X] = sin(plr->angle - 0.83);
-		plr->dest[Y] = cos(plr->angle - 0.83);
+		plr->dest[X] = sin(plr->angle - RAD90 + angle);
+		plr->dest[Y] = cos(plr->angle - RAD90 + angle);
 	}
 	plr->dest[X] *= MOVESPEED;
 	plr->dest[Y] *= MOVESPEED;

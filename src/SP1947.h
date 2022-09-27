@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 20:57:52 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:26:44 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,13 @@
 
 # define DARKNESS 1000.0f
 
-# define RAYSLICE	0.0018f
+# define RAYSLICE	0.0015f
 # define FOV		RAYSLICE * WINDOW_W
-# define WALLTHING	44 //TODO rename lol
+# define RAD90		1.57079633f
+# define WALLTHING	(0.0017777f / RAYSLICE) * 36000 //800w rayslice 0.0018f = 452
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.100f
 # define MAPSIZE	16
-//Yeah yeah it's unauthentic to have the player coordinates as floating points,
-// my brain hurt doing the integer so math so f it
 
 typedef struct s_player
 {

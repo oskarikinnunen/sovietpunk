@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 20:50:59 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:17:00 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,21 @@ int	*floortable(t_sdlcontext *sdl)
 
 	t = ft_memalloc(sizeof(u_int32_t) * (WINDOW_H / 2));
 	i = 0;
-	angle = 1.5708f;
-	
-	SDL_SetRenderDrawColor(sdl->renderer, 100,100,100,255);
+	angle = RAD90;
 	while (i < WINDOW_H / 2)
 	{
 		angle += RAYSLICE; //FOV STEP constant
 		ray[X] = sin(angle) * 64 * 1000; 
 		ray[Y] = cos(angle) * 64 * 1000;						//
-		int height = 32;
-		ray[Y] += height;
-		populate_bresenham(&b, (int[2]){0, height}, ray);
-		
-		SDL_RenderPresent(sdl->renderer);
-		while(b.local[Y] > -1)
+		#define HH 32 //TODO: define gamescale in sp1947
+		ray[Y] += HH; 
+		populate_bresenham(&b, (int[2]){0, HH}, ray);
+		while(b.local[Y] > 0) //fix pls
 			step_bresenham(&b);
-		# define SCL 5
-		SDL_RenderDrawLine(sdl->renderer, (0 + 100) / SCL, (32 + 100) / SCL, (b.local[X] + 100) / SCL, (b.local[Y] + 100) / SCL);
 		t[i] = b.local[X];
 		i++;
 	}
 	printf("exit ft \n");
-	//i = 240;
-	/*while (i > 1)
-	{
-		//t[i] = ft_abs(t[i] - t[i - 1]);
-		printf("diff %i \n", t[i]);
-		i--;
-	}*/
-	//SDL_Delay(5000);
 	return (t);
 }
 
