@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/22 19:50:00 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/28 19:27:04 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	int	index;
 
 	index = ix + (iy * img.size[Y]);
-	index = ft_clamp(index, 0, img.length);
+	//index = ft_clamp(index, 0, img.length - 1);
 	return (img.data[index]);
 }
 
@@ -39,21 +39,24 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 	
 	img = context->images[tid];
 	scalar = ((float)img.size[X] / (float)scale);
-	while (iy++ <= scale)
+	while (iy++ < scale - 1)
 	{
+		ix = 0;
+		if (iy + p[Y] < 0 || iy + p[Y] > WINDOW_H)
+			continue;
 		while (ix++ < scale)
 		{
-			//color = samplecolor(img, ix * (img.size[X] / scale) + iy * (img.size[X] / scale), iy * (img.size[Y] / scale));
-			color = samplecolor(img, (float)ix * scalar, (float)iy * scalar);
-			int index = ix + p[X] + (iy + p[Y]) * WINDOW_W;
-			index = ft_clamp(index, 0, WINDOW_H * WINDOW_W);
-			if (color != 0 || ix == 1 || ix == scale -1 && ix + p[X] > 0 && ix + p[X] < WINDOW_W)
-				((int *)context->surface->pixels)[index] = color;
 			
-			//SDL_SetRenderDrawColor(context->renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);
-			//SDL_RenderDrawPoint(context->renderer, ix + p[X], iy + p[Y]);
+			if (ix + p[X] < 0 || ix + p[X] >= WINDOW_W)
+				continue;
+			color = samplecolor(img, (float)ix * scalar, (float)iy * scalar);
+			if (color != 0)
+			{
+				
+				int index = ix + p[X] + (iy + p[Y]) * WINDOW_W;
+				((int *)context->surface->pixels)[index] = color;
+			}
 		}
-		ix = 0;
 	}
 }
 

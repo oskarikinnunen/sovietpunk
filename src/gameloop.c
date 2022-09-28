@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/27 20:35:23 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/28 20:45:58 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,37 @@
 #include "bresenham.h"
 #define RAY_LENGTH	20
 #define WALLSCALE	2
-#define GAMESCALE	64
 #define RENDERSCALE	10
 
 #include "assert.h"
-//TODO make this generic and move to helper file
+
+void	rendergame(t_sdlcontext *sdl, int *walls)
+{
+	int			i;
+	int			smpl[2];
+	int			wallheight;
+	float		ystep;
+	t_simpleimg	img;
+
+	i = -1;
+	while (i++ < WINDOW_W)
+	{
+		wallheight = WALLTHING / (walls[i] & 0xFFFF);
+		img = sdl->images[walls[i] >> 24 & 0xFF];
+		smpl[X] = ((walls[i] >> 16 & 0xFF) / 64.0f) * img.size[X];
+		smpl[Y] = ft_clamp((wallheight / 2) - WINDOW_H, 0, wallheight);
+		ystep = ((float)img.size[Y] / wallheight);
+		while (++smpl[Y] *ystep < img.size[Y] - 1 && wallheight != 0)
+		{
+			if ((WINDOW_H / 2) + (smpl[Y] - wallheight / 2) > WINDOW_H)
+				break ;
+			((int *)sdl->surface->pixels)[i + ((WINDOW_H / 2)
+					+ (smpl[Y] - wallheight / 2)) * WINDOW_W] = shade
+				(samplecolor(img, smpl[X] + smpl[Y] * ystep, smpl[Y] * ystep),
+					wallheight);
+		}
+	}
+}
 
 void	render2Dmap(t_sdlcontext *context, uint32_t *map)
 {
@@ -41,97 +67,51 @@ void	render2Dmap(t_sdlcontext *context, uint32_t *map)
 	}
 }
 
-static void DrawLineWithRenderScale(SDL_Renderer *r, int *origin, int *dest)
-{
-	float f = ((float)RENDERSCALE / (float)GAMESCALE);
-	SDL_RenderDrawLine(r, origin[X] * f, origin[Y] * f,
-							dest[X] * f, dest[Y] * f);
-}
-
-int	floorcast(int **floor, t_bresenham *b, t_gamecontext *gc)
+void	floorcast(int **floor, t_bresenham *b, t_gamecontext *gc)
 {
 	int		left;
 	int		i;
 
 	left = WINDOW_H / 2;
-	
 	i = 0;
 	while (i <= left)
 	{
 		while (v2dist(b->local, b->target) >= gc->sdlcontext->ft[i])
-			if (step_bresenham(b)) break;
-		floor[0][i] = ((b->local[Y] % GAMESCALE) & 0xFF) + ((b->local[X] % GAMESCALE) << 8);
+		{
+			if (step_bresenham(b))
+				break;
+		}
+		floor[0][i] = ((b->local[Y] % GAMESCALE) & 0xFF)
+			+ ((b->local[X] % GAMESCALE) << 8);
 		i++;
 	}
 }
 
-int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor) //TODO use int[2] as params?
+int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 {
-	static	t_bresenham	b;
-	int		tex_sample;
-	int		res;
+	static t_bresenham	b;
+	int					tex_sample;
+	int					res;
+	int					tx;
 
 	populate_bresenham(&b, crd, dst);
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
-			&& b.local[Y] > 0 && b.local[Y] < MAPSIZE * GAMESCALE
-			&& !step_bresenham(&b))
-	{
-		if (gc->map[((b.local[Y] & 0xFFFFFFC0) >> 6) * MAPSIZE
-			+ ((b.local[X] & 0xFFFFFFC0) >> 6)] != 0)
-			break;
-	}
+		&& b.local[Y] > 0 && b.local[Y] < MAPSIZE * GAMESCALE
+		&& !step_bresenham(&b) && gc->map[((b.local[Y] & 0xFFFFFFC0) >> 6)
+			* MAPSIZE + ((b.local[X] & 0xFFFFFFC0) >> 6)] == 0)
+		;
 	tex_sample = b.local[X] % GAMESCALE;
-	if (b.local[X] % GAMESCALE == 0 ||
-		b.local[X] % GAMESCALE == GAMESCALE - 1)
+	if (b.local[X] % GAMESCALE == 0
+		|| b.local[X] % GAMESCALE == GAMESCALE - 1)
 		tex_sample = b.local[Y] % GAMESCALE;
 	res = v2dist(crd, b.local);
-	b.local[Y] = ft_clamp(b.local[Y], 0, (MAPSIZE * GAMESCALE));
-	b.local[X] = ft_clamp(b.local[X], 0, (MAPSIZE * GAMESCALE));
-	int tx = (gc->map[((b.local[Y] & 0xFFFFFFC0) >> 6) * MAPSIZE
+	tx = (gc->map[((b.local[Y] & 0xFFFFFFC0) >> 6) * MAPSIZE
 			+ ((b.local[X] & 0xFFFFFFC0) >> 6)] & 0xFF);
-	tx = ft_clamp(tx, 0, 3); //TODO: fix mby?
-	tx = tx << 24;
+	tx = ft_clamp(tx, 0, 3) << 24;
 	populate_bresenham(&b, b.local, crd);
 	floorcast(&floor, &b, gc);
-	tex_sample = tex_sample & 0xFF;
-	res += (tex_sample << 16) + tx;
+	res += ((tex_sample & 0xFF) << 16) + tx;
 	return (res);
-}
-
-int		calc_wallheight(int wall)
-{
-	return (((RAY_LENGTH * GAMESCALE) - wall) * WALLSCALE);
-}
-
-void	rendergame(t_sdlcontext *sdl, int *walls, int max)
-{
-	int	i;
-	int offset = 300;
-	int wallheight;
-
-	//SDL_SetRenderDrawColor(sdl.renderer, 255, 0, 0, 10);
-	i = 0;
-	while (i < max)
-	{
-		wallheight = 0;
-		//if (walls[i] & 0xFFFF != 0)
-		wallheight = WALLTHING / (walls[i] & 0xFFFF);
-		float iy = 0.0f;
-		t_simpleimg img = sdl->images[walls[i] >> 24 & 0xFF];
-		int ix = ((float)(walls[i] >> 16 & 0xFF) / 64.0f) * img.size[X];
-		float ystep = ((float)img.size[Y] / (float)wallheight);
-		while (iy < wallheight - 1 && wallheight != 0)
-		{
-			Uint32 clr = samplecolor(img, ix + iy * ystep, iy * ystep);
-			clr = shade(clr, wallheight);
-			int ind = i + (int)(WINDOW_H / 2 + iy - (wallheight / 2)) * WINDOW_W;
-			if (ind < 0) ind = 0;
-			if (ind > WINDOW_H * WINDOW_W) ind = WINDOW_H * WINDOW_W;
-			((int *)sdl->surface->pixels)[ind] = clr;
-			iy++;
-		}
-		i++;
-	}
 }
 
 void moveplayer(t_player *plr, int deltatime, int *map)
@@ -140,7 +120,7 @@ void moveplayer(t_player *plr, int deltatime, int *map)
 
 	dest_index = (int)(plr->pos[X] + (plr->dest[X] * deltatime)) / 64
 				+ ((int)(plr->pos[Y] + (plr->dest[Y] * deltatime)) / 64) * MAPSIZE;
-	if (map[dest_index] == 0 || map[dest_index] == 3)
+	if (map[dest_index] == 0 || map[dest_index] == 2)
 	{
 		plr->pos[X] += plr->dest[X] * deltatime;
 		plr->pos[Y] += plr->dest[Y] * deltatime;
@@ -150,22 +130,23 @@ void moveplayer(t_player *plr, int deltatime, int *map)
 
 void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
 {
-	int	iy = 0;
+	int		iy;
+	int		x;
+	int		y;
+	Uint32	clr;
 
-	//assert ((int)WALLTHING == 54);
-
-	//int wh = ((int)WALLTHING * WINDOW_W) / h;
+	iy = 0;
 	while (iy <= (WINDOW_H / 2))
 	{
-		int x = (floor[iy] & 0xFF) * (sdl.images[0].size[X] / GAMESCALE);
-		int y = (floor[iy] >> 8) * (sdl.images[0].size[Y] / GAMESCALE);
-		int clr = samplecolor(sdl.images[0], x + y, x);
+		x = (floor[iy] & 0xFF) * (sdl.images[0].size[X] / GAMESCALE);
+		y = (floor[iy] >> 8) * (sdl.images[0].size[Y] / GAMESCALE);
+		clr = samplecolor(sdl.images[0], x + y, x);
 		clr = shade(clr, iy * 2);
+		int oc = ((int *)sdl.surface->pixels)[ix + (iy + WINDOW_H / 2) * WINDOW_W];
 		((int *)sdl.surface->pixels)[ix + (iy + WINDOW_H / 2) * WINDOW_W] = clr;
 		((int *)sdl.surface->pixels)[ix + (WINDOW_H / 2 - iy) * WINDOW_W] = clr;
 		iy++;
 	}
-	//printf("ix %i \n", ix);
 }
 
 int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext gc) //TODO: remove sdl context, only used for debug?
@@ -178,8 +159,6 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 
 	scan_h = 0;
 	scan_angle = angle + FOV;
-	//floorcast(*sdl, gc.player.pos, (float [2]){scan_angle, scan_angle - (512 * 0.0022)}); //TODO make fov define
-	gc.sdlcontext->fdfs->screenspace[X] = -200;
 	while (scan_h < WINDOW_W)
 	{
 		scan_angle -= RAYSLICE;
@@ -192,7 +171,6 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 			scan_h, wallheights[scan_h] & 0xFFFF);
 		scan_h++;
 	}
-	
 	return (wallheights);
 }
 
@@ -203,28 +181,6 @@ void	openmap(t_gamecontext *gc)
 	fd = open("map", O_RDONLY);
 	(void)!read(fd, gc->map, MAPSIZE * MAPSIZE * sizeof(u_int32_t)); //TODO: check that we read the correct amount
 	close(fd);
-}
-
-void	spawnplayer(t_gamecontext *gc)
-{
-	int ix;
-	int	iy;
-
-	ix = 0;
-	iy = 0;
-	while (iy < MAPSIZE)
-	{
-		while (ix < MAPSIZE)
-		{
-			if (gc->map[ix + (iy * MAPSIZE)] == 2)
-				ft_memcpy(gc->player.pos,
-					(float [2]){(ix * GAMESCALE) - 0.5f, (iy * GAMESCALE) - 0.5f}, sizeof(float [2]));
-			ix++;
-		}
-		ix = 0;
-		iy++;
-	}
-	gc->player.angle = 0;
 }
 
 void	gameloop(t_gamecontext gc)
@@ -239,15 +195,13 @@ void	gameloop(t_gamecontext gc)
 			return ;
 		update_deltatime(&gc.clock);
 		moveplayer(&gc.player, gc.clock.delta, gc.map);
-		//SDL_LockSurface(gc->sdlcontext->surface);
+		//SDL_LockSurface(gc.sdlcontext->surface);
 		rendergame(gc.sdlcontext,
-			raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc),
-			WINDOW_W);
+			raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc));
 		renderobj(&gc);
 		render2Dmap(gc.sdlcontext, gc.map);
 		drawimagescaled(gc.sdlcontext, gc.sdlcontext->fdfs->screenspace, 3, gc.sdlcontext->fdfs->scale);
-		//SDL_UnlockSurface(gc->sdlcontext->surface);
+		//SDL_UnlockSurface(gc.sdlcontext->surface);
 		SDL_UpdateWindowSurface(gc.sdlcontext->window);
-		
 	}
 }

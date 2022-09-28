@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/27 20:26:44 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/28 20:44:58 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define Y 1
 
 # define DARKNESS 1000.0f
-
+# define GAMESCALE	64
 # define RAYSLICE	0.0015f
 # define FOV		RAYSLICE * WINDOW_W
 # define RAD90		1.57079633f
@@ -83,6 +83,9 @@ typedef struct s_gamecontext
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
 	u_int32_t		v[2];
 }	t_gamecontext;
+
+/* player.c */
+void	spawnplayer(t_gamecontext *gc);
 
 /* shade.c */
 u_int32_t	shade(u_int32_t color, int wallheight);
