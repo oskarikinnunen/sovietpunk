@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:09:50 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/11 00:09:44 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 18:21:58 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,4 @@ void	populate_bresenham(t_bresenham *b, int32_t *from, int32_t *to)
 	b->target[X] = to[X];
 	b->target[Y] = to[Y];
 	b->error = b->diff[X] + b->diff[Y];
-	//b->local[Y] += b->add[Y];
 }

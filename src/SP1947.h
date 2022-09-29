@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/28 20:44:58 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 21:46:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,9 @@ typedef struct s_sdlcontext
 	SDL_Window				*window;
 	SDL_Surface				*surface;
 	SDL_Renderer			*renderer;
-	//struct	s_pngdata		*textures; //convert pngdarta into simpleimages
 	t_simpleimg				*images;
 	t_fdf					*fdfs;
 	int						*ft; //floortable
-	//struct	s_fdf			*objects;
 }	t_sdlcontext;
 
 typedef struct s_clock
@@ -77,13 +75,13 @@ typedef struct s_gamecontext
 	t_sdlcontext	*sdlcontext;
 	t_player		player;
 	Uint32			map[MAPSIZE * MAPSIZE];
-	//Uint32			lmap[MAPSIZE * MAPSIZE];
 	t_clock			clock;
-	u_int32_t		lastwall;
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
 	u_int32_t		v[2];
 }	t_gamecontext;
 
+/* sortwalls.c */
+void	sortwalls(int walls[WINDOW_W]);
 /* player.c */
 void	spawnplayer(t_gamecontext *gc);
 
@@ -91,6 +89,7 @@ void	spawnplayer(t_gamecontext *gc);
 u_int32_t	shade(u_int32_t color, int wallheight);
 
 /* obj_render.c */
+void	drawfdf(t_sdlcontext *sdl, t_fdf *fdf, int *walls);
 void	renderobj(t_gamecontext *gc);
 
 /* v2.c */
@@ -105,7 +104,7 @@ void	gameloop(t_gamecontext gc);
 /* image.c */
 Uint32	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext *context, int x, int y);
-void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
+void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale, int *walls);
 
 /* deltatime.c */
 void	update_deltatime(t_clock *c);

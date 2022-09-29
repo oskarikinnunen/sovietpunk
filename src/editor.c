@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 20:07:25 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 19:47:05 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL
 			if (crd[X] == ed.cursor[X] && crd[Y] == ed.cursor[Y])
 				clr = 0xFF << 8;
 			else if (ed.mapdata[crd[X] + crd[Y] * TILESIZE] != 0)
-				drawimagescaled(&context,
+				/*drawimagescaled(&context,
 					(int [2]){crd[X] + crd[X] * TILESIZE,
 					crd[Y] + crd[Y] * TILESIZE},
 					ed.mapdata[crd[X] + crd[Y] * TILESIZE], //Make its own function? with clamp or somsom
-					TILESIZE);
+					TILESIZE);*/
 			drawrect((uint32_t *)context.surface->pixels,
 				(int[2]){crd[X] + crd[X] * TILESIZE, crd[Y] + crd[Y] * TILESIZE},
 				clr);
@@ -97,28 +97,3 @@ void	mapcreator(char *mapname, t_sdlcontext sdl)
 	printf("wrote %lu b in file\n", write(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE));
 	close(fd);
 }
-
-/*void	mapcreator(char *mapname, t_sdlcontext context) //Maybe just make this a standalone program?
-{
-	int			fd;
-	t_pngdata	png;
-	t_simpleimg	img;
-	t_fdf		fdf;
-	t_obj		obj;
-
-	//fd = open(mapname, O_CREAT | O_RDWR); //USE protect function (sp_open)
-	pngparse(&png);
-	//close(fd);
-	context.textures = &png;
-	ft_memcpy(img.size, png.size, sizeof(Uint32[2]));
-	img.length = png.size[X] * png.size[Y] * sizeof(Uint32);
-	img.data = ft_memalloc(img.length * sizeof(Uint32));
-	ft_memset(img.data, 255, img.length);
-	
-	parse_obj(&obj);
-	fdf_init(&fdf, &img, &obj); //TODO: call fdf in mapcreator loop
-	fdf_update(&fdf);
-	context.images = &img;
-	context.objects = &fdf;
-	mapcreator_eventloop(fd, context);
-}*/

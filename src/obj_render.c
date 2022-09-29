@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/27 20:05:27 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 21:53:45 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,35 @@ int		screenspace_y(t_gamecontext *gc, int dist)
 	//return ((WINDOW_H / 2) + iy);
 }
 
+void	drawfdf(t_sdlcontext *sdl, t_fdf *fdf, int *walls)
+{
+	int			crd[2];
+	int			color;
+	float		scalar;
+
+	scalar = ((float)fdf->img->size[X] / (float)fdf->scale);
+	crd[Y] = fdf->screenspace[Y] - (fdf->scale / 2);
+	while (crd[Y]++ < fdf->screenspace[Y] + (fdf->scale / 2) - 1)
+	{
+		crd[X] = fdf->screenspace[X] - (fdf->scale / 2);
+		if (crd[Y] < 0 || crd[Y] > WINDOW_H)
+			continue;
+		while (crd[X]++ < fdf->screenspace[X] + (fdf->scale / 2) - 1)
+		{
+			if (crd[X] < 0 || crd[X] >= WINDOW_W)
+				continue;
+			color = samplecolor(*fdf->img, (float)(crd[X] - fdf->screenspace[X] / 2) * scalar
+								, (float)(crd[Y] - fdf->screenspace[Y] / 2) * scalar); //cast to float?
+			//printf("drawing \n");
+			if (color != 0/* && (walls[crd[X]] & 0xFFFF) < fdf.scale*/)
+			{
+				int index = crd[X] + (crd[Y] * WINDOW_W);
+				((int *)sdl->surface->pixels)[index] = color;
+			}
+		}
+	}
+}
+
 void	renderobj(t_gamecontext *gc)
 {
 	int		scan_h;
@@ -43,7 +72,6 @@ void	renderobj(t_gamecontext *gc)
 	t_fdf	*fdf;
 
 	fdf = gc->sdlcontext->fdfs; //TODO do as param or iterate through the objects;
-
 	angle = gc->player.angle + FOV;
 	scan_h = 0;
 	
@@ -56,8 +84,6 @@ void	renderobj(t_gamecontext *gc)
 	fdf->view[Y] = o_angle;// * (180 / PI);
 	fdf->clock = &gc->clock;
 	fdf_update(fdf);
-
-
 	while (scan_h < WINDOW_W)
 	{
 		angle -= RAYSLICE;

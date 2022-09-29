@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 17:47:34 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 18:53:02 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,16 @@ void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c)
 {
 	unsigned int	offset;
 	int				b_res;
-	//t_fdf			*fdf;
-	//TODO: finish lol
+
 	b_res = 0;
-	//
-	//printf("b %i %i trgt: %i %i \n", b.local[X], b.local[Y], b.target[X], b.target[Y]);
 	while (b_res != 1)
 	{
 		offset = b.local[X] + (b.local[Y] * fdf->img->size[X]);
 		if (offset < fdf->img->length && fdf->depth[offset] <= z)
 		{
-			//printf("z overwrote %f with %f\n", fdf->depth[offset], z);
 			fdf->depth[offset] = z;
 			fdf->img->data[offset] = c;
 		}
-			
-			//put this z in depth and color the pixel
-		
-		
-		/*if (offset < si->length)
-			si->data[offset] = c;*/
 		b_res = step_bresenham(&b);
 	}
 }
@@ -96,7 +86,6 @@ void	fill_sub_tri(int *tris[3], t_fdf *fdf, float z, int c)
 	draw_line(fdf, bf, z, c);
 }
 
-
 void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c)
 {
 	int		split[3]; 	//Vector that's used to form the subtriangles.
@@ -106,15 +95,15 @@ void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c)
 
 	sort_tris(ft_memcpy(sorted, tri, sizeof(int [3][3])));
 	lerp = (float)(sorted[1][Y] - sorted[2][Y]) / (float)(sorted[0][Y] - sorted[2][Y]);
-	//lerp = +0.00000001f;
 	split[X] = sorted[2][X] + (lerp * (sorted[0][X] - sorted[2][X]));
 	split[Y] = sorted[1][Y];
-	//printf("split X %i \n", split[X]);
 	split[Z] = sorted[1][Z];
 	fill_sub_tri((int *[3]){(int *)&(sorted[0]), (int *)&(sorted[1]), (int *)&split}, fdf, z, c);
 	fill_sub_tri((int *[3]){(int *)&(sorted[2]), (int *)&(sorted[1]), (int *)&split}, fdf, z, c);
-	//populate_bresenham(&b, sorted[0], split);
-	//draw_line(fdf, b, z, c);
+	if (sorted[0][X] != split[X] && sorted[0][Y] != split[Y]) {
+		populate_bresenham(&b, sorted[0], split);
+		draw_line(fdf, b, z, c);
+	}
 }
 
 float	z_depth(float **fv3s)
@@ -138,13 +127,11 @@ void	anim(t_fdf *fdf)
 	static uint32_t	tick;
 
 	tick += fdf->clock->delta;
-	//printf("tick %i frame %i \n", tick, fdf->curframe);
-	fdf->frames = 19;
+	fdf->frames = 18; //TODO: unhardcode
 	if (tick > 100)
 	{
 		fdf->curframe++;
-		
-		if (fdf->curframe >= fdf->frames - 1)
+		if (fdf->curframe >= fdf->frames)
 			fdf->curframe = 0;
 		tick = 0;
 	}
@@ -163,8 +150,6 @@ void	fdf_draw(t_fdf fdf)
 	fdf.crd[Y] = 512;
 	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
 	ft_bzero(fdf.depth, sizeof(float) * fdf.img->length);
-	float mul  = (float)((float)fdf.scale / DARKNESS) < 1.0f ? (float)((float)fdf.scale / DARKNESS) : 1.0f;
-
 	while (i < fdf.obj->f_count)
 	{
 		int cf = fdf.curframe;
@@ -179,7 +164,7 @@ void	fdf_draw(t_fdf fdf)
 		fv3_to_iv3(fdf.verts[fdf.obj[cf].faces[i][0]], i3[0]);
 		fv3_to_iv3(fdf.verts[fdf.obj[cf].faces[i][1]], i3[1]);
 		fv3_to_iv3(fdf.verts[fdf.obj[cf].faces[i][2]], i3[2]);
-		z *= 10.0f;
+		z *= 5.0f;
 		z += 10000.0f;
 		fill_tri(i3, &fdf, z, c);
 		draw_line(&fdf, (populate_bresenham(&b, i3[0], i3[1]), b), z, c);
@@ -194,54 +179,12 @@ static void	calc_matrices(t_fdf *fdf)
 	float	angles[2];
 
 	ft_bzero(fdf->matrices, sizeof(float [2][3][3]));
-	//angles[X] = ft_degtorad(fdf->view[Y]);
 	angles[X] = fdf->view[Y];
-
-	/*fdf->matrices[0][X][X] = cos(angles[X]);
-	fdf->matrices[0][Y][X] = sin(angles[X]);
-	fdf->matrices[0][Z][Y] = 1.0f;
-	fdf->matrices[0][Y][Z] = 1.0f;*/
-
-	fdf->matrices[0][X][X] = 1.0f;
-
-	fdf->matrices[0][Y][Y] = 1.0f;
-	fdf->matrices[0][Z][Z] = 1.0f;
-	//fdf->matrices[0][X][Z] = cos(angles[X]);
-	//fdf->matrices[0][Y][Z] = sin(angles[Y]);
-	
-	
 	fdf->matrices[1][X][X] = cos(angles[X]);
 	fdf->matrices[1][Y][X] = sin(angles[X]);
-	
 	fdf->matrices[1][Z][Y] = 1.0f;
-
-	//float ff = acos(ft_clampf(tan(angles[X]), -1.0f, 1.0f));
-	//printf("ff %f \n", ff);
 	fdf->matrices[1][Y][Z] = cos(angles[X]);
 	fdf->matrices[1][X][Z] = -sin(angles[X]); // actually correct
-	//fdf->matrices[1][Y][Z] = -cos(ff); //Correct (almost, not all angles)
-	
-	
-
-	
-	//fdf->matrices[1][Y][Z] = asin(ft_clampf(tan(angles[X]), -1.0f, 1.0f));
-	//fdf->matrices[1][Y][Z] = asin(angles[X]);
-	
-	//fdf->matrices[1][Z][Y] = 1.0f;
-	
-	//fdf->matrices[1][Z][X] = (angles[X]);
-	//fdf->matrices[1][Z][Z] = 1.0f;
-	//fdf->matrices[1][Y][Z] = 1.0f;
-	//fdf->matrices[1][Z][Y] = 1.0f;
-	
-	//CORRECT ROTATINO, WRONG Z?
-	/*fdf->matrices[1][X][X] = 1.0f;
-	fdf->matrices[1][Y][Y] = cos(angles[Y]);
-
-	fdf->matrices[1][Y][Z] = 1.0f;
-
-	fdf->matrices[1][Z][Z] = 1.0f;*/
-	
 }
 
 //TODO: fdf_init: allocates the memory and handles errors if that fails
@@ -258,17 +201,14 @@ int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
 	if (fdf->depth == NULL || fdf->verts == NULL)
 		return (-1);
 	i = 0;
-	while (i < fdf->obj->v_count) 
+	while (i < fdf->obj->v_count)
 	{
 		fdf->verts[i] = ft_memalloc(sizeof(float *) * 3);
 		if (fdf->verts[i] == NULL) //TODO: Free the prev vertices in this case of fail
 			return (-1);
 		i++;
 	}
-	fdf->view[X] = 0;
-	fdf->view[Y] = 0;
 	calc_matrices(fdf);
-	//printf("matrices %f %f %f \n", fdf->matrices[Y][X][X], fdf->matrices[Y][X][Y], fdf->matrices[Y][X][Z]);
 	return (1);
 }
 
@@ -278,19 +218,17 @@ void	fdf_update(t_fdf *fdf)
 
 	i = 0;
 	calc_matrices(fdf);
-	//fdf->obj = &fdf->obj[3];
 	anim(fdf);
 	while (i < fdf->obj->v_count)
 	{
 		fdf->verts[i][X] = (float)fdf->obj[fdf->curframe].verts[i][X];
 		fdf->verts[i][Y] = (float)fdf->obj[fdf->curframe].verts[i][Y];
 		fdf->verts[i][Z] = (float)fdf->obj[fdf->curframe].verts[i][Z];
-		v3_mul(fdf->matrices[X], fdf->verts[i]);
+		//v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
 		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 400, 0});
 		i++;
 	}
 	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
-	
 	fdf_draw(*fdf);
 }

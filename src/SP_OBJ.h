@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/20 16:38:15 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 21:49:19 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_fdf
 	float				matrices[2][3][3];
 	float				view[2];
 	u_int32_t			frames;
-	u_int32_t			screenspace[2];
+	int32_t				screenspace[2];
 	u_int32_t			scale;
 	u_int32_t			crd[2];
 }	t_fdf;

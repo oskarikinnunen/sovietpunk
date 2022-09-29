@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/28 19:22:21 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 18:48:25 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,9 @@ int	*floortable(t_sdlcontext *sdl)
 		angle += RAYSLICE; //FOV STEP constant
 		ray[X] = sin(angle) * 64 * 1000; 
 		ray[Y] = cos(angle) * 64 * 1000;						//
-		#define HH 32 //TODO: define gamescale in sp1947
-		ray[Y] += HH; 
-		populate_bresenham(&b, (int[2]){0, HH}, ray);
-		while(b.local[Y] > 0) //fix pls
+		ray[Y] += GAMESCALE / 2; 
+		populate_bresenham(&b, (int[2]){0, GAMESCALE / 2}, ray);
+		while(b.local[Y] > 0)
 			step_bresenham(&b);
 		t[i] = b.local[X];
 		i++;
@@ -87,7 +86,6 @@ int	main(int argc, char **args)
 	
 	loadpngs(&sdl);
 
-	//obj load
 	ft_bzero(objs, sizeof (t_obj [20]));
 	parse_obj(objs);
 	fdf_init(gc.sdlcontext->fdfs, &gc.sdlcontext->images[3], objs);

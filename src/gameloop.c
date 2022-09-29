@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/28 20:45:58 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/29 21:54:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 #include "assert.h"
 
-void	rendergame(t_sdlcontext *sdl, int *walls)
+void	rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc)
 {
 	int			i;
 	int			smpl[2];
@@ -28,9 +28,11 @@ void	rendergame(t_sdlcontext *sdl, int *walls)
 	t_simpleimg	img;
 
 	i = -1;
+	int rend = 0;
 	while (i++ < WINDOW_W)
 	{
-		wallheight = WALLTHING / (walls[i] & 0xFFFF);
+		//wallheight = WALLTHING / (walls[i] & 0xFFFF);
+		wallheight = walls[i] & 0xFFFF;
 		img = sdl->images[walls[i] >> 24 & 0xFF];
 		smpl[X] = ((walls[i] >> 16 & 0xFF) / 64.0f) * img.size[X];
 		smpl[Y] = ft_clamp((wallheight / 2) - WINDOW_H, 0, wallheight);
@@ -57,8 +59,8 @@ void	render2Dmap(t_sdlcontext *context, uint32_t *map)
 		while (crd[X] < MAPSIZE * RENDERSCALE)
 		{
 			if (map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] != 0) {
-				drawimagescaled(context, crd, map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] - 1,
-				RENDERSCALE);
+				/*drawimagescaled(context, crd, map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] - 1,
+				RENDERSCALE);*/
 			}
 			crd[X] += RENDERSCALE;
 		}
@@ -104,7 +106,7 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 	if (b.local[X] % GAMESCALE == 0
 		|| b.local[X] % GAMESCALE == GAMESCALE - 1)
 		tex_sample = b.local[Y] % GAMESCALE;
-	res = v2dist(crd, b.local);
+	res = WALLTHING / v2dist(crd, b.local);
 	tx = (gc->map[((b.local[Y] & 0xFFFFFFC0) >> 6) * MAPSIZE
 			+ ((b.local[X] & 0xFFFFFFC0) >> 6)] & 0xFF);
 	tx = ft_clamp(tx, 0, 3) << 24;
@@ -149,6 +151,19 @@ void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
 	}
 }
 
+static void printwalls(int walls[WINDOW_W]){
+	for (int i = 0; i < WINDOW_W; i++)
+	{
+		printf("w %i \n", walls[i] & 0xFFFF);
+		if (i > 0 && (walls[i - 1] & 0xFFFF) < (walls[i] & 0xFFFF)) {
+			printf("ASSERT FAIL\n");
+		}
+			
+		
+	}
+	exit(0);
+}
+
 int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext gc) //TODO: remove sdl context, only used for debug?
 {
 	static int			wallheights[WINDOW_W];
@@ -161,7 +176,6 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 	scan_angle = angle + FOV;
 	while (scan_h < WINDOW_W)
 	{
-		scan_angle -= RAYSLICE;
 		ray_d[X] = sin(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[Y] = cos(scan_angle) * RAY_LENGTH * GAMESCALE;
 		ray_d[X] += (int)playerpos[X];
@@ -169,6 +183,7 @@ int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext g
 		wallheights[scan_h] = raycast_len((int[2]){playerpos[X], playerpos[Y]}, ray_d, &gc, floor_tex);
 		render_floor(*sdl, floor_tex,
 			scan_h, wallheights[scan_h] & 0xFFFF);
+		scan_angle -= RAYSLICE;
 		scan_h++;
 	}
 	return (wallheights);
@@ -186,6 +201,7 @@ void	openmap(t_gamecontext *gc)
 void	gameloop(t_gamecontext gc)
 {
 	int i;
+	int	*walls;
 
 	openmap(&gc);
 	spawnplayer(&gc);
@@ -196,11 +212,13 @@ void	gameloop(t_gamecontext gc)
 		update_deltatime(&gc.clock);
 		moveplayer(&gc.player, gc.clock.delta, gc.map);
 		//SDL_LockSurface(gc.sdlcontext->surface);
+		walls = raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc);
 		rendergame(gc.sdlcontext,
-			raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc));
+			walls, &gc);
+		//render2Dmap(gc.sdlcontext, gc.map);
 		renderobj(&gc);
-		render2Dmap(gc.sdlcontext, gc.map);
-		drawimagescaled(gc.sdlcontext, gc.sdlcontext->fdfs->screenspace, 3, gc.sdlcontext->fdfs->scale);
+		//drawfdf(gc.sdlcontext, gc.sdlcontext->fdfs, walls);
+		drawimagescaled(gc.sdlcontext, gc.sdlcontext->fdfs->screenspace, 3, gc.sdlcontext->fdfs->scale, walls);
 		//SDL_UnlockSurface(gc.sdlcontext->surface);
 		SDL_UpdateWindowSurface(gc.sdlcontext->window);
 	}
