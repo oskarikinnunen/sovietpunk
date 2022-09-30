@@ -6,60 +6,58 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 21:53:45 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:36:21 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 
-int		screenspace_y(t_gamecontext *gc, int dist)
+int		screenspace_y(t_gamecontext *gc, int dist) //only needs sdl
 {
 	int	iy;
 
-	/*iy = (WINDOW_H / 2) - 2;
-	while (iy >= 0)
-	{
-		if (gc->sdlcontext->ft[iy] > dist)
-			break;
-		iy--;
-	}*/
 	iy = 0;
 	while (iy < WINDOW_H / 2)
 	{
-		if (gc->sdlcontext->ft[iy] > dist)
+		if (gc->sdl.ft[iy] > dist)
 			break;
 		iy++;
 	}
 	return (WINDOW_H / 2 + iy);
-	//return ((WINDOW_H / 2) + iy);
 }
 
-void	drawfdf(t_sdlcontext *sdl, t_fdf *fdf, int *walls)
+static void drawstripe(int *pixels, t_fdf fdf, int ix, float scalar)
 {
-	int			crd[2];
-	int			color;
+	int	iy;
+	int	py;
+
+	iy = 0;
+	py = fdf.screenspace[Y];
+	while (iy++ < fdf.scale - 1)
+	{
+		if (iy + py < 0 || iy + py >= WINDOW_H)
+			continue;
+		int clr = samplecolor(*fdf.img, ix * scalar, iy * scalar);
+		if (clr != 0)
+			pixels[(iy + fdf.screenspace[Y]) * WINDOW_W] = clr;
+	}
+}
+
+void	drawfdf(t_sdlcontext *sdl, t_fdf fdf, int *walls)
+{
+	//int			iy;
+	int			ix;
+	int			ssx;
 	float		scalar;
 
-	scalar = ((float)fdf->img->size[X] / (float)fdf->scale);
-	crd[Y] = fdf->screenspace[Y] - (fdf->scale / 2);
-	while (crd[Y]++ < fdf->screenspace[Y] + (fdf->scale / 2) - 1)
+	scalar = ((float)fdf.img->size[X] / (float)fdf.scale);
+	ssx = fdf.screenspace[X];
+	while (ix++ < fdf.scale)
 	{
-		crd[X] = fdf->screenspace[X] - (fdf->scale / 2);
-		if (crd[Y] < 0 || crd[Y] > WINDOW_H)
+		if (ix + ssx < 0 || ix + ssx >= WINDOW_W
+			||(walls[ix + ssx] & 0xFFFF) > fdf.scale)
 			continue;
-		while (crd[X]++ < fdf->screenspace[X] + (fdf->scale / 2) - 1)
-		{
-			if (crd[X] < 0 || crd[X] >= WINDOW_W)
-				continue;
-			color = samplecolor(*fdf->img, (float)(crd[X] - fdf->screenspace[X] / 2) * scalar
-								, (float)(crd[Y] - fdf->screenspace[Y] / 2) * scalar); //cast to float?
-			//printf("drawing \n");
-			if (color != 0/* && (walls[crd[X]] & 0xFFFF) < fdf.scale*/)
-			{
-				int index = crd[X] + (crd[Y] * WINDOW_W);
-				((int *)sdl->surface->pixels)[index] = color;
-			}
-		}
+		drawstripe(((int *)sdl->surface->pixels) + ix + ssx, fdf, ix, scalar);
 	}
 }
 
@@ -71,7 +69,7 @@ void	renderobj(t_gamecontext *gc)
 	int		dist;
 	t_fdf	*fdf;
 
-	fdf = gc->sdlcontext->fdfs; //TODO do as param or iterate through the objects;
+	fdf = gc->sdl.fdfs; //TODO do as param or iterate through the objects;
 	angle = gc->player.angle + FOV;
 	scan_h = 0;
 	
@@ -83,7 +81,6 @@ void	renderobj(t_gamecontext *gc)
 		(float)fdf->crd[Y] - gc->player.pos[Y]);
 	fdf->view[Y] = o_angle;// * (180 / PI);
 	fdf->clock = &gc->clock;
-	fdf_update(fdf);
 	while (scan_h < WINDOW_W)
 	{
 		angle -= RAYSLICE;
@@ -95,4 +92,6 @@ void	renderobj(t_gamecontext *gc)
 		}
 		scan_h++;
 	}
+	if (fdf->screenspace[X] != 300000)
+		fdf_update(fdf);
 }

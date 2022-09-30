@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 21:46:01 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:58:22 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,8 @@ typedef struct s_sdlcontext
 {
 	SDL_Window				*window;
 	SDL_Surface				*surface;
-	SDL_Renderer			*renderer;
 	t_simpleimg				*images;
-	t_fdf					*fdfs;
+	t_fdf					fdfs[1];
 	int						*ft; //floortable
 }	t_sdlcontext;
 
@@ -72,7 +71,7 @@ typedef struct s_clock
 
 typedef struct s_gamecontext
 {
-	t_sdlcontext	*sdlcontext;
+	t_sdlcontext	sdl;
 	t_player		player;
 	Uint32			map[MAPSIZE * MAPSIZE];
 	t_clock			clock;
@@ -89,7 +88,7 @@ void	spawnplayer(t_gamecontext *gc);
 u_int32_t	shade(u_int32_t color, int wallheight);
 
 /* obj_render.c */
-void	drawfdf(t_sdlcontext *sdl, t_fdf *fdf, int *walls);
+void	drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
 void	renderobj(t_gamecontext *gc);
 
 /* v2.c */

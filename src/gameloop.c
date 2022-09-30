@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 21:54:01 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:15:09 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	floorcast(int **floor, t_bresenham *b, t_gamecontext *gc)
 	i = 0;
 	while (i <= left)
 	{
-		while (v2dist(b->local, b->target) >= gc->sdlcontext->ft[i])
+		while (v2dist(b->local, b->target) >= gc->sdl.ft[i])
 		{
 			if (step_bresenham(b))
 				break;
@@ -212,14 +212,13 @@ void	gameloop(t_gamecontext gc)
 		update_deltatime(&gc.clock);
 		moveplayer(&gc.player, gc.clock.delta, gc.map);
 		//SDL_LockSurface(gc.sdlcontext->surface);
-		walls = raycast(gc.player.pos, gc.player.angle, gc.sdlcontext, gc);
-		rendergame(gc.sdlcontext,
+		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
+		rendergame(&gc.sdl,
 			walls, &gc);
 		//render2Dmap(gc.sdlcontext, gc.map);
 		renderobj(&gc);
-		//drawfdf(gc.sdlcontext, gc.sdlcontext->fdfs, walls);
-		drawimagescaled(gc.sdlcontext, gc.sdlcontext->fdfs->screenspace, 3, gc.sdlcontext->fdfs->scale, walls);
+		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls); //DrawfdfS? iterates through all of them
 		//SDL_UnlockSurface(gc.sdlcontext->surface);
-		SDL_UpdateWindowSurface(gc.sdlcontext->window);
+		SDL_UpdateWindowSurface(gc.sdl.window);
 	}
 }

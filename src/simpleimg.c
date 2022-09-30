@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 19:54:19 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:48:45 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,13 @@ void	pngtosimpleimg(t_pngdata *png, t_simpleimg *img)
 		img->data[i] = png->palette.plte[png->data[i]];
 		i++;
 	}
-	//ft_memcpy(sdl->images->data, sdl->textures->data, sdl->images->length);
+	free(png->data);
+	free(png->palette.plte); // check if palette exists?
 }
 
 void	loadpngs(t_sdlcontext	*sdl)
 {
-	t_pngdata	*pngs;
 	t_pngdata	png_stack[3];
-	
-	//pngs = ft_memalloc(2 * sizeof(t_pngdata));
 	
 	//nullcheck
 	pngparse(png_stack, "tex/flooruc.png");

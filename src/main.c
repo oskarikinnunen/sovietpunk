@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 18:48:25 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:15:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,61 +44,43 @@ void	createsdlcontext(t_sdlcontext *context)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0 || SDL_Init(SDL_INIT_EVENTS) < 0)
 		printf("SDL_Init error");
-	context->renderer = NULL;
 	context->window = SDL_CreateWindow("SovietPunk 1947",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
-	/*context->renderer = SDL_CreateRenderer(context->window, -1, SDL_RENDERER_ACCELERATED); //Read documentation to find out if surface is created aswell!
-	if (context->renderer == NULL)
-		printf("Still null? \n"); //Error exit */
+	
 	if (context->window == NULL)
-		printf("Couldn't create SDL2 window :("); //error exit
+		printf("Couldn't create SDL2 window :(");
 	printf("sdl context and init \n");
 	
+	//context->surface = SDL_CreateRGBSurface(0,WINDOW_W,WINDOW_H,32,0,0,0,0);
 	context->surface = SDL_GetWindowSurface(context->window);
-	//context->surface = SDL_ConvertSurfaceFormat(context->surface, SDL_PIXELFORMAT_ARGB32, 0); //WHY NO WORK
 	
 	if (context->surface == NULL)
 		(printf("WTH SURFACE NULL"), exit(0));
-	
-	
-	//SDL_LockSurface(context->surface);
-	
 	printf("%s \n", SDL_GetError());
-	//exit(0);
 	context->ft = floortable(context);
-	int i = 0;
-	//SDL_UpdateWindowSurface(context->window);
 }
 
 int	main(int argc, char **args)
 {
 	t_gamecontext	gc;
-	t_sdlcontext	sdl;
 	t_obj			objs[20];
-	t_fdf			fdfs[1];
-	ft_bzero(&sdl, sizeof(t_sdlcontext));
+	ft_bzero(&gc.sdl, sizeof(t_sdlcontext));
 	ft_bzero(&gc, sizeof(t_gamecontext));
 	
-	createsdlcontext(&sdl);
-	gc.sdlcontext = &sdl;
-	gc.sdlcontext->fdfs = fdfs;
-	
-	loadpngs(&sdl);
-
-	ft_bzero(objs, sizeof (t_obj [20]));
+	createsdlcontext(&gc.sdl);
+	//exit(0);
+	loadpngs(&gc.sdl);
 	parse_obj(objs);
-	fdf_init(gc.sdlcontext->fdfs, &gc.sdlcontext->images[3], objs);
-	fdfs->clock = &gc.clock;
-	gc.sdlcontext->fdfs->crd[X] = 420;
-	gc.sdlcontext->fdfs->crd[Y] = 512;
+	fdf_init(gc.sdl.fdfs, &gc.sdl.images[3], objs);
 	
-	//load images
+	gc.sdl.fdfs->crd[X] = 420;
+	gc.sdl.fdfs->crd[Y] = 512;
 	if (argc == 3 && ft_strcmp(args[1], "-e") == 0 && ft_strlen(args[2]) > 0)
-		mapcreator(args[2], sdl);
+		mapcreator(args[2], gc.sdl);
 	else
 		gameloop(gc);
-	SDL_DestroyWindow(sdl.window);
+	SDL_DestroyWindow(gc.sdl.window);
 	SDL_Quit();
 	return (0);
 }
