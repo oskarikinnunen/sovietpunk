@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 17:15:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 18:25:02 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	createsdlcontext(t_sdlcontext *context)
 	
 	//context->surface = SDL_CreateRGBSurface(0,WINDOW_W,WINDOW_H,32,0,0,0,0);
 	context->surface = SDL_GetWindowSurface(context->window);
-	
 	if (context->surface == NULL)
 		(printf("WTH SURFACE NULL"), exit(0));
 	printf("%s \n", SDL_GetError());

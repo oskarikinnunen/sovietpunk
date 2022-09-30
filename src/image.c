@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 21:57:02 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:51:59 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	return (img.data[index]);
 }
 
-void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale, int *walls)
+void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 {
 	int			iy;
 	int			ix;
@@ -42,7 +42,7 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale, int *w
 			if (ix + p[X] < 0 || ix + p[X] >= WINDOW_W)
 				continue;
 			color = samplecolor(img, (float)ix * scalar, (float)iy * scalar);
-			if (color != 0 && (walls[ix + p[X]] & 0xFFFF) < scale) // walls[ix + p[X]] & 0xFFFF < scale
+			if (color != 0)
 			{
 				int index = ix + p[X] + (iy + p[Y]) * WINDOW_W;
 				((int *)context->surface->pixels)[index] = color;

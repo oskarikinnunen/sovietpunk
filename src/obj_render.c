@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   obj_render.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 16:36:21 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:48:12 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ static void drawstripe(int *pixels, t_fdf fdf, int ix, float scalar)
 
 void	drawfdf(t_sdlcontext *sdl, t_fdf fdf, int *walls)
 {
-	//int			iy;
 	int			ix;
 	int			ssx;
 	float		scalar;
 
 	scalar = ((float)fdf.img->size[X] / (float)fdf.scale);
 	ssx = fdf.screenspace[X];
+	ix = 0;
 	while (ix++ < fdf.scale)
 	{
 		if (ix + ssx < 0 || ix + ssx >= WINDOW_W
@@ -72,7 +72,8 @@ void	renderobj(t_gamecontext *gc)
 	fdf = gc->sdl.fdfs; //TODO do as param or iterate through the objects;
 	angle = gc->player.angle + FOV;
 	scan_h = 0;
-	
+	fdf->crd[X] = 420;
+	fdf->crd[Y] = 512;
 	dist = v2dist(fdf->crd, (int [2]){gc->player.pos[X], gc->player.pos[Y]});
 	fdf->scale = WALLTHING / dist;
 	fdf->screenspace[X] = +300000;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 16:58:22 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:50:38 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define X 0
 # define Y 1
 
-# define DARKNESS 1000.0f
+# define DARKNESS	500.0f //On my elitebook 8460p 1000.0f is okay
 # define GAMESCALE	64
 # define RAYSLICE	0.0015f
 # define FOV		RAYSLICE * WINDOW_W
@@ -103,7 +103,7 @@ void	gameloop(t_gamecontext gc);
 /* image.c */
 Uint32	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext *context, int x, int y);
-void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale, int *walls);
+void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
 
 /* deltatime.c */
 void	update_deltatime(t_clock *c);

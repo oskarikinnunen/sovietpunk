@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP_OBJ.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 21:49:19 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:33:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_fdf
 	u_int32_t			frames;
 	int32_t				screenspace[2];
 	u_int32_t			scale;
-	u_int32_t			crd[2];
+	int32_t			crd[2];
 }	t_fdf;
 
 void	parse_obj(t_obj *obj);
