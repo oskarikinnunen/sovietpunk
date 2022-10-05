@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   eventloop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/27 20:04:29 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 17:49:19 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
+
+static int	iskey(SDL_Event e, int keycode)
+{
+	return (e.key.keysym.sym == keycode);
+}
 
 int	ismovement(SDL_KeyCode code)
 {
@@ -54,12 +59,18 @@ int	eventloop(t_gamecontext *gc)
 
 	while (SDL_PollEvent(&event) != 0)
 	{
-		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
-			gc->player.pos[X] = 3;
-			gc->player.pos[Y] = 6;
+		if (event.type == SDL_KEYDOWN)
+		{
+			if (iskey(event, SDLK_SPACE))
+			{
+				gc->player.pos[X] = 3;
+				gc->player.pos[Y] = 6;
+			}
+			if (ismovement(event.key.keysym.sym))
+				playerinput(event.key.keysym.sym, &gc->player);
+			if (iskey(event, SDLK_ESCAPE))
+				return (1);
 		}
-		if (event.type == SDL_KEYDOWN && ismovement(event.key.keysym.sym))
-			playerinput(event.key.keysym.sym, &gc->player);
 		if (event.type == SDL_KEYUP)
 		{
 			if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT)

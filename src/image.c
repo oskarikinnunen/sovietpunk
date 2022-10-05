@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 17:51:59 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:43:03 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,34 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	//index = ft_clamp(index, 0, img.length - 1);
 	return (img.data[index]);
 }
+
+/*void	drawimagescaled2(t_sdlcontext *context, int p[2], t_img img, int scale)
+{
+	int			iy;
+	int			ix;
+	int			color;
+	float		scalar;
+
+	iy = 0;
+	scalar = ((float)img.size[X] / (float)scale);
+	while (iy++ < scale - 1)
+	{
+		ix = 0;
+		if (iy + p[Y] < 0 || iy + p[Y] > WINDOW_H)
+			continue;
+		while (ix++ < scale)
+		{
+			if (ix + p[X] < 0 || ix + p[X] >= WINDOW_W)
+				continue;
+			color = samplecolor(img, (float)ix * scalar, (float)iy * scalar);
+			if (color != 0)
+			{
+				int index = ix + p[X] + (iy + p[Y]) * WINDOW_W;
+				((int *)context->surface->pixels)[index] = color;
+			}
+		}
+	}
+}*/
 
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 {

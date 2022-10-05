@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 19:39:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 17:33:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:05:57 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,7 @@
 
 #include "libft.h"
 #include "inttypes.h"
-
-typedef struct s_obj
-{
-	char		**mtlnames;
-	uint32_t	*mtlcolors;
-	uint8_t		*colors; //Points to colors in mtlcolors
-	uint32_t	m_count;
-	int32_t		**verts;
-	uint32_t	**faces;
-	uint32_t	v_count;
-	uint32_t	f_count;
-}	t_obj;
+#include "SP1947.h"
 
 /*typedef struct s_img_info
 {
@@ -37,25 +26,5 @@ typedef struct s_obj
 	int		sz_line;
 	int		endian;
 }	t_img_info;*/
-
-typedef struct s_fdf
-{
-	struct s_simpleimg	*img;
-	struct s_clock		*clock;
-	t_obj				*obj;
-	int					curframe;
-	float				*depth;
-	float				**verts;
-	float				matrices[2][3][3];
-	float				view[2];
-	u_int32_t			frames;
-	int32_t				screenspace[2];
-	u_int32_t			scale;
-	int32_t			crd[2];
-}	t_fdf;
-
-void	parse_obj(t_obj *obj);
-int		fdf_init(t_fdf *fdf, struct s_simpleimg *img, t_obj *object);
-void	fdf_update(t_fdf *fdf);
 
 #endif

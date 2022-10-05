@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 17:50:38 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:11:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,34 @@ typedef struct s_simpleimg
 	Uint32	length;
 }	t_simpleimg;
 
+typedef struct s_obj
+{
+	char		**mtlnames;
+	uint32_t	*mtlcolors;
+	uint8_t		*colors; //Points to colors in mtlcolors
+	uint32_t	m_count;
+	int32_t		**verts;
+	uint32_t	**faces;
+	uint32_t	v_count;
+	uint32_t	f_count;
+}	t_obj;
+
+typedef struct s_fdf
+{
+	t_simpleimg			img; // TODO: make local
+	struct s_clock		*clock;
+	t_obj				*obj;
+	int					curframe;
+	float				*depth;
+	float				**verts;
+	float				matrices[2][3][3];
+	float				view[2];
+	u_int32_t			frames;
+	int32_t				screenspace[2];
+	u_int32_t			scale;
+	int32_t				crd[2];
+}	t_fdf;
+
 typedef struct s_sdlcontext
 {
 	SDL_Window				*window;
@@ -79,8 +107,8 @@ typedef struct s_gamecontext
 	u_int32_t		v[2];
 }	t_gamecontext;
 
-/* sortwalls.c */
-void	sortwalls(int walls[WINDOW_W]);
+
+
 /* player.c */
 void	spawnplayer(t_gamecontext *gc);
 
@@ -104,6 +132,12 @@ void	gameloop(t_gamecontext gc);
 Uint32	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext *context, int x, int y);
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
+
+/* fdf.c / obj.c */
+void	parse_obj(t_obj *obj);
+int		fdf_init(t_fdf *fdf, t_obj *object);
+void	fdf_update(t_fdf *fdf);
+
 
 /* deltatime.c */
 void	update_deltatime(t_clock *c);

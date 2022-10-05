@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
+#    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/09/29 19:01:34 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/05 18:04:07 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,16 @@ LIBFT= libft/libft.a
 SDL2= libs/lib/libSDL2.a
 SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
 		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c \
-		v2.c obj_render.c shade.c player.c sortwalls.c
+		v2.c obj_render.c shade.c player.c #sortwalls.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
-CFLAGS +=  $(INCLUDE) -ldl -lpthread -lm -g -O1# -g -O2
+LIBS= $(LIBFT) -ldl -lpthread -lm
+CFLAGS +=  $(INCLUDE) -g -O1# -g -O2
 PWD= $(shell pwd)
 
 all: $(OBJ) $(SDL2) $(LIBFT) src/SP1947.h
-	$(CC) $(OBJ) -o $(NAME) `libs/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBFT) -lm
+	$(CC) $(OBJ) -o $(NAME) `libs/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
 
 $(OBJ): src/SP1947.h
 

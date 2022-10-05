@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_fdf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 18:53:02 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:10:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c)
 	b_res = 0;
 	while (b_res != 1)
 	{
-		offset = b.local[X] + (b.local[Y] * fdf->img->size[X]);
-		if (offset < fdf->img->length && fdf->depth[offset] <= z)
+		offset = b.local[X] + (b.local[Y] * fdf->img.size[X]);
+		if (offset < fdf->img.length && fdf->depth[offset] <= z)
 		{
 			fdf->depth[offset] = z;
-			fdf->img->data[offset] = c;
+			fdf->img.data[offset] = c;
 		}
 		b_res = step_bresenham(&b);
 	}
@@ -148,8 +148,8 @@ void	fdf_draw(t_fdf fdf)
 	i = 0;
 	fdf.crd[X] = 420;
 	fdf.crd[Y] = 512;
-	ft_bzero(fdf.img->data, fdf.img->length * sizeof(Uint32));
-	ft_bzero(fdf.depth, sizeof(float) * fdf.img->length);
+	ft_bzero(fdf.img.data, fdf.img.length * sizeof(Uint32));
+	ft_bzero(fdf.depth, sizeof(float) * fdf.img.length);
 	while (i < fdf.obj->f_count)
 	{
 		int cf = fdf.curframe;
@@ -189,14 +189,14 @@ static void	calc_matrices(t_fdf *fdf)
 
 //TODO: fdf_init: allocates the memory and handles errors if that fails
 #include "assert.h"
-int	fdf_init(t_fdf *fdf, t_simpleimg *img, t_obj *object)
+int	fdf_init(t_fdf *fdf, t_obj *object)
 {
 	int	i;
 
 	ft_bzero(fdf, sizeof(t_fdf));
-	fdf->depth = ft_memalloc(sizeof(float) * img->length);
+	fdf->depth = ft_memalloc(sizeof(float) * fdf->img.length);
 	fdf->verts = ft_memalloc(sizeof(float *) * object->v_count);
-	fdf->img = img;
+	//fdf->img = img;
 	fdf->obj = &object[0];
 	if (fdf->depth == NULL || fdf->verts == NULL)
 		return (-1);
@@ -226,9 +226,9 @@ void	fdf_update(t_fdf *fdf)
 		fdf->verts[i][Z] = (float)fdf->obj[fdf->curframe].verts[i][Z];
 		//v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
-		v3_add(fdf->verts[i], (float [3]) {fdf->img->size[X] / 2, 400, 0});
+		v3_add(fdf->verts[i], (float [3]) {fdf->img.size[X] / 2, 400, 0});
 		i++;
 	}
-	ft_bzero(fdf->img->data, fdf->img->size[X] * fdf->img->size[Y] * sizeof(int));
+	ft_bzero(fdf->img.data, fdf->img.size[X] * fdf->img.size[Y] * sizeof(int));
 	fdf_draw(*fdf);
 }

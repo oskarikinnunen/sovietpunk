@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 17:51:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:05:03 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc)
 	int rend = 0;
 	while (i++ < WINDOW_W)
 	{
-		//wallheight = WALLTHING / (walls[i] & 0xFFFF);
 		wallheight = walls[i] & 0xFFFF;
 		img = sdl->images[walls[i] >> 24 & 0xFF];
 		smpl[X] = ((walls[i] >> 16 & 0xFF) / 64.0f) * img.size[X];
@@ -151,19 +150,6 @@ void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
 	}
 }
 
-static void printwalls(int walls[WINDOW_W]){
-	for (int i = 0; i < WINDOW_W; i++)
-	{
-		printf("w %i \n", walls[i] & 0xFFFF);
-		if (i > 0 && (walls[i - 1] & 0xFFFF) < (walls[i] & 0xFFFF)) {
-			printf("ASSERT FAIL\n");
-		}
-			
-		
-	}
-	exit(0);
-}
-
 int *raycast(float playerpos[2], float angle, t_sdlcontext *sdl, t_gamecontext gc) //TODO: remove sdl context, only used for debug?
 {
 	static int			wallheights[WINDOW_W];
@@ -207,7 +193,7 @@ void	gameloop(t_gamecontext gc)
 	while (1)
 	{
 		if (eventloop(&gc))
-			return ;
+			break ; //TODO: is good mby?
 		update_deltatime(&gc.clock);
 		moveplayer(&gc.player, gc.clock.delta, gc.map);
 		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
@@ -218,4 +204,5 @@ void	gameloop(t_gamecontext gc)
 		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
 		SDL_UpdateWindowSurface(gc.sdl.window);
 	}
+	exit(0);
 }

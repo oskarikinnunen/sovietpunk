@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 17:48:12 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 18:40:44 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void drawstripe(int *pixels, t_fdf fdf, int ix, float scalar)
 	{
 		if (iy + py < 0 || iy + py >= WINDOW_H)
 			continue;
-		int clr = samplecolor(*fdf.img, ix * scalar, iy * scalar);
+		int clr = samplecolor(fdf.img, ix * scalar, iy * scalar);
 		if (clr != 0)
 			pixels[(iy + fdf.screenspace[Y]) * WINDOW_W] = clr;
 	}
@@ -49,7 +49,7 @@ void	drawfdf(t_sdlcontext *sdl, t_fdf fdf, int *walls)
 	int			ssx;
 	float		scalar;
 
-	scalar = ((float)fdf.img->size[X] / (float)fdf.scale);
+	scalar = ((float)fdf.img.size[X] / (float)fdf.scale);
 	ssx = fdf.screenspace[X];
 	ix = 0;
 	while (ix++ < fdf.scale)

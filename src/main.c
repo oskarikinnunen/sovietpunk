@@ -6,11 +6,12 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 18:25:02 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/05 19:11:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
+#include "SP_OBJ.h"
 #include "bresenham.h"
 
 int	*floortable(t_sdlcontext *sdl)
@@ -68,11 +69,10 @@ int	main(int argc, char **args)
 	ft_bzero(&gc, sizeof(t_gamecontext));
 	
 	createsdlcontext(&gc.sdl);
-	//exit(0);
 	loadpngs(&gc.sdl);
 	parse_obj(objs);
-	fdf_init(gc.sdl.fdfs, &gc.sdl.images[3], objs);
 	
+	fdf_init(gc.sdl.fdfs, objs); //TODO malloc space for image
 	gc.sdl.fdfs->crd[X] = 420;
 	gc.sdl.fdfs->crd[Y] = 512;
 	if (argc == 3 && ft_strcmp(args[1], "-e") == 0 && ft_strlen(args[2]) > 0)

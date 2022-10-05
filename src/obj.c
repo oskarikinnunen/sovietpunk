@@ -187,6 +187,7 @@ void	parse_anim(t_obj *obj, char *name, int framecount)
 	int		i;
 	int		fd;
 	char	oname[100];
+	char	*i_str;
 
 	i = 0;
 	ft_bzero(oname, sizeof(char[100]));
@@ -196,8 +197,9 @@ void	parse_anim(t_obj *obj, char *name, int framecount)
 		ft_strcpy(name, oname);
 		if (i < 10)
 			ft_strcat(name, "0");
-		ft_strcat(ft_strcat(name, ft_itoa(i)), ".obj");
-		printf("name '%s' \n", name);
+		i_str = ft_itoa(i);
+		ft_strcat(ft_strcat(name, i_str), ".obj");
+		free(i_str);
 		fd = file_open(name);
 		if (i != 0)
 			cpy_materials(&obj[i], &obj[0]);
@@ -212,16 +214,12 @@ void	parse_obj(t_obj *obj)
 	int		fd;
 	char	name[100]; //TODO: is safe? should be
 
-	//mtl
 	ft_bzero(obj, sizeof(t_obj [20]));
 	fd = file_open("animtests/cyborg/cy_000000.mtl");
 	get_materials(obj, fd);
 	close(fd);
-	//obj
 	ft_bzero(name, sizeof(char[100]));
 	ft_strcat(name, "animtests/cyborg/cy");
 	parse_anim(obj, name, 19);
 	printf("m count %i \n", obj->m_count);
-	//exit(0);
-	//close(fd);
 }
