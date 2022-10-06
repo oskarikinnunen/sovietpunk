@@ -6,7 +6,7 @@
 #    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/05 18:04:07 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/06 12:40:21 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME= SovietPunk1947
 
 INCLUDE= -Ilib/include/SDL2/ -Isrc -Ilibft
 LIBFT= libft/libft.a
-SDL2= libs/lib/libSDL2.a
+SDL2= SDL_built/lib/libSDL2.a
 SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
 		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c \
 		v2.c obj_render.c shade.c player.c #sortwalls.c
@@ -25,16 +25,18 @@ LIBS= $(LIBFT) -ldl -lpthread -lm
 CFLAGS +=  $(INCLUDE) -g -O1# -g -O2
 PWD= $(shell pwd)
 
-all: $(OBJ) $(SDL2) $(LIBFT) src/SP1947.h
-	$(CC) $(OBJ) -o $(NAME) `libs/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
+all: $(SDL2) $(LIBFT) $(OBJ) #src/SP1947.h
+	$(CC) $(OBJ) -o $(NAME) `SDL_built/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
 
 $(OBJ): src/SP1947.h
 
 $(SDL2):
-	cd SDL2-2.0.22/build && ../configure --prefix=$(PWD)/libs/ && make install
+	cd SDL2-2.0.22/build && ../configure --prefix=$(PWD)/SDL_built/ && make install
 
 clean-sdl:
 	rm -rf SDL2-2.0.22/build/*
+	rm -rf SDL_built/*
+	touch SDL_built/DontRemoveMe
 	rm -f $(SDL2)
 
 clean:

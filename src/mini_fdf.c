@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/05 19:10:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:10:27 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ void	anim(t_fdf *fdf)
 			fdf->curframe = 0;
 		tick = 0;
 	}
-		
 }
 
 void	fdf_draw(t_fdf fdf)

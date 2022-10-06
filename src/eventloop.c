@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/05 17:49:19 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 12:00:48 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	playerinput(SDL_Keycode kc, t_player *plr)
 	angle = RAYSLICE * (WINDOW_W / 2);
 	if (kc == SDLK_UP)
 	{
-		plr->dest[X] = sin(plr->angle + angle); //Have plr destination variable and move player with bresenham?? must be a simpler way to do it tho.
+		plr->dest[X] = sin(plr->angle + angle);
 		plr->dest[Y] = cos(plr->angle + angle);
 	}
 	if (kc == SDLK_DOWN)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/29 19:47:05 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:53:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	drawrect(uint32_t *pxls, int crd[2], int clr)
 	}
 }
 
-int		isnonempty(u_int32_t *mapdata, int *crd)
+/*int		isnonempty(u_int32_t *mapdata, int *crd)
 {
 	int local[2];
-}
+}*/
 
 void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL DRAW
 {
@@ -53,13 +53,13 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL
 		{
 			clr = INT_MAX;
 			if (crd[X] == ed.cursor[X] && crd[Y] == ed.cursor[Y])
-				clr = 0xFF << 8;
-			else if (ed.mapdata[crd[X] + crd[Y] * TILESIZE] != 0)
-				/*drawimagescaled(&context,
+				clr = CLR_PRPL;
+			else if (ed.mapdata[crd[X] + crd[Y] * TILESIZE] >= 0 && ed.mapdata[crd[X] + crd[Y] * TILESIZE] <= 2 )
+				drawimagescaled(&context,
 					(int [2]){crd[X] + crd[X] * TILESIZE,
 					crd[Y] + crd[Y] * TILESIZE},
 					ed.mapdata[crd[X] + crd[Y] * TILESIZE], //Make its own function? with clamp or somsom
-					TILESIZE);*/
+					TILESIZE);
 			drawrect((uint32_t *)context.surface->pixels,
 				(int[2]){crd[X] + crd[X] * TILESIZE, crd[Y] + crd[Y] * TILESIZE},
 				clr);

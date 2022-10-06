@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   editor_eventloop.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:46:26 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 20:08:16 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:50:05 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ int	ed_eventloop(t_mapeddata *ed)
 			ed->cursor[Y] += event.key.keysym.sym == SDLK_DOWN;
 			ed->cursor[X] = ft_clamp(ed->cursor[X], 0, MAPSIZE - 1);
 			ed->cursor[Y] = ft_clamp(ed->cursor[Y], 0, MAPSIZE - 1);
-			if (event.key.keysym.sym == SDLK_s)
-				ed->cursoritem = pollitemid(&event);
 			if (event.key.keysym.sym == SDLK_SPACE)
+				ed->cursoritem = pollitemid(&event);
+			if (event.key.keysym.sym == SDLK_RETURN)
 				placeitem(*ed);
 			printf("PLACING ITEM %i\nCURRENT TILE == %i\n",
 				ed->cursoritem,

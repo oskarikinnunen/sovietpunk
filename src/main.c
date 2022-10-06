@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/05 19:11:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:32:31 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,10 @@ int	main(int argc, char **args)
 	
 	createsdlcontext(&gc.sdl);
 	loadpngs(&gc.sdl);
-	parse_obj(objs);
+	//parse_obj(objs);
+	alloc_image(&gc.sdl.fdfs->img, 400, 400);
 	
-	fdf_init(gc.sdl.fdfs, objs); //TODO malloc space for image
+	//fdf_init(gc.sdl.fdfs, objs); //TODO malloc space for image
 	gc.sdl.fdfs->crd[X] = 420;
 	gc.sdl.fdfs->crd[Y] = 512;
 	if (argc == 3 && ft_strcmp(args[1], "-e") == 0 && ft_strlen(args[2]) > 0)

@@ -6,14 +6,14 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/05 19:11:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:47:28 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SP1947_H
 # define SP1947_H
 
-#include "../libs/include/SDL2/SDL.h"
+#include "../SDL_built/include/SDL2/SDL.h"
 #include "SP_OBJ.h"
 #include <stdlib.h>
 #include <fcntl.h>
@@ -26,6 +26,10 @@
 # define WINDOW_H 600
 # define X 0
 # define Y 1
+
+# define CLR_PRPL 14231500
+# define CLR_TURQ 5505010
+# define CLR_GRAY 4868682
 
 # define DARKNESS	500.0f //On my elitebook 8460p 1000.0f is okay
 # define GAMESCALE	64
@@ -132,6 +136,7 @@ void	gameloop(t_gamecontext gc);
 Uint32	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext *context, int x, int y);
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
+void	alloc_image(t_simpleimg *img, int width, int height);
 
 /* fdf.c / obj.c */
 void	parse_obj(t_obj *obj);

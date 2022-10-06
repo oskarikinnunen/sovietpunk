@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simpleimg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/30 16:48:45 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:32:09 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,10 @@ void	loadpngs(t_sdlcontext	*sdl)
 	pngparse(&png_stack[2], "textures/spawn.png");
 
 	//Converting png to simpleimg
-	sdl->images	= ft_memalloc(sizeof(t_simpleimg) * 4); //4th one is for mini_fdf
-	sdl->images[3].data = ft_memalloc(sizeof(Uint32) * 400 * 400);
-	sdl->images[3].size[X] = 400;
-	sdl->images[3].size[Y] = 400;
-	sdl->images[3].length = 400 * 400;
-
+	sdl->images	= ft_memalloc(sizeof(t_simpleimg) * 3); //4th one WAS for mini_fdf
 	pngtosimpleimg(png_stack, sdl->images);
 	pngtosimpleimg(&png_stack[1], &sdl->images[1]); //TODO LOOP
 	pngtosimpleimg(&png_stack[2], &sdl->images[2]);
+
 	//textures can be free here, simpleimg can be the only data remaining
 }

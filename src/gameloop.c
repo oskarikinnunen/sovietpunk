@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/05 18:05:03 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:35:34 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,18 +190,24 @@ void	gameloop(t_gamecontext gc)
 
 	openmap(&gc);
 	spawnplayer(&gc);
+	printf("SPAWNPLAYER");
 	while (1)
 	{
+		
 		if (eventloop(&gc))
 			break ; //TODO: is good mby?
+		
 		update_deltatime(&gc.clock);
 		moveplayer(&gc.player, gc.clock.delta, gc.map);
 		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
 		rendergame(&gc.sdl,
 			walls, &gc);
 		//render2Dmap(gc.sdlcontext, gc.map);
-		renderobj(&gc);
-		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
+		
+		//renderobj(&gc);
+		
+		//drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
+
 		SDL_UpdateWindowSurface(gc.sdl.window);
 	}
 	exit(0);
