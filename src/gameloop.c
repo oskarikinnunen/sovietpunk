@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameloop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 12:24:41 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 14:12:20 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "bresenham.h"
 #define RAY_LENGTH	20
 #define WALLSCALE	2
-#define RENDERSCALE	10
+#define MAPTILESIZE	10
 
 #include "assert.h"
 
@@ -50,24 +50,51 @@ void	rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc)
 	}
 }
 
-void	render2Dmap(t_sdlcontext *context, uint32_t *map)
+static void drawplayer2D(t_gamecontext *gc)
 {
-	int	crd[2];
+	float		plrcrd[2];
+	int			linecrd[2];
+	float		line_angle;
+	int			screencrd[2];
+
+	f2cpy(plrcrd, gc->player.pos);
+	f2mul(plrcrd, 1.0f / GAMESCALE);
+	f2mul(plrcrd, MAPTILESIZE);
+	f2tov2(plrcrd, screencrd);
+	drawcircle(gc->sdl.surface->pixels, screencrd, MAPTILESIZE / 4, CLR_PRPL);
+	line_angle = gc->player.angle + (FOV);
+	v2cpy(linecrd, screencrd);
+	v2add(linecrd, (int [2]){sin(line_angle) * MAPTILESIZE * 2, cos(line_angle) * MAPTILESIZE * 2});
+	drawline(gc->sdl.surface->pixels, screencrd, linecrd, CLR_PRPL);
+	line_angle = gc->player.angle;
+	v2cpy(linecrd, screencrd);
+	v2add(linecrd, (int [2]){sin(line_angle) * MAPTILESIZE * 2, cos(line_angle) * MAPTILESIZE * 2});
+	drawline(gc->sdl.surface->pixels, screencrd, linecrd, CLR_PRPL);
+}
+
+void	render2Dmap(t_gamecontext *gc)
+{
+	int			crd[2];
+	int			mapcrd[2];
+
+	uint32_t	tile;
 
 	ft_bzero(crd, sizeof(int [2]));
-	while (crd[Y] < MAPSIZE * RENDERSCALE)
+	while (crd[Y] < MAPSIZE * MAPTILESIZE)
 	{
-		while (crd[X] < MAPSIZE * RENDERSCALE)
+		while (crd[X] < MAPSIZE * MAPTILESIZE)
 		{
-			if (map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] != 0) {
-				/*drawimagescaled(context, crd, map [(crd[X] / RENDERSCALE) + (crd[Y] / RENDERSCALE) * MAPSIZE] - 1,
-				RENDERSCALE);*/
-			}
-			crd[X] += RENDERSCALE;
+			v2cpy(mapcrd, crd);
+			v2div(mapcrd, MAPTILESIZE);
+			tile = samplemap(gc->map, mapcrd);
+			drawimagescaled(&gc->sdl, crd, tile, MAPTILESIZE);
+			drawrect(gc->sdl.surface->pixels, crd, CLR_GRAY, MAPTILESIZE);
+			crd[X] += MAPTILESIZE;
 		}
 		crd[X] = 0;
-		crd[Y] += RENDERSCALE;
+		crd[Y] += MAPTILESIZE;
 	}
+	drawplayer2D(gc);
 }
 
 void	floorcast(int **floor, t_bresenham *b, t_gamecontext *gc)
@@ -119,7 +146,6 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 
 static void	updatemovementvector(float move_f2[2], int32_t keystate, float angle)
 {
-	//TODO: next parts could be done with some kind of "rotatevector" function
 	angle = angle + (FOV / 2.0f);
 	if ((keystate >> KEYS_UPMASK) & 1) 
 	{
@@ -131,7 +157,6 @@ static void	updatemovementvector(float move_f2[2], int32_t keystate, float angle
 		move_f2[X] -= sin(angle);
 		move_f2[Y] -= cos(angle);
 	}
-	// strafe
 	if ((keystate >> KEYS_LEFTMASK) & 1)
 	{
 		move_f2[X] += sin(angle + RAD90);
@@ -147,8 +172,9 @@ static void	updatemovementvector(float move_f2[2], int32_t keystate, float angle
 void moveplayer(t_gamecontext *gc)
 {
 	float	move_f2[2];
-	float	potential_plr_pos[2];
 	float	angle;
+	float	potential_plrpos[2];
+	int		mapcrd[2];
 
 	ft_bzero(move_f2, sizeof(float [2]));
 	angle = 0;
@@ -157,7 +183,12 @@ void moveplayer(t_gamecontext *gc)
 	gc->player.angle += angle;
 	updatemovementvector(move_f2, gc->keystate, gc->player.angle);
 	f2mul(move_f2, gc->clock.delta * MOVESPEED);
-	f2add(gc->player.pos, move_f2);
+	f2cpy(potential_plrpos, gc->player.pos);
+	f2add(potential_plrpos, move_f2);
+	f2mul(potential_plrpos, 1.0f / GAMESCALE);
+	f2tov2(potential_plrpos, mapcrd);
+	if (samplemap(gc->map, mapcrd) == 0)
+		f2add(gc->player.pos, move_f2);
 }
 
 void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
@@ -231,18 +262,14 @@ void	gameloop(t_gamecontext gc)
 		if (eventloop(&gc))
 			break ; //TODO: is good mby?
 		moveplayer(&gc);
-		printf("b4 raycast and rendergame \n");
 		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
-		rendergame(&gc.sdl,
-			walls, &gc);
-		printf("after aycast and rendergame \n");
-		//render2Dmap(gc.sdlcontext, gc.map);
+		rendergame(&gc.sdl, walls, &gc);
 		
-		//renderobj(&gc);
 		
-		printf("b4 drawfdf \n");
-		//drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
-		printf("after drawfdf \n");
+		renderobj(&gc);
+		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
+		render2Dmap(&gc);
+		//drawcircle(gc.sdl.surface->pixels, (int [2]) {100, 100}, 60, INT_MAX);
 		SDL_UpdateWindowSurface(gc.sdl.window);
 	}
 	exit(0);

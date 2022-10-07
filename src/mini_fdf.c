@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 11:53:28 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 12:45:56 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,10 +190,8 @@ int	fdf_init(t_fdf *fdf, t_obj *object)
 {
 	int	i;
 
-	ft_bzero(fdf, sizeof(t_fdf));
 	fdf->depth = ft_memalloc(sizeof(float) * fdf->img.length);
 	fdf->verts = ft_memalloc(sizeof(float *) * object->v_count);
-	//fdf->img = img;
 	fdf->obj = &object[0];
 	if (fdf->depth == NULL || fdf->verts == NULL)
 		return (-1);
@@ -218,12 +216,11 @@ void	fdf_update(t_fdf *fdf)
 	calc_matrices(fdf);
 	anim(fdf);
 	
-	while (i < fdf->obj->v_count - 1)
+	while (i < fdf->obj->v_count)
 	{
 		fdf->verts[i][X] = (float)fdf->obj[fdf->curframe].verts[i][X];
 		fdf->verts[i][Y] = (float)fdf->obj[fdf->curframe].verts[i][Y];
 		fdf->verts[i][Z] = (float)fdf->obj[fdf->curframe].verts[i][Z];
-		//printf("vert %i \n", i);
 		//v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
 		v3_add(fdf->verts[i], (float [3]) {fdf->img.size[X] / 2, 400, 0});

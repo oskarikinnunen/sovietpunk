@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:46:26 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/06 14:50:05 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 14:36:04 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,17 @@
 #include "SP1947_MAPED.h"
 
 //TODO: render minitexture for walls, indicate enemies and player with just a different color
-int	pollitemid(SDL_Event *e)
+int	get_item_id(int *itemid)
 {
-	int	id;
-
-	id = 0;
-	printf("\e[1;1H\e[2J");
-	while (1)
+	static int itemlist[4] = 
 	{
-		SDL_PollEvent(e);
-		if (e->type != SDL_KEYDOWN)
-			continue ;
-		id -= e->key.keysym.sym == SDLK_LEFT;
-		id += e->key.keysym.sym == SDLK_RIGHT;
-		id = ft_clamp(id, 0, 6); //TODO: clamp to max_item_id
-		printf("\e[1;1H\e[2J");
-		printf("ITEM ID == %i (SPACE/ENTER TO CONFIRM)\n", id);
-		if (e->key.keysym.sym == SDLK_RETURN ||
-			e->key.keysym.sym == SDLK_SPACE)
-			break ;
-	}
-	return (id);
+		0, 1, 2, TILE_SPAWN
+	};
+	static int selector;
+	selector++;
+	if (selector > 3)
+		selector = 0;
+	*itemid = itemlist[selector];
 }
 
 void	placeitem(t_mapeddata ed)
@@ -63,7 +53,7 @@ int	ed_eventloop(t_mapeddata *ed)
 			ed->cursor[X] = ft_clamp(ed->cursor[X], 0, MAPSIZE - 1);
 			ed->cursor[Y] = ft_clamp(ed->cursor[Y], 0, MAPSIZE - 1);
 			if (event.key.keysym.sym == SDLK_SPACE)
-				ed->cursoritem = pollitemid(&event);
+				get_item_id(&ed->cursoritem);
 			if (event.key.keysym.sym == SDLK_RETURN)
 				placeitem(*ed);
 			printf("PLACING ITEM %i\nCURRENT TILE == %i\n",

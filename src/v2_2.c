@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   v2_2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 12:13:02 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 12:17:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 13:04:09 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ void	v2diff(int v[2], int ov[2], int rv[2])
 {
 	rv[X] = v[X] - ov[X];
 	rv[Y] = v[Y] - ov[Y];
+}
+
+void	v2div(int v[2], int div)
+{
+	if (div == 0)
+		return ;
+	v[X] /= div;
+	v[Y] /= div;
 }
 
 void	v2mul(int v[2], int mul)

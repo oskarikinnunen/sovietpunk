@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 12:13:55 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 14:31:33 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # define CLR_TURQ 5505010
 # define CLR_GRAY 4868682
 
+# define TILE_SPAWN 42
+
 # define DARKNESS	500.0f //On my elitebook 8460p 1000.0f is okay
 # define GAMESCALE	64
 # define RAYSLICE	0.0015f
@@ -42,7 +44,8 @@
 # define MOVESPEED	0.100f
 # define MOUSESPEED 0.0001f
 # define MAPSIZE	16
-
+# define CIRCLESIDES 16
+# define FULLRAD	PI * 2.0
 
 # define KEYS_LEFTMASK 0
 # define KEYS_RGHTMASK 2
@@ -143,6 +146,7 @@ void	f2cpy(float to[2], float from[2]);
 
 void	v2add(int v[2], int ov[2]);
 void	v2mul(int v[2], int mul);
+void	v2div(int v[2], int div);
 void	v2cpy(int to[2], int from[2]);
 void	v2diff(int v[2], int ov[2], int rv[2]);
 
@@ -154,6 +158,9 @@ void	gameloop(t_gamecontext gc);
 
 /* draw.c */
 void	draw(uint32_t *pxls, int crd[2], uint32_t clr);
+void	drawrect(uint32_t *pxls, int crd[2], int clr, int size);
+void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr);
+void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr);
 
 /* image.c */
 uint32_t	samplecolor(t_simpleimg img, int ix, int iy);
@@ -170,7 +177,11 @@ void	fdf_update(t_fdf *fdf);
 /* deltatime.c */
 void	update_deltatime(t_clock *c);
 
+/* samplemap.c */
+uint32_t	samplemap(uint32_t *map, int crd[2]);
+
 /* MAP.C */
+
 void	mapcreator(char *mapname, t_sdlcontext context);
 
 /* simpleimage.c */

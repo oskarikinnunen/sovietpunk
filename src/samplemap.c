@@ -1,38 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player.c                                           :+:      :+:    :+:   */
+/*   samplemap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/28 20:43:19 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 14:26:25 by okinnune         ###   ########.fr       */
+/*   Created: 2022/10/07 12:57:35 by okinnune          #+#    #+#             */
+/*   Updated: 2022/10/07 13:01:18 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 
-void	spawnplayer(t_gamecontext *gc)
+uint32_t	samplemap(uint32_t *map, int crd[2])
 {
-	int ix;
-	int	iy;
-
-	ix = 0;
-	iy = 0;
-	while (iy < MAPSIZE)
-	{
-		while (ix < MAPSIZE)
-		{
-			if (samplemap(gc->map, (int [2]){ix, iy}) == TILE_SPAWN)
-			{
-				gc->player.pos[X] = (ix * GAMESCALE) - 0.5f;
-				gc->player.pos[Y] = (iy * GAMESCALE) - 0.5f;
-				gc->map[ix + (iy) * MAPSIZE] = 0;
-			}
-			ix++;
-		}
-		ix = 0;
-		iy++;
-	}
-	gc->player.angle = 0;
+	if (crd[X] + (crd[Y] * MAPSIZE) >= MAPSIZE * MAPSIZE)
+		return (0);
+	return (map[crd[X] + (crd[Y] * MAPSIZE)]);
 }
