@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/26 17:23:56 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 15:23:59 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,9 @@ Uint32	png4byte(char *ptr)
 	result = 0;
 	while (i < 4)
 	{
-		result += (unsigned char)ptr[i]; //bitshift, this isn't correct
+		result = (unsigned char)ptr[i]; //bitshift, this isn't correct
 		i++;
-		//printf("png4byte result %i \n", result);
 	}
-	 
 	return (result);
 }
  //Figure out palette lenght!
