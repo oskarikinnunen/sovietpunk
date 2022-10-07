@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 14:41:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 16:07:05 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,7 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL
 			if (crd[X] == ed.cursor[X] && crd[Y] == ed.cursor[Y])
 				clr = CLR_PRPL;
 			tile = samplemap(ed.mapdata, crd);
-			if (tile <= 2)
-				drawimagescaled(&context, scr_crd, tile, TILESIZE);
-			if (tile == TILE_SPAWN)
-				drawrect(context.surface->pixels, scr_crd, CLR_TURQ, TILESIZE / 2);
+			drawimagescaled(&context, scr_crd, tile, TILESIZE);
 			drawrect(context.surface->pixels, scr_crd, clr, TILESIZE);
 			crd[X]++;
 		}
@@ -54,17 +51,19 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL
 	}
 }
 
-void	mapcreator(char *mapname, t_sdlcontext sdl)
+void	mapcreator(char *mapname, t_gamecontext gc)
 {
-	int			fd;
-	t_mapeddata	ed;
-	int			scr_middle[2];
+	int				fd;
+	t_mapeddata		ed;
+	int				scr_middle[2];
+	t_sdlcontext	sdl;
 	//t_editorcontext? Has textures in it and stuff?
 
+	sdl = gc.sdl;
 	ft_bzero(&ed, sizeof(t_mapeddata));
 	ed.mapdata = ft_memalloc(sizeof(u_int32_t) * MAPSIZE * MAPSIZE);
 	if (ed.mapdata == NULL)
-		error_exit("couldn't allocate mapdata");
+		exit(0);
 	fd = sp_fileopen(mapname, O_RDWR);
 	printf("read %lu from file \n", read(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE));
 	close(fd);
@@ -75,12 +74,10 @@ void	mapcreator(char *mapname, t_sdlcontext sdl)
 		if (ed_eventloop(&ed))
 			break ;
 		drawmapstate(sdl, ed); //draw map state
-		if (ed.cursoritem != TILE_SPAWN)
-			drawimagescaled(&sdl, scr_middle, ed.cursoritem, TILESIZE * 2);
-		else
-			drawrect(sdl.surface->pixels, scr_middle, CLR_TURQ, TILESIZE * 2);
+		drawimagescaled(&sdl, scr_middle, ed.cursoritem, TILESIZE * 2);
 		SDL_UpdateWindowSurface(sdl.window);
 	}
 	printf("wrote %lu b in file\n", write(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE));
 	close(fd);
+	exit (0);
 }

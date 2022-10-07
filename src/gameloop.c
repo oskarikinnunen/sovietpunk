@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 14:12:20 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 16:25:48 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 	int					tex_sample;
 	int					res;
 	int					tx;
+	int					mapcrd[2];
 
 	populate_bresenham(&b, crd, dst);
 	while (b.local[X] > 0 && b.local[X] < MAPSIZE * GAMESCALE
@@ -187,7 +188,7 @@ void moveplayer(t_gamecontext *gc)
 	f2add(potential_plrpos, move_f2);
 	f2mul(potential_plrpos, 1.0f / GAMESCALE);
 	f2tov2(potential_plrpos, mapcrd);
-	if (samplemap(gc->map, mapcrd) == 0)
+	if (is_in_map(mapcrd) && samplemap(gc->map, mapcrd) == 0)
 		f2add(gc->player.pos, move_f2);
 }
 
@@ -252,6 +253,7 @@ void	openmap(t_gamecontext *gc)
 void	gameloop(t_gamecontext gc)
 {
 	int	*walls;
+	int	mapcrd[2];
 
 	openmap(&gc);
 	spawnplayer(&gc);
@@ -264,8 +266,6 @@ void	gameloop(t_gamecontext gc)
 		moveplayer(&gc);
 		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
 		rendergame(&gc.sdl, walls, &gc);
-		
-		
 		renderobj(&gc);
 		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
 		render2Dmap(&gc);

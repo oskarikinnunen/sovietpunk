@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 14:31:33 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 16:11:00 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@
 # define CLR_TURQ 5505010
 # define CLR_GRAY 4868682
 
-# define TILE_SPAWN 42
+# define TILE_SPAWN 3
+# define PNG_COUNT 4
 
 # define DARKNESS	500.0f //On my elitebook 8460p 1000.0f is okay
 # define GAMESCALE	64
@@ -178,11 +179,12 @@ void	fdf_update(t_fdf *fdf);
 void	update_deltatime(t_clock *c);
 
 /* samplemap.c */
+bool		is_in_map(int crd[2]);
 uint32_t	samplemap(uint32_t *map, int crd[2]);
 
 /* MAP.C */
 
-void	mapcreator(char *mapname, t_sdlcontext context);
+void	mapcreator(char *mapname, t_gamecontext gc);
 
 /* simpleimage.c */
 void	loadpngs(t_sdlcontext	*sdl);

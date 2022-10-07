@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 14:46:51 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 16:05:53 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int argc, char **args)
 	gc.sdl.fdfs->crd[X] = 420;
 	gc.sdl.fdfs->crd[Y] = 420;
 	if (argc == 3 && ft_strcmp(args[1], "-e") == 0 && ft_strlen(args[2]) > 0)
-		mapcreator(args[2], gc.sdl);
+		mapcreator(args[2], gc);
 	else
 		gameloop(gc);
 	SDL_DestroyWindow(gc.sdl.window);

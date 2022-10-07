@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 14:41:07 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 15:56:18 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 	t_simpleimg	img;
 
 	iy = 0;
-	tid = ft_clamp(tid, 0, 2); //TODO: texturecount
-	
+	tid = ft_clamp(tid, 0, PNG_COUNT - 1); //TODO: texturecount
 	img = context->images[tid];
 	scalar = ((float)img.size[X] / (float)scale);
 	while (iy++ < scale - 1)
@@ -57,29 +56,5 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 			if (color != 0)
 				draw(context->surface->pixels, (int [2]){ix + p[X], iy + p[Y]}, color);
 		}
-	}
-}
-
-void	drawimage(t_sdlcontext *context, int x, int y)
-{
-	int			iy;
-	int			ix;
-	int			color;
-	t_simpleimg	img;
-
-	iy = 0;
-	ix = 0;
-	img = context->images[3];
-	while (iy++ <= img.size[Y] - 4)
-	{
-		while (ix++ < img.size[X])
-		{
-			color = samplecolor(img, ft_clamp(ix, 0, img.length), iy);
-			if (color != 0)
-				((int *)context->surface->pixels)[ix + x + (iy + y) * WINDOW_W] = color;
-			//SDL_SetRenderDrawColor(context.renderer, color & 0xFF, color >> 8 & 0xFF, color >> 16 & 0xFF, 0xFF);
-			//SDL_RenderDrawPoint(context.renderer, ix + x, iy + y);
-		}
-		ix = 0;
 	}
 }

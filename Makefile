@@ -6,7 +6,7 @@
 #    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/07 13:00:41 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/07 15:59:08 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
 LIBS= $(LIBFT) -ldl -lpthread -lm
-CFLAGS +=  $(INCLUDE) -g -O1# -g -O2
+CFLAGS +=  $(INCLUDE) -g -O2# -g -O2
 PWD= $(shell pwd)
 
 all: $(SDL2) $(LIBFT) $(OBJ) #src/SP1947.h
