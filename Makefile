@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
+#    By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/07 11:14:37 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/07 12:16:53 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIBFT= libft/libft.a
 SDL2= SDL_built/lib/libSDL2.a
 SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
 		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c \
-		v2.c obj_render.c shade.c player.c inputhelp.c
+		v2.c obj_render.c shade.c player.c inputhelp.c v2_2.c draw.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameloop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 11:39:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 12:24:41 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc)
 {
 	int			i;
 	int			smpl[2];
+	int			pxlcrd[2];
 	int			wallheight;
 	float		ystep;
 	t_simpleimg	img;
@@ -40,10 +41,11 @@ void	rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc)
 		{
 			if ((WINDOW_H / 2) + (smpl[Y] - wallheight / 2) > WINDOW_H)
 				break ;
-			((int *)sdl->surface->pixels)[i + ((WINDOW_H / 2)
-					+ (smpl[Y] - wallheight / 2)) * WINDOW_W] = shade
+			v2cpy(pxlcrd, (int [2]){i, ((WINDOW_H / 2) +  (smpl[Y] - wallheight / 2))} );
+			int clr = shade
 				(samplecolor(img, smpl[X] + smpl[Y] * ystep, smpl[Y] * ystep),
-					wallheight);
+				wallheight);
+			draw(sdl->surface->pixels, pxlcrd, clr);
 		}
 	}
 }
@@ -163,6 +165,7 @@ void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
 	int		iy;
 	int		x;
 	int		y;
+	int		pxlcrd[2];
 	Uint32	clr;
 
 	iy = 0;
@@ -173,8 +176,10 @@ void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
 		clr = samplecolor(sdl.images[0], x + y, x);
 		clr = shade(clr, iy * 2);
 		int oc = ((int *)sdl.surface->pixels)[ix + (iy + WINDOW_H / 2) * WINDOW_W];
-		((int *)sdl.surface->pixels)[ix + (iy + WINDOW_H / 2) * WINDOW_W] = clr;
-		((int *)sdl.surface->pixels)[ix + (WINDOW_H / 2 - iy) * WINDOW_W] = clr;
+		v2cpy(pxlcrd, (int [2]) {ix, iy + WINDOW_H / 2});
+		draw(sdl.surface->pixels, pxlcrd, clr);
+		v2cpy(pxlcrd, (int [2]) {ix, (WINDOW_H / 2)- iy});
+		draw(sdl.surface->pixels, pxlcrd, clr);
 		iy++;
 	}
 }
@@ -233,10 +238,10 @@ void	gameloop(t_gamecontext gc)
 		printf("after aycast and rendergame \n");
 		//render2Dmap(gc.sdlcontext, gc.map);
 		
-		renderobj(&gc);
+		//renderobj(&gc);
 		
 		printf("b4 drawfdf \n");
-		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
+		//drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
 		printf("after drawfdf \n");
 		SDL_UpdateWindowSurface(gc.sdl.window);
 	}

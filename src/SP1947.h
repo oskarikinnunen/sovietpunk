@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SP1947.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
+/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 11:42:57 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 12:13:55 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,11 +141,19 @@ void	f2tov2(float f[2], int v[2]);
 void	f2add(float f[2], float of[2]);
 void	f2cpy(float to[2], float from[2]);
 
+void	v2add(int v[2], int ov[2]);
+void	v2mul(int v[2], int mul);
+void	v2cpy(int to[2], int from[2]);
+void	v2diff(int v[2], int ov[2], int rv[2]);
+
 /* eventloop.c */
 int		eventloop(t_gamecontext *gc);
 
 /* gameloop.c */
 void	gameloop(t_gamecontext gc);
+
+/* draw.c */
+void	draw(uint32_t *pxls, int crd[2], uint32_t clr);
 
 /* image.c */
 uint32_t	samplecolor(t_simpleimg img, int ix, int iy);
