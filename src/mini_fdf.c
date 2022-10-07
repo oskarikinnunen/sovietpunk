@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/06 17:10:27 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 11:53:28 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	anim(t_fdf *fdf)
 	static uint32_t	tick;
 
 	tick += fdf->clock->delta;
-	fdf->frames = 18; //TODO: unhardcode
+	fdf->frames = 17; //TODO: unhardcode
 	if (tick > 100)
 	{
 		fdf->curframe++;
@@ -145,8 +145,6 @@ void	fdf_draw(t_fdf fdf)
 	uint32_t	c;
 
 	i = 0;
-	fdf.crd[X] = 420;
-	fdf.crd[Y] = 512;
 	ft_bzero(fdf.img.data, fdf.img.length * sizeof(Uint32));
 	ft_bzero(fdf.depth, sizeof(float) * fdf.img.length);
 	while (i < fdf.obj->f_count)
@@ -216,18 +214,21 @@ void	fdf_update(t_fdf *fdf)
 	int	i;
 
 	i = 0;
+	
 	calc_matrices(fdf);
 	anim(fdf);
-	while (i < fdf->obj->v_count)
+	
+	while (i < fdf->obj->v_count - 1)
 	{
 		fdf->verts[i][X] = (float)fdf->obj[fdf->curframe].verts[i][X];
 		fdf->verts[i][Y] = (float)fdf->obj[fdf->curframe].verts[i][Y];
 		fdf->verts[i][Z] = (float)fdf->obj[fdf->curframe].verts[i][Z];
+		//printf("vert %i \n", i);
 		//v3_mul(fdf->matrices[X], fdf->verts[i]);
 		v3_mul(fdf->matrices[Y], fdf->verts[i]);
 		v3_add(fdf->verts[i], (float [3]) {fdf->img.size[X] / 2, 400, 0});
 		i++;
 	}
-	ft_bzero(fdf->img.data, fdf->img.size[X] * fdf->img.size[Y] * sizeof(int));
+	ft_bzero(fdf->img.data, fdf->img.size[X] * fdf->img.size[Y] * sizeof(uint32_t));
 	fdf_draw(*fdf);
 }

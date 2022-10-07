@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/06 12:00:48 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 11:26:07 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,31 @@ int	ismovement(SDL_KeyCode code)
 {
 	return (code == SDLK_LEFT || code == SDLK_RIGHT || code == SDLK_UP || code == SDLK_DOWN) ||
 			(code == SDLK_a || code == SDLK_d);
+}
+
+static int	key_events(SDL_Event e, t_gamecontext *game)
+{
+	if (e.type == SDL_KEYDOWN)
+	{
+		if (iskey(e, SDLK_ESCAPE))
+			return (1);
+		if (iskey(e, SDLK_TAB)) {
+			game->relativemousemode = !game->relativemousemode;
+			SDL_SetRelativeMouseMode(game->relativemousemode);
+		}
+		game->keystate |= keyismoveleft(e);
+		game->keystate |= keyismoveright(e) << KEYS_RGHTMASK;
+		game->keystate |= keyismoveup(e) << KEYS_UPMASK;
+		game->keystate |= keyismovedown(e) << KEYS_DOWNMASK;
+	}
+	else if(e.type == SDL_KEYUP)
+	{
+		game->keystate &= ~(keyismoveleft(e));
+		game->keystate &= ~(keyismoveright(e) << KEYS_RGHTMASK);
+		game->keystate &= ~(keyismoveup(e) << KEYS_UPMASK);
+		game->keystate &= ~(keyismovedown(e) << KEYS_DOWNMASK);
+	}
+	return (0);
 }
 
 void	playerinput(SDL_Keycode kc, t_player *plr)
@@ -56,29 +81,13 @@ void	playerinput(SDL_Keycode kc, t_player *plr)
 int	eventloop(t_gamecontext *gc)
 {
 	static SDL_Event	event;
+	int					key_event_return;
 
+	SDL_GetRelativeMouseState(&gc->mouse_delta[X], &gc->mouse_delta[Y]);
 	while (SDL_PollEvent(&event) != 0)
 	{
-		if (event.type == SDL_KEYDOWN)
-		{
-			if (iskey(event, SDLK_SPACE))
-			{
-				gc->player.pos[X] = 3;
-				gc->player.pos[Y] = 6;
-			}
-			if (ismovement(event.key.keysym.sym))
-				playerinput(event.key.keysym.sym, &gc->player);
-			if (iskey(event, SDLK_ESCAPE))
-				return (1);
-		}
-		if (event.type == SDL_KEYUP)
-		{
-			if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT)
-				gc->player.rot = 0;
-			if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_DOWN)
-				ft_bzero(gc->player.dest, sizeof(float[2]));
-		}
-		if (event.type == SDL_QUIT)
+		key_event_return = key_events(event, gc);
+		if (event.type == SDL_QUIT || key_event_return)
 			return (1);
 	}
 	return (0);

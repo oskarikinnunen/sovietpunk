@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/06 17:35:34 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 11:39:26 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,18 +115,47 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 	return (res);
 }
 
-void moveplayer(t_player *plr, int deltatime, int *map)
+static void	updatemovementvector(float move_f2[2], int32_t keystate, float angle)
 {
-	int	dest_index;
-
-	dest_index = (int)(plr->pos[X] + (plr->dest[X] * deltatime)) / 64
-				+ ((int)(plr->pos[Y] + (plr->dest[Y] * deltatime)) / 64) * MAPSIZE;
-	if (map[dest_index] == 0 || map[dest_index] == 2)
+	//TODO: next parts could be done with some kind of "rotatevector" function
+	angle = angle + (FOV / 2.0f);
+	if ((keystate >> KEYS_UPMASK) & 1) 
 	{
-		plr->pos[X] += plr->dest[X] * deltatime;
-		plr->pos[Y] += plr->dest[Y] * deltatime;
+		move_f2[X] += sin(angle);
+		move_f2[Y] += cos(angle);
 	}
-	plr->angle += plr->rot * deltatime;
+	if ((keystate >> KEYS_DOWNMASK) & 1)
+	{
+		move_f2[X] -= sin(angle);
+		move_f2[Y] -= cos(angle);
+	}
+	// strafe
+	if ((keystate >> KEYS_LEFTMASK) & 1)
+	{
+		move_f2[X] += sin(angle + RAD90);
+		move_f2[Y] += cos(angle + RAD90);
+	}
+	if ((keystate >> KEYS_RGHTMASK) & 1)
+	{
+		move_f2[X] += -sin(angle + RAD90);
+		move_f2[Y] += -cos(angle + RAD90);
+	}
+}
+
+void moveplayer(t_gamecontext *gc)
+{
+	float	move_f2[2];
+	float	potential_plr_pos[2];
+	float	angle;
+
+	ft_bzero(move_f2, sizeof(float [2]));
+	angle = 0;
+	angle -= gc->mouse_delta[X] * MOUSESPEED;
+	angle *= gc->clock.delta;
+	gc->player.angle += angle;
+	updatemovementvector(move_f2, gc->keystate, gc->player.angle);
+	f2mul(move_f2, gc->clock.delta * MOVESPEED);
+	f2add(gc->player.pos, move_f2);
 }
 
 void	render_floor(t_sdlcontext sdl, int *floor, int ix, int h)
@@ -193,21 +222,22 @@ void	gameloop(t_gamecontext gc)
 	printf("SPAWNPLAYER");
 	while (1)
 	{
-		
+		update_deltatime(&gc.clock);
 		if (eventloop(&gc))
 			break ; //TODO: is good mby?
-		
-		update_deltatime(&gc.clock);
-		moveplayer(&gc.player, gc.clock.delta, gc.map);
+		moveplayer(&gc);
+		printf("b4 raycast and rendergame \n");
 		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
 		rendergame(&gc.sdl,
 			walls, &gc);
+		printf("after aycast and rendergame \n");
 		//render2Dmap(gc.sdlcontext, gc.map);
 		
-		//renderobj(&gc);
+		renderobj(&gc);
 		
-		//drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
-
+		printf("b4 drawfdf \n");
+		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
+		printf("after drawfdf \n");
 		SDL_UpdateWindowSurface(gc.sdl.window);
 	}
 	exit(0);

@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/06 14:47:28 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 11:42:57 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <math.h>
 #include "libft.h"
+#include <stdbool.h>
 //#include "SP_PNG.h"
 
 # define FPSCOUNTER
@@ -39,7 +40,14 @@
 # define WALLTHING	(0.0017777f / RAYSLICE) * 36000 //800w rayslice 0.0018f = 452
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.100f
+# define MOUSESPEED 0.0001f
 # define MAPSIZE	16
+
+
+# define KEYS_LEFTMASK 0
+# define KEYS_RGHTMASK 2
+# define KEYS_UPMASK 4
+# define KEYS_DOWNMASK 8
 
 typedef struct s_player
 {
@@ -53,9 +61,9 @@ typedef struct s_player
 
 typedef struct s_simpleimg
 {
-	Uint32	size[2];
-	Uint32	*data;
-	Uint32	length;
+	uint32_t	size[2];
+	uint32_t	*data;
+	uint32_t	length;
 }	t_simpleimg;
 
 typedef struct s_obj
@@ -97,15 +105,18 @@ typedef struct s_sdlcontext
 
 typedef struct s_clock
 {
-	Uint32	prev_time;
-	Uint32	delta;
+	uint32_t	prev_time;
+	uint32_t	delta;
 } t_clock;
 
 typedef struct s_gamecontext
 {
 	t_sdlcontext	sdl;
 	t_player		player;
-	Uint32			map[MAPSIZE * MAPSIZE];
+	_Bool			relativemousemode;
+	int32_t			keystate;
+	uint32_t			map[MAPSIZE * MAPSIZE];
+	int				mouse_delta[2];
 	t_clock			clock;
 	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
 	u_int32_t		v[2];
@@ -125,6 +136,10 @@ void	renderobj(t_gamecontext *gc);
 
 /* v2.c */
 int		v2dist(int *v, int *ov);
+void	f2mul(float f[2], float mul); //TODO: move f2 functions to own file and maybe think of better naming?
+void	f2tov2(float f[2], int v[2]);
+void	f2add(float f[2], float of[2]);
+void	f2cpy(float to[2], float from[2]);
 
 /* eventloop.c */
 int		eventloop(t_gamecontext *gc);
@@ -133,7 +148,7 @@ int		eventloop(t_gamecontext *gc);
 void	gameloop(t_gamecontext gc);
 
 /* image.c */
-Uint32	samplecolor(t_simpleimg img, int ix, int iy);
+uint32_t	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext *context, int x, int y);
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
 void	alloc_image(t_simpleimg *img, int width, int height);
@@ -152,6 +167,12 @@ void	mapcreator(char *mapname, t_sdlcontext context);
 
 /* simpleimage.c */
 void	loadpngs(t_sdlcontext	*sdl);
+
+/* inputhelp.c */
+bool	keyismoveleft(SDL_Event e);
+bool	keyismoveright(SDL_Event e);
+bool	keyismoveup(SDL_Event e);
+bool	keyismovedown(SDL_Event e);
 
 /* FILE_OPEN.c */
 

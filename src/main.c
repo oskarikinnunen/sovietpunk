@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/06 17:32:31 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 11:56:49 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ int	main(int argc, char **args)
 	
 	createsdlcontext(&gc.sdl);
 	loadpngs(&gc.sdl);
-	//parse_obj(objs);
+	parse_obj(objs);
 	alloc_image(&gc.sdl.fdfs->img, 400, 400);
 	
-	//fdf_init(gc.sdl.fdfs, objs); //TODO malloc space for image
-	gc.sdl.fdfs->crd[X] = 420;
-	gc.sdl.fdfs->crd[Y] = 512;
+	fdf_init(gc.sdl.fdfs, objs); //TODO malloc space for image
+	gc.sdl.fdfs->crd[X] = 1.4f * GAMESCALE;
+	gc.sdl.fdfs->crd[Y] = 1.4f * 72;
 	if (argc == 3 && ft_strcmp(args[1], "-e") == 0 && ft_strlen(args[2]) > 0)
 		mapcreator(args[2], gc.sdl);
 	else
