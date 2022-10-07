@@ -6,7 +6,7 @@
 /*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 15:24:50 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/07 15:47:42 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	loadpngs(t_sdlcontext	*sdl)
 	//nullcheck
 	pngparse(png_stack, "tex/flooruc.png");
 	pngparse(&png_stack[1], "tex/wallu.png");
-	pngparse(&png_stack[2], "tex/pxlflag.png");
+	pngparse(&png_stack[2], "tex/walluc2.png");
 
 	//Converting png to simpleimg
 	sdl->images	= ft_memalloc(sizeof(t_simpleimg) * 3); //4th one WAS for mini_fdf
