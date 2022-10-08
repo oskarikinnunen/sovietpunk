@@ -6,16 +6,11 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 11:26:07 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/08 10:48:52 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
-
-static int	iskey(SDL_Event e, int keycode)
-{
-	return (e.key.keysym.sym == keycode);
-}
 
 int	ismovement(SDL_KeyCode code)
 {
@@ -83,7 +78,8 @@ int	eventloop(t_gamecontext *gc)
 	static SDL_Event	event;
 	int					key_event_return;
 
-	SDL_GetRelativeMouseState(&gc->mouse_delta[X], &gc->mouse_delta[Y]);
+	if (gc->relativemousemode)
+		SDL_GetRelativeMouseState(&gc->mouse_delta[X], &gc->mouse_delta[Y]);
 	while (SDL_PollEvent(&event) != 0)
 	{
 		key_event_return = key_events(event, gc);

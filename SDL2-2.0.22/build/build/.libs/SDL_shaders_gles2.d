@@ -1,24 +1,24 @@
 build/SDL_shaders_gles2.lo: \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/SDL_shaders_gles2.c \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/../../SDL_internal.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/../../dynapi/SDL_dynapi.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/../../dynapi/SDL_dynapi_overrides.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/SDL_shaders_gles2.c \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/../../SDL_internal.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/../../dynapi/SDL_dynapi.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/../../dynapi/SDL_dynapi_overrides.h \
  include/SDL_config.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_platform.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/begin_code.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/close_code.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_assert.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_config.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_log.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_stdinc.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_video.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_pixels.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_endian.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_rect.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_error.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_rwops.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_surface.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_blendmode.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_opengles2.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/SDL_shaders_gles2.h \
- /home/oskari/projects/sovietpunk/SDL2-2.0.22/include/SDL_stdinc.h
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_platform.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/begin_code.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/close_code.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_assert.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_config.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_log.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_stdinc.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_video.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_pixels.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_endian.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_rect.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_error.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_rwops.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_surface.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_blendmode.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_opengles2.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/src/render/opengles2/SDL_shaders_gles2.h \
+ /home/oskari/Projects/sovietpunk/SDL2-2.0.22/include/SDL_stdinc.h

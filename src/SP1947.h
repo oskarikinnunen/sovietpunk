@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 16:11:00 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/08 11:13:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define FPSCOUNTER
 # define WINDOW_W 800
 # define WINDOW_H 600
+# define CENTER_X WINDOW_W / 2
+# define CENTER_Y WINDOW_H / 2
 # define X 0
 # define Y 1
 
@@ -32,8 +34,9 @@
 # define CLR_TURQ 5505010
 # define CLR_GRAY 4868682
 
-# define TILE_SPAWN 3
-# define PNG_COUNT 4
+
+# define PNG_COUNT 6
+# define TILE_SPAWN PNG_COUNT - 1
 
 # define DARKNESS	500.0f //On my elitebook 8460p 1000.0f is okay
 # define GAMESCALE	64
@@ -47,6 +50,7 @@
 # define MAPSIZE	16
 # define CIRCLESIDES 16
 # define FULLRAD	PI * 2.0
+
 
 # define KEYS_LEFTMASK 0
 # define KEYS_RGHTMASK 2
@@ -133,6 +137,7 @@ void	spawnplayer(t_gamecontext *gc);
 
 /* shade.c */
 u_int32_t	shade(u_int32_t color, int wallheight);
+u_int32_t	vanilla_shade(u_int32_t clr, int wallheight);
 
 /* obj_render.c */
 void	drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
@@ -144,6 +149,7 @@ void	f2mul(float f[2], float mul); //TODO: move f2 functions to own file and may
 void	f2tov2(float f[2], int v[2]);
 void	f2add(float f[2], float of[2]);
 void	f2cpy(float to[2], float from[2]);
+void	v2clamp_xy(int v[2], int min, int max);
 
 void	v2add(int v[2], int ov[2]);
 void	v2mul(int v[2], int mul);
@@ -190,6 +196,7 @@ void	mapcreator(char *mapname, t_gamecontext gc);
 void	loadpngs(t_sdlcontext	*sdl);
 
 /* inputhelp.c */
+bool	iskey(SDL_Event e, int keycode);
 bool	keyismoveleft(SDL_Event e);
 bool	keyismoveright(SDL_Event e);
 bool	keyismoveup(SDL_Event e);

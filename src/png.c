@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   png.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 15:23:59 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/08 11:04:34 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ Uint32	png4byte(char *ptr)
 Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
 {
 	int	i;
+
+	printf("here \n");
 	png->palette.plte = ft_memalloc(sizeof(Uint64) * 1024); //TODO: calculate actual lenght for malloc.
 	while (ft_strncmp(ptr, "PLTE", 4) != 0)
 		ptr++;
 	ptr += 4; // should be 4
 	i = 0;
+	
 	while (ft_strncmp(ptr, "bKGD", 4) != 0 && ft_strncmp(ptr, "tIME", 4) != 0)
 	{
 		//png->palette.plte[i] = *ptr + (*(ptr + 1) << 8) + (*(ptr + 2) << 16);
@@ -78,7 +81,9 @@ void	pngparse(t_pngdata	*png, char *filename)
 	Uint8		buf[32000];
 	//t_pngdata	png;
 
+	
 	fd = sp_fileopen(filename, O_RDONLY);
+	printf("opened %s \n", filename);
 	//fd = sp_fileopen("exdc.png", O_RDONLY);
 	len = read(fd, buf, sizeof(Uint8) * 32000);
 	//error_exit("png file didn't fit in static buffer");

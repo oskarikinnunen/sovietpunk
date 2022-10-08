@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 16:25:48 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/08 11:39:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,8 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 		|| b.local[X] % GAMESCALE == GAMESCALE - 1)
 		tex_sample = b.local[Y] % GAMESCALE;
 	res = WALLTHING / v2dist(crd, b.local);
-	tx = (gc->map[((b.local[Y] & 0xFFFFFFC0) >> 6) * MAPSIZE
-			+ ((b.local[X] & 0xFFFFFFC0) >> 6)] & 0xFF);
-	tx = ft_clamp(tx, 0, 3) << 24;
+	tx = samplemap(gc->map, (int [2]){b.local[X] / GAMESCALE, b.local[Y] / GAMESCALE});
+	tx = ft_clamp(tx, 0, PNG_COUNT - 1) << 24;
 	populate_bresenham(&b, b.local, crd);
 	floorcast(&floor, &b, gc);
 	res += ((tex_sample & 0xFF) << 16) + tx;

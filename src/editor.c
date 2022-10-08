@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 16:07:05 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/08 11:07:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed) //TODO: CONVERT TO PIXEL
 			v2cpy(scr_crd, crd);
 			v2mul(scr_crd, TILESIZE);
 			v2add(scr_crd, crd);
-			clr = INT_MAX;
+			clr = CLR_GRAY;
 			if (crd[X] == ed.cursor[X] && crd[Y] == ed.cursor[Y])
 				clr = CLR_PRPL;
+			//printf("pos %i %i \n", crd[X], crd[Y]);
 			tile = samplemap(ed.mapdata, crd);
 			drawimagescaled(&context, scr_crd, tile, TILESIZE);
 			drawrect(context.surface->pixels, scr_crd, clr, TILESIZE);
@@ -61,22 +62,24 @@ void	mapcreator(char *mapname, t_gamecontext gc)
 
 	sdl = gc.sdl;
 	ft_bzero(&ed, sizeof(t_mapeddata));
+	ed.wall_select = -1;
 	ed.mapdata = ft_memalloc(sizeof(u_int32_t) * MAPSIZE * MAPSIZE);
 	if (ed.mapdata == NULL)
 		exit(0);
 	fd = sp_fileopen(mapname, O_RDWR);
 	printf("read %lu from file \n", read(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE));
 	close(fd);
-	fd = sp_fileopen(mapname, O_TRUNC | O_RDWR);
 	v2cpy(scr_middle, (int [2]){WINDOW_W / 2, WINDOW_H / 2});
 	while (1)
 	{
 		if (ed_eventloop(&ed))
 			break ;
+		draw_buttons(sdl, ed.wall_select);
 		drawmapstate(sdl, ed); //draw map state
 		drawimagescaled(&sdl, scr_middle, ed.cursoritem, TILESIZE * 2);
 		SDL_UpdateWindowSurface(sdl.window);
 	}
+	fd = sp_fileopen(mapname, O_TRUNC | O_RDWR);
 	printf("wrote %lu b in file\n", write(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE));
 	close(fd);
 	exit (0);

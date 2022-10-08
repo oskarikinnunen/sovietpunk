@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 12:13:02 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 13:04:09 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/08 08:37:33 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 {
 	return (v[X] == ov[X] && v[Y] == ov[Y]);
 }*/
+
+void	v2clamp_xy(int v[2], int min, int max)
+{
+	v[X] = ft_clamp(v[X], min, max);
+	v[Y] = ft_clamp(v[Y], min, max);
+}
 
 void	v2cpy(int to[2], int from[2]) 
 {
