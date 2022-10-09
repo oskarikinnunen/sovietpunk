@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 19:37:23 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 20:56:50 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 16:06:59 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	append_to_buff(t_buffer **s_buf, char *str, size_t len)
 		(*s_buf)->string = (char *)ft_memalloc((*s_buf)->size);
 		if ((*s_buf)->string == NULL)
 			return (-1);
-		if (cpy != NULL)
+		if (cpy != NULL && (*s_buf)->size != 0)
 			ft_memcpy((*s_buf)->string, cpy, (*s_buf)->size / 2);
 		ft_strdel(&cpy);
 	}

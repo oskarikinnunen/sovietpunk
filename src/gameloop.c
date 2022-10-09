@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:39:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 16:16:14 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,9 @@ void	render2Dmap(t_gamecontext *gc)
 			v2cpy(mapcrd, crd);
 			v2div(mapcrd, MAPTILESIZE);
 			tile = samplemap(gc->map, mapcrd);
-			drawimagescaled(&gc->sdl, crd, tile, MAPTILESIZE);
-			drawrect(gc->sdl.surface->pixels, crd, CLR_GRAY, MAPTILESIZE);
+			drawquadtile(&gc->sdl, crd, tile, MAPTILESIZE + 2);
+			//drawrect(gc->sdl.surface->pixels, crd, CLR_GRAY, MAPTILESIZE + 1);
+			//drawrect(gc->sdl.surface->pixels, crd, CLR_GRAY, MAPTILESIZE);
 			crd[X] += MAPTILESIZE;
 		}
 		crd[X] = 0;
@@ -117,6 +118,23 @@ void	floorcast(int **floor, t_bresenham *b, t_gamecontext *gc)
 	}
 }
 
+int	getraytex(uint32_t sample, int pos[2])
+{
+	int	mod[2];
+	int	walldecider;
+
+	mod[X] = pos[X] % GAMESCALE;
+	mod[Y] = pos[Y] % GAMESCALE;
+	walldecider = NORTHWALL;
+	if (mod[X] == 0)
+		walldecider = WESTWALL;
+	else if (mod[X] == GAMESCALE - 1)
+		walldecider = EASTWALL;
+	if (mod[Y] == GAMESCALE - 1)
+		walldecider = SOUTHWALL;
+	return(getindexedwall(sample, walldecider));
+}
+
 int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 {
 	static t_bresenham	b;
@@ -136,8 +154,10 @@ int	raycast_len(int crd[2], int dst[2], t_gamecontext *gc, int *floor)
 		|| b.local[X] % GAMESCALE == GAMESCALE - 1)
 		tex_sample = b.local[Y] % GAMESCALE;
 	res = WALLTHING / v2dist(crd, b.local);
-	tx = samplemap(gc->map, (int [2]){b.local[X] / GAMESCALE, b.local[Y] / GAMESCALE});
-	tx = ft_clamp(tx, 0, PNG_COUNT - 1) << 24;
+	tx = getraytex(samplemap(gc->map, (int [2]){b.local[X] / GAMESCALE, b.local[Y] / GAMESCALE}), b.local);
+	tx = tx << 24; //CLAMP?
+	/*tx = samplemap(gc->map, (int [2]){b.local[X] / GAMESCALE, b.local[Y] / GAMESCALE}) & 0xFF;
+	tx = ft_clamp(tx, 0, PNG_COUNT - 1) << 24;*/
 	populate_bresenham(&b, b.local, crd);
 	floorcast(&floor, &b, gc);
 	res += ((tex_sample & 0xFF) << 16) + tx;

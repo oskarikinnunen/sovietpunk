@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 05:48:12 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 13:55:54 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 16:13:59 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	drawrect(uint32_t *pxls, int crd[2], int clr, int size)
 		i++;
 	}
 }
-
 
 void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr)
 {

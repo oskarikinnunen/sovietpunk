@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:13:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 15:25:30 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 
 # define PNG_COUNT 6
 # define TILE_SPAWN PNG_COUNT - 1
+# define SPAWN 5 + (5 << 8) + (5 << 16) + (5 << 24)
 
 # define DARKNESS	500.0f //On my elitebook 8460p 1000.0f is okay
 # define GAMESCALE	64
@@ -51,6 +52,11 @@
 # define CIRCLESIDES 16
 # define FULLRAD	PI * 2.0
 
+
+# define NORTHWALL 0
+# define WESTWALL 1
+# define EASTWALL 2
+# define SOUTHWALL 3
 
 # define KEYS_LEFTMASK 0
 # define KEYS_RGHTMASK 2
@@ -169,6 +175,9 @@ void	drawrect(uint32_t *pxls, int crd[2], int clr, int size);
 void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr);
 void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr);
 
+/* drawquadtile.c */
+void	drawquadtile(t_sdlcontext *context, int p[2], uint32_t wall, int scale);
+
 /* image.c */
 uint32_t	samplecolor(t_simpleimg img, int ix, int iy);
 void	drawimage(t_sdlcontext *context, int x, int y);
@@ -180,6 +189,8 @@ void	parse_obj(t_obj *obj);
 int		fdf_init(t_fdf *fdf, t_obj *object);
 void	fdf_update(t_fdf *fdf);
 
+/* getwall.c */
+uint32_t	getindexedwall(uint32_t wall, int i);
 
 /* deltatime.c */
 void	update_deltatime(t_clock *c);

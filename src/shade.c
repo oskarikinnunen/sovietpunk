@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:26:45 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:51:25 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 14:51:37 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,9 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 	uint8_t		intensity;
 	const int	div = 15;
 
-	//return (clr);
-
 	intensity = color_intensity(clr);
 	if (intensity < 33)
-		return (1);
+		return (589833);
 	mul = (float)wallheight / DARKNESS;
 	if (mul > 1.0f)
 		mul = 1.0f;

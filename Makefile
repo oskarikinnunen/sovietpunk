@@ -6,7 +6,7 @@
 #    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/08 09:52:57 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/09 14:06:11 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SDL2= SDL_built/lib/libSDL2.a
 SRCFILES= main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c \
 		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c \
 		v2.c obj_render.c shade.c player.c inputhelp.c v2_2.c draw.c samplemap.c \
-		editor_buttons.c
+		editor_buttons.c drawquadtile.c getwall.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc

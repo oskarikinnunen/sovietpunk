@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:43:19 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 09:40:16 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 15:25:23 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	spawnplayer(t_gamecontext *gc)
 {
-	int ix;
-	int	iy;
+	int			ix;
+	int			iy;
+	uint32_t	smpl;
 
 	ix = 0;
 	iy = 0;
@@ -23,7 +24,8 @@ void	spawnplayer(t_gamecontext *gc)
 	{
 		while (ix < MAPSIZE)
 		{
-			if (samplemap(gc->map, (int [2]){ix, iy}) == TILE_SPAWN)
+			smpl = samplemap(gc->map, (int[2]) {ix, iy});
+			if (samplemap(gc->map, (int [2]){ix, iy}) == SPAWN)
 			{
 				gc->player.pos[X] = (ix * GAMESCALE) + GAMESCALE / 2;
 				gc->player.pos[Y] = (iy * GAMESCALE) + GAMESCALE / 2;

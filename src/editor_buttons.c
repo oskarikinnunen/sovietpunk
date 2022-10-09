@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 09:00:36 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 09:36:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 15:42:52 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,25 @@
 #include "SP1947_MAPED.h"
 
 //4 buttons, each with x, y and size (int [3])
-void	draw_buttons(t_sdlcontext sdl, int select)
+void	draw_buttons(t_sdlcontext *sdl, t_mapeddata ed)
 {
 	static int	btns[4][3] = 
 	{
-		{CENTER_X, CENTER_Y - TILESIZE2, TILESIZE2},
-		{CENTER_X - TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X + TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X, CENTER_Y + TILESIZE2, TILESIZE2}
+		{CENTER_X + 64, CENTER_Y - TILESIZE2, TILESIZE2},
+		{CENTER_X + 64 - TILESIZE2, CENTER_Y, TILESIZE2},
+		{CENTER_X + 64 + TILESIZE2, CENTER_Y, TILESIZE2},
+		{CENTER_X + 64, CENTER_Y + TILESIZE2, TILESIZE2}
 	};
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 4)
 	{
-		if (i == select)
-			drawrect(sdl.surface->pixels, btns[i], CLR_PRPL, btns[i][2]);
+		drawimagescaled(sdl, btns[i], getindexedwall(ed.cursoritem, i), btns[i][2]);
+		if (i == ed.wall_select)
+			drawrect(sdl->surface->pixels, btns[i], CLR_PRPL, btns[i][2]);
 		else
-			drawrect(sdl.surface->pixels, btns[i], CLR_GRAY, btns[i][2]);
+			drawrect(sdl->surface->pixels, btns[i], CLR_GRAY, btns[i][2]);
 		i++;
 	}
 }
@@ -46,12 +47,12 @@ int	hit_button(t_mapeddata *ed)
 {
 	static int	btns[4][3] = 
 	{
-		{CENTER_X, CENTER_Y - TILESIZE2, TILESIZE2},
-		{CENTER_X - TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X + TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X, CENTER_Y + TILESIZE2, TILESIZE2}
+		{CENTER_X + 64, CENTER_Y - TILESIZE2, TILESIZE2},
+		{CENTER_X + 64 - TILESIZE2, CENTER_Y, TILESIZE2},
+		{CENTER_X + 64 + TILESIZE2, CENTER_Y, TILESIZE2},
+		{CENTER_X + 64, CENTER_Y + TILESIZE2, TILESIZE2}
 	};
-	int	i;
+	int			i;
 
 	i = 0;
 	while (i < 4)

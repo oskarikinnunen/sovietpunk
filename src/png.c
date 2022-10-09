@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:04:34 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 16:18:47 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,15 @@ void	pngparse(t_pngdata	*png, char *filename)
 	//t_pngdata	png;
 
 	
-	fd = sp_fileopen(filename, O_RDONLY);
-	printf("opened %s \n", filename);
-	//fd = sp_fileopen("exdc.png", O_RDONLY);
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		error_exit("fileopen error");
 	len = read(fd, buf, sizeof(Uint8) * 32000);
 	//error_exit("png file didn't fit in static buffer");
 	ft_bzero(png, sizeof(t_pngdata));
 	ptr = buf;
 	while (ft_strcmp(++ptr, "IHDR") != 0 && len > 0) //Extract function?
 		len--;
-	//printf("string: %s length left: %i\n", ptr, len);
 	ptr += 4; //Skip IHDR
 	png->size[X] = png4byte(ptr);
 	png->size[Y] = png4byte(ptr+4);
@@ -103,7 +102,6 @@ void	pngparse(t_pngdata	*png, char *filename)
 	printf("height = %i \n", png->size[Y]);
 	printf("bitdepth = %i \n", png->bitdepth);
 	printf("colortype = %i \n", png->colortype);
-	//fillpalette(png, &ptr, &buf, len);
 	ptr = readpalette(png, ptr);
 	readdat(png, ptr);
 	close(fd);

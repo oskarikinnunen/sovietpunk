@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:39:17 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 12:17:06 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 	t_simpleimg	img;
 
 	iy = 0;
+	
 	tid = ft_clamp(tid, 0, PNG_COUNT - 1); //TODO: texturecount
 	img = context->images[tid];
 	scalar = ((float)img.size[X] / (float)scale);

@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:46:26 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:35:55 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 15:01:41 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,26 @@
 #include "SP1947_MAPED.h"
 //#include "inputhelp.h"
 
-//TODO: render minitexture for walls, indicate enemies and player with just a different color
-int	get_item_id(int *itemid, int dir)
+int	get_item_id(int *itemid, int wallselect, int dir)
 {
 	static int selector;
 	selector += dir;
+	printf("selector %i \n", selector);
 	selector = ft_clamp(selector, 0, PNG_COUNT - 1);
-	*itemid = selector;
+	if (wallselect == -1)
+	{
+		*itemid = 0;
+		*itemid |= selector << (NORTHWALL * 8);
+		*itemid |= selector << (WESTWALL * 8);
+		*itemid |= selector << (EASTWALL * 8);
+		*itemid |= selector << (SOUTHWALL * 8);
+	}
+	else
+	{
+		*itemid &= ~(0xFF << (wallselect * 8));
+		*itemid |= selector << (wallselect * 8);
+	}
+	
 }
 
 void	removeitem(t_mapeddata ed)
@@ -35,8 +48,8 @@ void	placeitem(t_mapeddata ed)
 	int i;
 
 	i = 0;
-	if (samplemap(ed.mapdata, ed.cursor) == ed.cursoritem)
-		return ;
+	/*if (samplemap(ed.mapdata, ed.cursor) == ed.cursoritem)
+		return ;*/
 	/*while (ed.cursoritem == TILE_SPAWN && i++ < MAPSIZE * MAPSIZE) // REMOVE SPAWNS
 		ed.mapdata[i] = (ed.mapdata[i] != TILE_SPAWN) * ed.mapdata[i];*/
 	ed.mapdata[ed.cursor[X] + ed.cursor[Y] * MAPSIZE] = ed.cursoritem;
@@ -53,11 +66,10 @@ int	ed_eventloop(t_mapeddata *ed)
 	while (SDL_PollEvent(&event) != 0)
 	{
 		if (event.type == SDL_MOUSEWHEEL)
-			get_item_id(&ed->cursoritem, event.wheel.y);
+			get_item_id(&ed->cursoritem, ed->wall_select, event.wheel.y);
 		if (event.type == SDL_MOUSEBUTTONDOWN)
 		{
 			ed->wall_select = hit_button(ed);
-			printf("wall select %i \n", ed->wall_select);
 			ed->mouseheld = (event.button.button) * (ed->wall_select == -1);
 		}
 		if (event.type == SDL_MOUSEBUTTONUP)
@@ -68,8 +80,8 @@ int	ed_eventloop(t_mapeddata *ed)
 			removeitem(*ed);
 		if (event.type == SDL_KEYDOWN)
 		{
-			get_item_id(&ed->cursoritem, iskey(event, SDLK_UP));
-			get_item_id(&ed->cursoritem, -iskey(event, SDLK_DOWN));
+			get_item_id(&ed->cursoritem, ed->wall_select, iskey(event, SDLK_UP));
+			get_item_id(&ed->cursoritem, ed->wall_select, -iskey(event, SDLK_DOWN));
 			if (iskey(event, SDLK_ESCAPE))
 				return (1);
 		}
