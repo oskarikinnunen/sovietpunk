@@ -5,7 +5,10 @@
 		"array": "c",
 		"string": "c",
 		"string_view": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"*.tcc": "c",
+		"ostream": "c",
+		"sstream": "c"
 	},
 	"C_Cpp.errorSquiggles": "Disabled"
 }

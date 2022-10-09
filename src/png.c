@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 16:18:47 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 22:46:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,19 @@ Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
 {
 	int	i;
 
-	printf("here \n");
 	png->palette.plte = ft_memalloc(sizeof(Uint64) * 1024); //TODO: calculate actual lenght for malloc.
 	while (ft_strncmp(ptr, "PLTE", 4) != 0)
 		ptr++;
-	ptr += 4; // should be 4
+	ptr += 4;
 	i = 0;
 	
 	while (ft_strncmp(ptr, "bKGD", 4) != 0 && ft_strncmp(ptr, "tIME", 4) != 0)
 	{
-		//png->palette.plte[i] = *ptr + (*(ptr + 1) << 8) + (*(ptr + 2) << 16);
 		png->palette.plte[i] = (*ptr << 16) + (*(ptr + 1) << 8) + (*(ptr + 2));
-		//png->palette.plte[i] = *(ptr + 2);
 		ptr += 3;
 		i++;
 	}
 	png->palette.length = i;
-	printf("pal len %i \n", png->palette.length);
 	return (ptr);
 }
 
@@ -56,12 +52,10 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 	while (ft_strncmp(ptr, "IDAT", 4) != 0)
 		ptr++;
 	ptr += 12; // should be 4??
-	//printf("string start %s \n", ptr);
 	int count = 0;
 	png->data = ft_memalloc(sizeof(Uint8) * png->size[X] * png->size[Y]);
 	//protec
 
-	//ft_strncmp(ptr++, "IEND", 4) != 0 &&
 	while (ft_strncmp(ptr, "tEXt", 4) != 0
 		&& count < png->size[X] * png->size[Y])
 	{
@@ -70,7 +64,6 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 		count++;
 	}
 	printf("found %i pixels in image \n", count);
-	/*printf("first pixel %i second pixel %i \n", png->data[0], png->data[1]);*/
 }
 
 void	pngparse(t_pngdata	*png, char *filename)

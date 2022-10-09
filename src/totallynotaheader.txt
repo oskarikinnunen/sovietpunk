@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   SP1947.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:17:26 by okinnune         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    totallynotaheader.txt                              :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#              #
+#    Updated: 2022/10/09 22:33:55 by okinnune         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 #ifndef SP1947_H
 # define SP1947_H
@@ -19,48 +19,38 @@
 # include <fcntl.h>
 # include <math.h>
 # include "libft.h"
-# include "bresenham.h"
 # include <stdbool.h>
 
 # define FPSCOUNTER
 # define WINDOW_W 960
 # define WINDOW_H 720
-# define CENTER_X 480
-# define CENTER_Y 360
-//# define CENTER_X WINDOW_W / 2
-//# define CENTER_Y WINDOW_H / 2
+# define CENTER_X WINDOW_W / 2
+# define CENTER_Y WINDOW_H / 2
 # define X 0
 # define Y 1
-# define Z 2
 
 # define CLR_PRPL 14231500
 # define CLR_TURQ 5505010
 # define CLR_GRAY 4868682
 
-# define ANIMFRAMES 18
 # define PNG_COUNT 14
 # define TILE_SPAWN 13
-# define SPAWN 218959117
-//# define TILE_SPAWN PNG_COUNT - 1
-//# define
-//SPAWN TILE_SPAWN + (TILE_SPAWN << 8) + (TILE_SPAWN << 16) + (TILE_SPAWN << 24)
+# define TILE_SPAWN PNG_COUNT - 1
+# define SPAWN TILE_SPAWN + (TILE_SPAWN << 8) + (TILE_SPAWN << 16) + (TILE_SPAWN << 24)
 
 # define DARKNESS	700.0f
 # define GAMESCALE	64
-# define RAYSLICE	0.0010f
-# define FOV		0.96f
-//# define FOV		RAYSLICE * WINDOW_W
+# define RAYSLICE	0.0011f
+# define FOV		RAYSLICE * WINDOW_W
 # define RAD90		1.57079633f
-# define WALLTHING	63997.2 //800w rayslice 0.0018f = 452
-//# define WALLTHING
-//	(0.0017777f / RAYSLICE) * 36000
+# define WALLTHING	(0.0017777f / RAYSLICE) * 36000 //800w rayslice 0.0018f = 452
 # define TURNSPEED	0.003f
 # define MOVESPEED	0.100f
 # define MOUSESPEED 0.0001f
 # define MAPSIZE	20
 # define CIRCLESIDES 16
-# define FULLRAD	6.28318530718
-//# define FULLRAD	PI * 2.0
+# define FULLRAD	PI * 2.0
+
 
 # define NORTHWALL 0
 # define WESTWALL 1
@@ -89,14 +79,11 @@ typedef struct s_simpleimg
 	uint32_t	length;
 }	t_simpleimg;
 
-/*
-	'colors' is the indexer for mtlcolors, confusing naming
-*/
 typedef struct s_obj
 {
 	char		**mtlnames;
 	uint32_t	*mtlcolors;
-	uint8_t		*colors;
+	uint8_t		*colors; //Points to colors in mtlcolors
 	uint32_t	m_count;
 	int32_t		**verts;
 	uint32_t	**faces;
@@ -106,7 +93,7 @@ typedef struct s_obj
 
 typedef struct s_fdf
 {
-	t_simpleimg			img;
+	t_simpleimg			img; // TODO: make local
 	struct s_clock		*clock;
 	t_obj				*obj;
 	int					curframe;
@@ -114,26 +101,26 @@ typedef struct s_fdf
 	float				**verts;
 	float				matrices[2][3][3];
 	float				view[2];
+	u_int32_t			frames;
 	int32_t				screenspace[2];
 	u_int32_t			scale;
 	int32_t				crd[2];
 }	t_fdf;
 
-//ft = floortable
 typedef struct s_sdlcontext
 {
 	SDL_Window				*window;
 	SDL_Surface				*surface;
 	t_simpleimg				*images;
 	t_fdf					fdfs[1];
-	int						*ft;
+	int						*ft; //floortable
 }	t_sdlcontext;
 
 typedef struct s_clock
 {
 	uint32_t	prev_time;
 	uint32_t	delta;
-}	t_clock;
+} t_clock;
 
 typedef struct s_gamecontext
 {
@@ -141,9 +128,10 @@ typedef struct s_gamecontext
 	t_player		player;
 	_Bool			relativemousemode;
 	int32_t			keystate;
-	uint32_t		map[MAPSIZE * MAPSIZE];
+	uint32_t			map[MAPSIZE * MAPSIZE];
 	int				mouse_delta[2];
 	t_clock			clock;
+	u_int32_t		tex_x; //TODO: REMOVE and make a local variable
 	u_int32_t		v[2];
 }	t_gamecontext;
 
@@ -196,9 +184,6 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
 void	alloc_image(t_simpleimg *img, int width, int height);
 
 /* fdf.c / obj.c */
-void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c);  //FDF SPECIFIC
-void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c);
-void	fv3_to_iv3(float *f3, int *i3);
 void	parse_obj(t_obj *obj);
 int		fdf_init(t_fdf *fdf, t_obj *object);
 void	fdf_update(t_fdf *fdf);
@@ -228,9 +213,15 @@ bool	keyismoveup(SDL_Event e);
 bool	keyismovedown(SDL_Event e);
 
 /* FILE_OPEN.c */
+
+/* \brief Protected version of the standard 'open' function
+	@param filename name of the file.
+	@param flags flags used to open the file. */
 int		sp_fileopen(char *filename, int flags);
 
 /* ERROR.C */
+/* \brief Exits the program after printing out the requested string
+	@param str string that's printed out to stderror (2) */
 void	error_exit(char *str);
 
 #endif

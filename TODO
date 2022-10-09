@@ -1,6 +1,0 @@
-
-render minifdf objects in the world
-
-implement dda for raycast and ditch weird integer scaling raycast thingy (Ignore this lol I guess)
-
-make error exit function

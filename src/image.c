@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 12:17:06 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 23:45:38 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 	int	index;
 
 	index = ix + (iy * img.size[Y]);
-	if (index < 0 || index >= img.length)
+	if (index < 0)
+		index = 0;
+	if (ix >= (img.size[X] * img.size[Y]) - 1 || iy >= img.size[Y] - 1)
+		index = img.length - 1;
+	if (img.length == 0)
 		return (0);
 	//index = ft_clamp(index, 0, img.length - 1);
 	return (img.data[index]);
@@ -27,8 +31,8 @@ void	alloc_image(t_simpleimg *img, int width, int height)
 {
 	img->size[X] = width;
 	img->size[Y] = width;
-	img->length = width * height * sizeof(uint32_t);
-	img->data = ft_memalloc(img->length);
+	img->length = width * height;
+	img->data = ft_memalloc(img->length * sizeof(uint32_t));
 }
 
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)

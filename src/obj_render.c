@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 12:45:41 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 23:20:46 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ static void drawstripe(uint32_t *pixels, t_fdf fdf, int ix, float scalar)
 
 	iy = 0;
 	py = fdf.screenspace[Y];
+	//printf("img size %i %i len %i \n", fdf.img.size[X], fdf.img.size[Y], fdf.img.length);
 	while (iy++ < fdf.scale - 1)
 	{
 		if (iy + py < 0 || iy + py >= WINDOW_H)
 			continue;
+		
 		uint32_t clr =
 			samplecolor(fdf.img, ix * scalar, iy * scalar);
 		

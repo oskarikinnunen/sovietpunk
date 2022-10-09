@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player.c                                           :+:      :+:    :+:   */
+/*   spawnplayer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 20:43:19 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 15:25:23 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 23:54:15 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@ void	spawnplayer(t_gamecontext *gc)
 
 	ix = 0;
 	iy = 0;
+	f2cpy(gc->player.pos, (float [2]){ 127.0f, 127.0f});
 	while (iy < MAPSIZE)
 	{
 		while (ix < MAPSIZE)
 		{
 			smpl = samplemap(gc->map, (int[2]) {ix, iy});
-			if (samplemap(gc->map, (int [2]){ix, iy}) == SPAWN)
+			if (smpl == SPAWN)
 			{
 				gc->player.pos[X] = (ix * GAMESCALE) + GAMESCALE / 2;
 				gc->player.pos[Y] = (iy * GAMESCALE) + GAMESCALE / 2;
@@ -36,5 +37,4 @@ void	spawnplayer(t_gamecontext *gc)
 		ix = 0;
 		iy++;
 	}
-	gc->player.angle = 0;
 }

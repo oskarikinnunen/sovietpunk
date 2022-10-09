@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 16:28:39 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 19:53:05 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	mapcreator(char *mapname, t_gamecontext gc)
 		exit(0);
 	printf("read %lu from file \n", read(fd, ed.mapdata, sizeof(u_int32_t [MAPSIZE * MAPSIZE])));
 	close(fd);
-	v2cpy(selector_pos, (int [2]){WINDOW_W / 2 + 64, WINDOW_H / 2});
+	v2cpy(selector_pos, (int [2]){WINDOW_W - 128, WINDOW_H / 2});
 	while (1)
 	{
 		if (ed_eventloop(&ed))

@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 02:40:52 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 11:33:21 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 23:03:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,20 @@ void	loadpngs(t_sdlcontext	*sdl)
 	int			i;
 	
 	//nullcheck
-	pngparse(png_stack, "tex/floor1.png");
-	pngparse(&png_stack[1], "tex/wall_cf.png");
-	pngparse(&png_stack[2], "tex/wall_orange.png");
-	pngparse(&png_stack[3], "tex/console.png");
-	pngparse(&png_stack[4], "tex/wall_red.png");
-	pngparse(&png_stack[TILE_SPAWN], "tex/pxlflag_d.png"); //Spawn always last
+	pngparse(png_stack, "tex/output/floory2.png");
+	pngparse(&png_stack[1], "tex/output/floor1.png");
+	pngparse(&png_stack[2], "tex/output/wall4.png");
+	pngparse(&png_stack[3], "tex/output/wall4_ruin2.png");
+	pngparse(&png_stack[4], "tex/output/wall4_ruin_pc.png");
+	pngparse(&png_stack[5], "tex/output/wall2.png");
+	pngparse(&png_stack[6], "tex/output/wall3_ruin.png");
+	pngparse(&png_stack[7], "tex/output/wall3_ruin2.png");
+	pngparse(&png_stack[8], "tex/output/wall3.png");
+	pngparse(&png_stack[9], "tex/output/wall4_pc_blue.png");
+	pngparse(&png_stack[10], "tex/output/wall4_pc.png");
+	pngparse(&png_stack[11], "tex/output/wall4_ruin.png");
+	pngparse(&png_stack[12], "tex/output/wall4.png");
+	pngparse(&png_stack[TILE_SPAWN], "tex/output/spawn.png"); //Spawn always last
 
 	//Converting png to simpleimg
 	sdl->images	= ft_memalloc(sizeof(t_simpleimg) * PNG_COUNT); //4th one WAS for mini_fdf

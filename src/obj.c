@@ -91,6 +91,8 @@ void	get_vertices(t_obj *obj, int fd)
 	obj->verts = ft_memalloc(sizeof(int **) * 10000); // Do with remalloc
 	obj->faces = ft_memalloc(sizeof(int **) * 10000);
 	obj->colors = ft_memalloc(sizeof(uint8_t *) * 10000);
+	obj->f_count = 0;
+	obj->v_count = 0;
 	while (ft_get_next_line(fd, &line))
 	{
 		if (ft_strncmp("usemtl", line, 6) == 0)
@@ -220,6 +222,6 @@ void	parse_obj(t_obj *obj)
 	close(fd);
 	ft_bzero(name, sizeof(char[100]));
 	ft_strcat(name, "animtests/cyborg/cy");
-	parse_anim(obj, name, 19);
+	parse_anim(obj, name, ANIMFRAMES);
 	printf("m count %i \n", obj->m_count);
 }

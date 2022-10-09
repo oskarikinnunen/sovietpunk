@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:26:45 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 14:51:37 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 22:03:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 		mul = 1.0f;
 	mul *= mul;
 	final = (clr & 0xFF) * mul;
-	final += (uint32_t)((clr >> 8 & 0xFF) * mul * mul)  << 8;
-	final += (uint32_t)((clr >> 16 & 0xFF) * mul * mul) << 16;
+	final += (uint32_t)((clr >> 8 & 0xFF) * mul * mul) << 8;
+	final += (uint32_t)((clr >> 16 & 0xFF) * mul) << 16;
 	return (final);
 }
 
@@ -55,7 +55,7 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 
 	intensity = color_intensity(clr);
 	if (intensity < 33)
-		return (589833);
+		return (196613);
 	mul = (float)wallheight / DARKNESS;
 	if (mul > 1.0f)
 		mul = 1.0f;

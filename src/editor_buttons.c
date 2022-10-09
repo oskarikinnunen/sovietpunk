@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 09:00:36 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 15:42:52 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/09 19:52:52 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	draw_buttons(t_sdlcontext *sdl, t_mapeddata ed)
 {
 	static int	btns[4][3] = 
 	{
-		{CENTER_X + 64, CENTER_Y - TILESIZE2, TILESIZE2},
-		{CENTER_X + 64 - TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X + 64 + TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X + 64, CENTER_Y + TILESIZE2, TILESIZE2}
+		{WINDOW_W - 128, CENTER_Y - TILESIZE2, TILESIZE2},
+		{WINDOW_W - 128 - TILESIZE2, CENTER_Y, TILESIZE2},
+		{WINDOW_W - 128 + TILESIZE2, CENTER_Y, TILESIZE2},
+		{WINDOW_W - 128, CENTER_Y + TILESIZE2, TILESIZE2}
 	};
 	int	i;
 
@@ -47,10 +47,10 @@ int	hit_button(t_mapeddata *ed)
 {
 	static int	btns[4][3] = 
 	{
-		{CENTER_X + 64, CENTER_Y - TILESIZE2, TILESIZE2},
-		{CENTER_X + 64 - TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X + 64 + TILESIZE2, CENTER_Y, TILESIZE2},
-		{CENTER_X + 64, CENTER_Y + TILESIZE2, TILESIZE2}
+		{WINDOW_W - 128, CENTER_Y - TILESIZE2, TILESIZE2},
+		{WINDOW_W - 128 - TILESIZE2, CENTER_Y, TILESIZE2},
+		{WINDOW_W - 128 + TILESIZE2, CENTER_Y, TILESIZE2},
+		{WINDOW_W - 128, CENTER_Y + TILESIZE2, TILESIZE2}
 	};
 	int			i;
 
