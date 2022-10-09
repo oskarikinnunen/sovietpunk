@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:17:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 01:23:59 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 //# define WALLTHING
 //	(0.0017777f / RAYSLICE) * 36000
 # define TURNSPEED	0.003f
-# define MOVESPEED	0.100f
+# define MOVESPEED	0.130f
 # define MOUSESPEED 0.0001f
 # define MAPSIZE	20
 # define CIRCLESIDES 16
@@ -138,6 +138,7 @@ typedef struct s_clock
 typedef struct s_gamecontext
 {
 	t_sdlcontext	sdl;
+	char			*mapname;
 	t_player		player;
 	_Bool			relativemousemode;
 	int32_t			keystate;
@@ -202,6 +203,7 @@ void	fv3_to_iv3(float *f3, int *i3);
 void	parse_obj(t_obj *obj);
 int		fdf_init(t_fdf *fdf, t_obj *object);
 void	fdf_update(t_fdf *fdf);
+void	calc_matrices(t_fdf *fdf);
 
 /* getwall.c */
 uint32_t	getindexedwall(uint32_t wall, int i);

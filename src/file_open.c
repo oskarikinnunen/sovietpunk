@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:18:12 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 16:25:09 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 01:13:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@ int	sp_fileopen(char *filename, int flags)
 
 	fd = open(filename, flags);
 	if (fd < 0)
-		error_exit(0);
+		exit(0);
 	return (fd);
 }

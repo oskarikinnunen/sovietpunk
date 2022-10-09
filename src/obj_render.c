@@ -6,13 +6,13 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 23:20:46 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 00:37:16 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 
-int		screenspace_y(t_gamecontext *gc, int dist) //only needs sdl
+int	screenspace_y(t_gamecontext *gc, int dist)
 {
 	int	iy;
 
@@ -20,34 +20,27 @@ int		screenspace_y(t_gamecontext *gc, int dist) //only needs sdl
 	while (iy < WINDOW_H / 2)
 	{
 		if (gc->sdl.ft[iy] > dist)
-			break;
+			break ;
 		iy++;
 	}
 	return (WINDOW_H / 2 + iy);
 }
 
-static void drawstripe(uint32_t *pixels, t_fdf fdf, int ix, float scalar)
+static void	drawstripe(uint32_t *pixels, t_fdf fdf, int ix, float scalar)
 {
-	int	iy;
-	int	py;
+	int			iy;
+	int			py;
+	uint32_t	clr;
 
 	iy = 0;
 	py = fdf.screenspace[Y];
-	//printf("img size %i %i len %i \n", fdf.img.size[X], fdf.img.size[Y], fdf.img.length);
 	while (iy++ < fdf.scale - 1)
 	{
 		if (iy + py < 0 || iy + py >= WINDOW_H)
-			continue;
-		
-		uint32_t clr =
-			samplecolor(fdf.img, ix * scalar, iy * scalar);
-		
+			continue ;
+		clr = samplecolor(fdf.img, ix * scalar, iy * scalar);
 		if (clr != 0)
-		{
 			draw(pixels, (int[2]) {ix + fdf.screenspace[X], iy + py}, clr);
-			//pixels[(iy + fdf.screenspace[Y]) * WINDOW_W] = clr;
-		}
-			
 	}
 }
 
@@ -62,8 +55,7 @@ void	drawfdf(t_sdlcontext *sdl, t_fdf fdf, int *walls)
 	ix = 0;
 	while (ix++ < fdf.scale)
 	{
-		//p_x = ft_clamp(ix + ssx, 0, WINDOW_W - 1);
-		if (ix + ssx < 0 || ix + ssx >= WINDOW_W
+		if (ix + ssx < 0 || ix + ssx >= WINDOW_W - 1
 			||(walls[ix + ssx] & 0xFFFF) > fdf.scale)
 			continue;
 		drawstripe(sdl->surface->pixels, fdf, ix, scalar);

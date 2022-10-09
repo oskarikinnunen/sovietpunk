@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 05:48:12 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 20:02:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 00:54:56 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	draw(uint32_t *pxls, int crd[2], uint32_t clr)
 	if (crd[X] < 0 || crd[X] >= WINDOW_W - 1
 		|| crd[Y] < 0 || crd[Y] >= WINDOW_H - 1)
 		return ;
-	//printf("drawing %i %i \n", crd[X], crd[Y]);
 	pxls[crd[X] + crd[Y] * WINDOW_W] = clr;
 }
 
@@ -52,7 +51,6 @@ void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr)
 		draw(pxls, b.local, clr);
 	draw(pxls, b.local, clr);
 }
-
 
 void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr)
 {

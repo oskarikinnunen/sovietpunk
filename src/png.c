@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 22:46:11 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 01:12:43 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	pngparse(t_pngdata	*png, char *filename)
 	
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		error_exit("fileopen error");
+		exit(0);
 	len = read(fd, buf, sizeof(Uint8) * 32000);
 	//error_exit("png file didn't fit in static buffer");
 	ft_bzero(png, sizeof(t_pngdata));

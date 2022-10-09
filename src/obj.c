@@ -37,13 +37,11 @@ void	read_vertex(int *v3, char *line)
 	while (i < 3)
 	{
 		ft_strreplace(vstrs[i], 'E', '\0');
-		//ft_strreplace(vstrs[i], '.', '\0');
 		v3[i] = atof(vstrs[i]) * 14.0f;//ft_atoi(vstrs[i]) * 13.0f;
 		free(vstrs[i]);
 		i++;
 	}
 	free(vstrs);
-	//printf("v content x %i y%i z%i \n", v3[X], v3[Y], v3[Z]);
 }
 
 void	read_face(int *v3, char *line)
@@ -61,7 +59,6 @@ void	read_face(int *v3, char *line)
 		i++;
 	}
 	free(fstrs);
-	//printf("f content %i->%i->%i \n", v3[X] + 1, v3[Y] + 1, v3[Z] + 1);
 }
 
 uint8_t	materialcolor(char *name, t_obj o) //Returns just the index that can be used to access the color from materials
@@ -111,9 +108,7 @@ void	get_vertices(t_obj *obj, int fd)
 		}
 		free(line);
 	}
-	
 }
-
 
 //color is reversed cuz I'm too lazy to change the sdl format
 uint32_t	get_color(char *line)
@@ -169,11 +164,10 @@ void	get_materials(t_obj *obj, int fd)
 void	cpy_materials(t_obj *dst, t_obj *src)
 {
 	int	i;
-	//dst->colors = ft_memalloc(sizeof(uint8_t *) * 10000);
+
 	dst->mtlcolors = ft_memalloc(sizeof(uint32_t) * MC);
 	dst->mtlnames = ft_memalloc(sizeof (char *) * MC);
 	ft_memcpy(dst->mtlcolors, src->mtlcolors, src->m_count * sizeof(uint32_t));
-	//ft_memcpy(dst->colors, src->colors, src->f_count * sizeof(uint8_t));
 	i = 0;
 	while (i < src->m_count)
 	{
@@ -184,11 +178,12 @@ void	cpy_materials(t_obj *dst, t_obj *src)
 	dst->m_count = src->m_count;
 }
 
+
 void	parse_anim(t_obj *obj, char *name, int framecount)
 {
 	int		i;
 	int		fd;
-	char	oname[100];
+	char	oname[100]; // TEST IF LEAKS WHEN EXITED HERE
 	char	*i_str;
 
 	i = 0;
@@ -216,7 +211,7 @@ void	parse_obj(t_obj *obj)
 	int		fd;
 	char	name[100]; //TODO: is safe? should be
 
-	ft_bzero(obj, sizeof(t_obj [20]));
+	ft_bzero(obj, sizeof(t_obj [ANIMFRAMES]));
 	fd = file_open("animtests/cyborg/cy_000000.mtl");
 	get_materials(obj, fd);
 	close(fd);

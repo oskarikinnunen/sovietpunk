@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 13:59:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 14:01:22 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 00:48:32 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,9 @@
 
 uint32_t	getindexedwall(uint32_t wall, int i)
 {
-	return ((wall & (0xFF << (8 * i))) >> 8 * i);
+	uint32_t	result;
+
+	result = (wall & (0xFF << (8 * i))) >> 8 * i;
+	result = ft_clamp(result, 0, PNG_COUNT - 1);
+	return (result);
 }
