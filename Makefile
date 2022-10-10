@@ -6,7 +6,7 @@
 #    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/10 15:28:05 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/10 15:50:18 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ LIBS= $(LIBFT) -ldl -lpthread -lm
 override CFLAGS +=  $(INCLUDE) -Werror -Ofast -finline-functions -g#-g# -g -O2
 PWD= $(shell pwd)
 
-all: $(SDL2) $(LIBFT) $(OBJ) #src/SP1947.h
+all: $(SDL2) $(LIBFT) $(OBJ)
 	$(CC) $(OBJ) -o $(NAME) `SDL_built/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
 
 shade1:
@@ -45,6 +45,7 @@ $(SDL2):
 
 clean-sdl:
 	rm -rf SDL2-2.0.22/build/*
+	touch SDL2-2.0.22/build/DontRemoveMe
 	rm -rf SDL_built/*
 	touch SDL_built/DontRemoveMe
 	rm -f $(SDL2)
@@ -53,9 +54,12 @@ clean:
 	rm -f src/*.o
 	rm -f $(LIBFT)
 
+rmbin:
+	rm -f $(NAME)
+
 re:	clean all
 
-fclean: clean-sdl clean
+fclean: clean-sdl clean rmbin
 
 re-sdl: clean-sdl $(SDL2)
 	
@@ -63,4 +67,4 @@ re-sdl: clean-sdl $(SDL2)
 $(LIBFT):
 	make -C libft
 
-.PHONY : all shade1 shade2 clean-sdl clean re fclean re-sdl
+.PHONY : all shade1 shade2 clean-sdl clean re fclean re-sdl rmbin
