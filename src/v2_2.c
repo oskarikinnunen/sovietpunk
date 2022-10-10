@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 12:13:02 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:07:56 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:53:20 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	v2clamp_xy(int v[2], int min, int max)
 	v[Y] = ft_clamp(v[Y], min, max);
 }
 
-void	v2cpy(int to[2], int from[2]) 
+void	v2cpy(int to[2], int from[2])
 {
 	to[X] = from[X];
 	to[Y] = from[Y];

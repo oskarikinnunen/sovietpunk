@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 23:45:38 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:56:40 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ Uint32	samplecolor(t_simpleimg img, int ix, int iy)
 		index = img.length - 1;
 	if (img.length == 0)
 		return (0);
-	//index = ft_clamp(index, 0, img.length - 1);
 	return (img.data[index]);
 }
 

@@ -1,4 +1,4 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   obj.c                                              :+:      :+:    :+:   */
@@ -6,26 +6,15 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 20:44:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/22 20:59:09 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:22:47 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "SP_OBJ.h"
 #include "SP1947.h"
 #include "v3lib.h"
 
 #define MC 10 //MATERIAL COUNt
-
-int	file_open(char *filename) //TODO: use sp_fileopen
-{
-	int	fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd <= -1)
-		exit(0);
-	return (fd);
-}
 
 void	read_vertex(int *v3, char *line)
 {
@@ -132,6 +121,7 @@ uint32_t	get_color(char *line)
 	
 }
 
+//TODO: find out allocation lengths from file
 void	get_materials(t_obj *obj, int fd)
 {
 	char	*line;
@@ -139,24 +129,20 @@ void	get_materials(t_obj *obj, int fd)
 
 	i = -1;
 	obj->mtlnames = ft_memalloc(sizeof(char *) * MC); //check null
-	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * MC); //TODO: find out allocation length from file
+	obj->mtlcolors = ft_memalloc(sizeof(uint32_t) * MC);
+	if (obj->mtlcolors == NULL || obj->mtlnames == NULL)
+		return ;
 	while (ft_get_next_line(fd, &line)) 
 	{
 		if (ft_strncmp(line, "newmtl", 6) == 0)
 		{
 			i++;
-			obj->mtlnames[i] = ft_strnew(20); //TODO do properly
-			ft_strcpy(obj->mtlnames[i], line + 7); //TODO: UNSAFEEEE
-			printf("mat found %s \n", obj->mtlnames[i]);
+			obj->mtlnames[i] = ft_strnew(20);
+			ft_strcpy(obj->mtlnames[i], line + 7);
 		}
 		if (ft_strncmp(line, "Kd", 2) == 0)
-		{
-			printf("color index %i ", i);
 			obj->mtlcolors[i] = get_color(line + 3);
-			//printf("color of mat %i  r: %i g: %i b: %i\n", obj->mtlcolors[i], 0 ,0 ,0);
-		}
 		free(line);
-		//if newmat, alloc
 	}
 	obj->m_count = i;
 }
@@ -197,7 +183,7 @@ void	parse_anim(t_obj *obj, char *name, int framecount)
 		i_str = ft_itoa(i);
 		ft_strcat(ft_strcat(name, i_str), ".obj");
 		free(i_str);
-		fd = file_open(name);
+		fd = sp_fileopen(name, O_RDONLY);
 		if (i != 0)
 			cpy_materials(&obj[i], &obj[0]);
 		get_vertices(&(obj[i]), fd);
@@ -212,7 +198,7 @@ void	parse_obj(t_obj *obj)
 	char	name[100]; //TODO: is safe? should be
 
 	ft_bzero(obj, sizeof(t_obj [ANIMFRAMES]));
-	fd = file_open("animtests/cyborg/cy_000000.mtl");
+	fd = sp_fileopen("animtests/cyborg/cy_000000.mtl", O_RDONLY);
 	get_materials(obj, fd);
 	close(fd);
 	ft_bzero(name, sizeof(char[100]));

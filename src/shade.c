@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:26:45 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 22:03:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:02:09 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 	float		mul;
 	uint32_t	final;
 
-	//return (clr);
 	mul = (float)wallheight / DARKNESS;
 	if (mul > 1.0f)
 		mul = 1.0f;
@@ -34,7 +33,7 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 
 #elif SHADETRIPPY
 
-static u_int8_t color_intensity(u_int32_t clr)
+static u_int8_t	color_intensity(u_int32_t clr)
 {
 	uint32_t	combine;
 
@@ -73,7 +72,6 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 	float		mul;
 	uint32_t	final;
 
-	//return (clr);
 	mul = (float)wallheight / DARKNESS;
 	if (mul > 1.0f)
 		mul = 1.0f;
@@ -85,13 +83,12 @@ u_int32_t	shade(u_int32_t clr, int wallheight)
 
 #endif
 
-
+//Unused
 u_int32_t	vanilla_shade(u_int32_t clr, int wallheight)
 {
 	float		mul;
 	uint32_t	final;
 
-	//return (clr);
 	mul = (float)wallheight / DARKNESS;
 	if (mul > 1.0f)
 		mul = 1.0f;

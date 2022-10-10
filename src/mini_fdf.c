@@ -6,11 +6,10 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:34:23 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:00:37 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "SP_OBJ.h"
 #include "v3lib.h"
 #include "SP1947.h"
 

@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:35:29 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:37:16 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:17:21 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	drawstripe(uint32_t *pixels, t_fdf fdf, int ix, float scalar)
 			continue ;
 		clr = samplecolor(fdf.img, ix * scalar, iy * scalar);
 		if (clr != 0)
-			draw(pixels, (int[2]) {ix + fdf.screenspace[X], iy + py}, clr);
+			draw(pixels, (int [2]){ix + fdf.screenspace[X], iy + py}, clr);
 	}
 }
 
@@ -56,41 +56,36 @@ void	drawfdf(t_sdlcontext *sdl, t_fdf fdf, int *walls)
 	while (ix++ < fdf.scale)
 	{
 		if (ix + ssx < 0 || ix + ssx >= WINDOW_W - 1
-			||(walls[ix + ssx] & 0xFFFF) > fdf.scale)
-			continue;
+			|| (walls[ix + ssx] & 0xFFFF) > fdf.scale)
+			continue ;
 		drawstripe(sdl->surface->pixels, fdf, ix, scalar);
 	}
 }
 
-void	renderobj(t_gamecontext *gc)
+void	renderobj(t_gamecontext *gc, t_fdf *fdf)
 {
 	int		scan_h;
 	float	angle;
-	float	o_angle;
 	int		dist;
-	t_fdf	*fdf;
 
-	fdf = gc->sdl.fdfs;
 	angle = gc->player.angle + FOV;
 	dist = v2dist(fdf->crd, (int [2]){gc->player.pos[X], gc->player.pos[Y]});
 	fdf->scale = WALLTHING / dist;
 	fdf->screenspace[Y] = screenspace_y(gc, dist) - (fdf->scale / 2);
 	fdf->screenspace[X] = 300000;
-	o_angle = atan2((float)fdf->crd[X] - gc->player.pos[X],
-		(float)fdf->crd[Y] - gc->player.pos[Y]);
-	fdf->view[Y] = o_angle;
+	fdf->view[Y] = atan2((float)fdf->crd[X] - gc->player.pos[X],
+			(float)fdf->crd[Y] - gc->player.pos[Y]);
 	fdf->clock = &gc->clock;
-	scan_h = 0;
-	while (scan_h < WINDOW_W)
+	scan_h = -1;
+	while (scan_h++ < WINDOW_W)
 	{
 		angle -= RAYSLICE;
-		if (atan2(sin(angle), cos(angle)) <= o_angle + RAYSLICE &&
-			atan2(sin(angle), cos(angle)) >= o_angle - RAYSLICE)
+		if (atan2(sin(angle), cos(angle)) <= fdf->view[Y] + RAYSLICE
+			&& atan2(sin(angle), cos(angle)) >= fdf->view[Y] - RAYSLICE)
 		{
 			fdf->screenspace[X] = scan_h - (fdf->scale / 2);
 			break ;
 		}
-		scan_h++;
 	}
 	if (fdf->screenspace[X] != 300000)
 		fdf_update(fdf);

@@ -6,12 +6,11 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:05:51 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:45:14 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:08:18 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
-#include "SP_OBJ.h"
 #include "bresenham.h"
 
 int	*floortable(t_sdlcontext *sdl)
@@ -37,7 +36,6 @@ int	*floortable(t_sdlcontext *sdl)
 		t[i] = b.local[X];
 		i++;
 	}
-	printf("exit ft \n");
 	return (t);
 }
 
@@ -52,8 +50,6 @@ void	createsdlcontext(t_sdlcontext *context)
 	if (context->window == NULL)
 		printf("Couldn't create SDL2 window :(");
 	printf("sdl context and init \n");
-	
-	//context->surface = SDL_CreateRGBSurface(0,WINDOW_W,WINDOW_H,32,0,0,0,0);
 	context->surface = SDL_GetWindowSurface(context->window);
 	if (context->surface == NULL)
 		(printf("WTH SURFACE NULL"), exit(0));

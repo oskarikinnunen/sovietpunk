@@ -6,14 +6,13 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 01:12:20 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:07:25 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 #include "SP1947_MAPED.h"
 #include "SP_PNG.h"
-#include "SP_OBJ.h"
 
 void	drawmapstate(t_sdlcontext	context, t_mapeddata ed)
 {

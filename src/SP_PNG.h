@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   SP_PNG.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okinnune <eino.oskari.kinnunen@gmail.co    +#+  +:+       +#+        */
+/*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:11:21 by okinnune          #+#    #+#             */
-/*   Updated: 2022/08/25 23:51:58 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:55:26 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SP_PNG_H
 # define SP_PNG_H
 
-#include "SP1947.h"
+# include "SP1947.h"
 
 typedef struct s_pngpalette
 {
 	Uint64	*plte;
 	Uint32	length;
-} t_pngpalette;
+}	t_pngpalette;
 
 typedef struct s_pngdata
 {
@@ -30,9 +30,7 @@ typedef struct s_pngdata
 	t_pngpalette	palette;
 }	t_pngdata;
 
-/* PNG.C */
-/* \brief parses a png image
-*/
+/* parses a png image */
 void	pngparse(t_pngdata *data, char *filename);
 
 #endif

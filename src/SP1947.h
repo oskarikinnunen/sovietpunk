@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 01:23:59 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:14:33 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define SP1947_H
 
 # include "../SDL_built/include/SDL2/SDL.h"
-# include "SP_OBJ.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
+# include "inttypes.h"
 # include "libft.h"
 # include "bresenham.h"
 # include <stdbool.h>
@@ -148,68 +148,68 @@ typedef struct s_gamecontext
 	u_int32_t		v[2];
 }	t_gamecontext;
 
-
-
 /* player.c */
-void	spawnplayer(t_gamecontext *gc);
+void		spawnplayer(t_gamecontext *gc);
 
 /* shade.c */
 u_int32_t	shade(u_int32_t color, int wallheight);
 u_int32_t	vanilla_shade(u_int32_t clr, int wallheight);
 
 /* obj_render.c */
-void	drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
-void	renderobj(t_gamecontext *gc);
+void		drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
+void		renderobj(t_gamecontext *gc, t_fdf *fdf);
 
 /* v2.c */
-int		v2dist(int *v, int *ov);
-void	f2mul(float f[2], float mul); //TODO: move f2 functions to own file and maybe think of better naming?
-void	f2tov2(float f[2], int v[2]);
-void	f2add(float f[2], float of[2]);
-void	f2cpy(float to[2], float from[2]);
-void	v2clamp_xy(int v[2], int min, int max);
+int			v2dist(int *v, int *ov);
+void		f2mul(float f[2], float mul);
+void		f2tov2(float f[2], int v[2]);
+void		f2add(float f[2], float of[2]);
+void		f2cpy(float to[2], float from[2]);
+void		v2clamp_xy(int v[2], int min, int max);
 
-void	v2add(int v[2], int ov[2]);
-void	v2mul(int v[2], int mul);
-void	v2div(int v[2], int div);
-void	v2cpy(int to[2], int from[2]);
-void	v2diff(int v[2], int ov[2], int rv[2]);
+void		v2add(int v[2], int ov[2]);
+void		v2mul(int v[2], int mul);
+void		v2div(int v[2], int div);
+void		v2cpy(int to[2], int from[2]);
+void		v2diff(int v[2], int ov[2], int rv[2]);
 
 /* eventloop.c */
-int		eventloop(t_gamecontext *gc);
+int			eventloop(t_gamecontext *gc);
 
 /* gameloop.c */
-void	gameloop(t_gamecontext gc);
+void		gameloop(t_gamecontext gc);
 
 /* draw.c */
-void	draw(uint32_t *pxls, int crd[2], uint32_t clr);
-void	drawrect(uint32_t *pxls, int crd[2], int clr, int size);
-void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr);
-void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr);
+void		draw(uint32_t *pxls, int crd[2], uint32_t clr);
+void		drawrect(uint32_t *pxls, int crd[2], int clr, int size);
+void		drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr);
+void		drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr);
 
 /* drawquadtile.c */
-void	drawquadtile(t_sdlcontext *context, int p[2], uint32_t wall, int scale);
+void		drawquadtile(t_sdlcontext *context,
+				int p[2], uint32_t wall, int scale);
 
 /* image.c */
 uint32_t	samplecolor(t_simpleimg img, int ix, int iy);
-void	drawimage(t_sdlcontext *context, int x, int y);
-void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
-void	alloc_image(t_simpleimg *img, int width, int height);
+void		drawimage(t_sdlcontext *context, int x, int y);
+void		drawimagescaled(t_sdlcontext *context,
+				int p[2], int tid, int scale);
+void		alloc_image(t_simpleimg *img, int width, int height);
 
 /* fdf.c / obj.c */
-void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c);  //FDF SPECIFIC
-void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c);
-void	fv3_to_iv3(float *f3, int *i3);
-void	parse_obj(t_obj *obj);
-int		fdf_init(t_fdf *fdf, t_obj *object);
-void	fdf_update(t_fdf *fdf);
-void	calc_matrices(t_fdf *fdf);
+void		draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c);
+void		fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c);
+void		fv3_to_iv3(float *f3, int *i3);
+void		parse_obj(t_obj *obj);
+int			fdf_init(t_fdf *fdf, t_obj *object);
+void		fdf_update(t_fdf *fdf);
+void		calc_matrices(t_fdf *fdf);
 
 /* getwall.c */
 uint32_t	getindexedwall(uint32_t wall, int i);
 
 /* deltatime.c */
-void	update_deltatime(t_clock *c);
+void		update_deltatime(t_clock *c);
 
 /* samplemap.c */
 bool		is_in_map(int crd[2]);
@@ -217,22 +217,22 @@ uint32_t	samplemap(uint32_t *map, int crd[2]);
 
 /* MAP.C */
 
-void	mapcreator(char *mapname, t_gamecontext gc);
+void		mapcreator(char *mapname, t_gamecontext gc);
 
 /* simpleimage.c */
-void	loadpngs(t_sdlcontext	*sdl);
+void		loadpngs(t_sdlcontext	*sdl);
 
 /* inputhelp.c */
-bool	iskey(SDL_Event e, int keycode);
-bool	keyismoveleft(SDL_Event e);
-bool	keyismoveright(SDL_Event e);
-bool	keyismoveup(SDL_Event e);
-bool	keyismovedown(SDL_Event e);
+bool		iskey(SDL_Event e, int keycode);
+bool		keyismoveleft(SDL_Event e);
+bool		keyismoveright(SDL_Event e);
+bool		keyismoveup(SDL_Event e);
+bool		keyismovedown(SDL_Event e);
 
 /* FILE_OPEN.c */
-int		sp_fileopen(char *filename, int flags);
+int			sp_fileopen(char *filename, int flags);
 
 /* ERROR.C */
-void	error_exit(char *str);
+void		error_exit(char *str);
 
 #endif

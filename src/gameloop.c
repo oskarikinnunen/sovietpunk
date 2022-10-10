@@ -6,12 +6,11 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/09 20:25:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 23:09:04 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 12:14:43 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
-#include "SP_OBJ.h"
 #include "bresenham.h"
 #define RAY_LENGTH	20
 #define WALLSCALE	2
@@ -294,7 +293,7 @@ void	gameloop(t_gamecontext gc)
 		moveplayer(&gc);
 		walls = raycast(gc.player.pos, gc.player.angle, &gc.sdl, gc);
 		rendergame(&gc.sdl, walls, &gc);
-		renderobj(&gc);
+		renderobj(&gc, gc.sdl.fdfs);
 		drawfdf(&gc.sdl, gc.sdl.fdfs[0], walls);
 		render2Dmap(&gc);
 		//drawcircle(gc.sdl.surface->pixels, (int [2]) {100, 100}, 60, INT_MAX);
