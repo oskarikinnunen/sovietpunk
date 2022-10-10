@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 12:14:33 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:22:44 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,17 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
-# include "inttypes.h"
+# include <stdbool.h>
+# include <inttypes.h>
 # include "libft.h"
 # include "bresenham.h"
-# include <stdbool.h>
 
+# define CLRSCR "\e[1;1H\e[2J"
 # define FPSCOUNTER
-# define WINDOW_W 960
-# define WINDOW_H 720
-# define CENTER_X 480
-# define CENTER_Y 360
+# define WINDOW_W 1080
+# define WINDOW_H 600
+# define CENTER_X 540
+# define CENTER_Y 300
 //# define CENTER_X WINDOW_W / 2
 //# define CENTER_Y WINDOW_H / 2
 # define X 0
@@ -37,6 +38,7 @@
 # define CLR_TURQ 5505010
 # define CLR_GRAY 4868682
 
+# define MC 10
 # define ANIMFRAMES 18
 # define PNG_COUNT 14
 # define TILE_SPAWN 13
@@ -48,7 +50,7 @@
 # define DARKNESS	700.0f
 # define GAMESCALE	64
 # define RAYSLICE	0.0010f
-# define FOV		0.96f
+# define FOV		1.08f
 //# define FOV		RAYSLICE * WINDOW_W
 # define RAD90		1.57079633f
 # define WALLTHING	63997.2 //800w rayslice 0.0018f = 452
@@ -71,6 +73,10 @@
 # define KEYS_RGHTMASK 2
 # define KEYS_UPMASK 4
 # define KEYS_DOWNMASK 8
+
+# define WALLHEIGHTMASK 0xFF
+# define RAY_LENGTH	20
+# define MAPTILESIZE	10
 
 typedef struct s_player
 {
@@ -99,7 +105,7 @@ typedef struct s_obj
 	uint8_t		*colors;
 	uint32_t	m_count;
 	int32_t		**verts;
-	uint32_t	**faces;
+	int32_t		**faces;
 	uint32_t	v_count;
 	uint32_t	f_count;
 }	t_obj;
@@ -155,6 +161,11 @@ void		spawnplayer(t_gamecontext *gc);
 u_int32_t	shade(u_int32_t color, int wallheight);
 u_int32_t	vanilla_shade(u_int32_t clr, int wallheight);
 
+/* render.c */
+void		rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc, int i);
+void		rendertopdownmap(t_gamecontext *gc);
+void		render_floor(t_sdlcontext sdl, int16_t *floor, int ix, int h);
+
 /* obj_render.c */
 void		drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
 void		renderobj(t_gamecontext *gc, t_fdf *fdf);
@@ -172,6 +183,9 @@ void		v2mul(int v[2], int mul);
 void		v2div(int v[2], int div);
 void		v2cpy(int to[2], int from[2]);
 void		v2diff(int v[2], int ov[2], int rv[2]);
+
+/* player_move.c */
+void		moveplayer(t_gamecontext *gc);
 
 /* eventloop.c */
 int			eventloop(t_gamecontext *gc);
@@ -204,6 +218,13 @@ void		parse_obj(t_obj *obj);
 int			fdf_init(t_fdf *fdf, t_obj *object);
 void		fdf_update(t_fdf *fdf);
 void		calc_matrices(t_fdf *fdf);
+void		read_vertex(int *v3, char *line);
+void		read_face(int *v3, char *line);
+uint8_t		materialcolor(char *name, t_obj o);
+void		get_vertices(t_obj *obj, int fd);
+uint32_t	get_color(char *line);
+void		get_materials(t_obj *obj, int fd);
+void		cpy_materials(t_obj *dst, t_obj *src);
 
 /* getwall.c */
 uint32_t	getindexedwall(uint32_t wall, int i);
@@ -231,6 +252,7 @@ bool		keyismovedown(SDL_Event e);
 
 /* FILE_OPEN.c */
 int			sp_fileopen(char *filename, int flags);
+void		openmap(t_gamecontext *gc, uint32_t *to);
 
 /* ERROR.C */
 void		error_exit(char *str);

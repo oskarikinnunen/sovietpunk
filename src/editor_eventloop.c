@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:46:26 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 01:02:29 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:23:11 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "SP1947_MAPED.h"
 //#include "inputhelp.h"
 
-int	get_item_id(int *itemid, int wallselect, int dir)
+static void	get_item_id(int *itemid, int wallselect, int dir)
 {
 	static int	selector;
 

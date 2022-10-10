@@ -1,5 +1,0 @@
-typedef enum t_IDs
-{
-	Player = 0,
-	Wall = 1
-} e_IDs;

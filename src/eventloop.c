@@ -6,17 +6,11 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 23:03:04 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/08 10:48:52 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 14:33:07 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
-
-int	ismovement(SDL_KeyCode code)
-{
-	return (code == SDLK_LEFT || code == SDLK_RIGHT || code == SDLK_UP || code == SDLK_DOWN) ||
-			(code == SDLK_a || code == SDLK_d);
-}
 
 static int	key_events(SDL_Event e, t_gamecontext *game)
 {
@@ -24,7 +18,8 @@ static int	key_events(SDL_Event e, t_gamecontext *game)
 	{
 		if (iskey(e, SDLK_ESCAPE))
 			return (1);
-		if (iskey(e, SDLK_TAB)) {
+		if (iskey(e, SDLK_TAB))
+		{
 			game->relativemousemode = !game->relativemousemode;
 			SDL_SetRelativeMouseMode(game->relativemousemode);
 		}
@@ -33,7 +28,7 @@ static int	key_events(SDL_Event e, t_gamecontext *game)
 		game->keystate |= keyismoveup(e) << KEYS_UPMASK;
 		game->keystate |= keyismovedown(e) << KEYS_DOWNMASK;
 	}
-	else if(e.type == SDL_KEYUP)
+	else if (e.type == SDL_KEYUP)
 	{
 		game->keystate &= ~(keyismoveleft(e));
 		game->keystate &= ~(keyismoveright(e) << KEYS_RGHTMASK);
@@ -43,9 +38,24 @@ static int	key_events(SDL_Event e, t_gamecontext *game)
 	return (0);
 }
 
+static void	strafe(SDL_Keycode kc, t_player *plr, float angle)
+{
+	if (kc == SDLK_a)
+	{
+		plr->dest[X] = -sin(plr->angle - RAD90 + angle);
+		plr->dest[Y] = -cos(plr->angle - RAD90 + angle);
+	}
+	if (kc == SDLK_d)
+	{
+		plr->dest[X] = sin(plr->angle - RAD90 + angle);
+		plr->dest[Y] = cos(plr->angle - RAD90 + angle);
+	}
+}
+
 void	playerinput(SDL_Keycode kc, t_player *plr)
 {
 	float	angle;
+
 	plr->rot = (kc == SDLK_LEFT) * TURNSPEED;
 	plr->rot -= (kc == SDLK_RIGHT) * TURNSPEED;
 	angle = RAYSLICE * (WINDOW_W / 2);
@@ -59,16 +69,7 @@ void	playerinput(SDL_Keycode kc, t_player *plr)
 		plr->dest[X] = -sin(plr->angle + angle);
 		plr->dest[Y] = -cos(plr->angle + angle);
 	}
-	if (kc == SDLK_a)
-	{
-		plr->dest[X] = -sin(plr->angle - RAD90 + angle);
-		plr->dest[Y] = -cos(plr->angle - RAD90 + angle);
-	}
-	if (kc == SDLK_d)
-	{
-		plr->dest[X] = sin(plr->angle - RAD90 + angle);
-		plr->dest[Y] = cos(plr->angle - RAD90 + angle);
-	}
+	strafe(kc, plr, angle);
 	plr->dest[X] *= MOVESPEED;
 	plr->dest[Y] *= MOVESPEED;
 }

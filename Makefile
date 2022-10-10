@@ -6,11 +6,11 @@
 #    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/10 12:00:30 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/10 15:28:05 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME= SovietPunk1947
+NAME= wolf3d
 
 INCLUDE= -Ilib/include/SDL2/ -Isrc -Ilibft
 LIBFT= libft/libft.a
@@ -18,12 +18,13 @@ SDL2= SDL_built/lib/libSDL2.a
 SRCFILES= main.c editor.c png.c file_open.c mini_fdf.c obj.c \
 		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c convertpng.c \
 		v2.c obj_render.c shade.c spawnplayer.c inputhelp.c v2_2.c draw.c samplemap.c \
-		editor_buttons.c drawquadtile.c getwall.c mini_fdf_helpers.c mini_fdf_matrix.c 
+		editor_buttons.c drawquadtile.c getwall.c mini_fdf_helpers.c mini_fdf_matrix.c \
+		error.c obj_parse.c player_move.c render.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
 LIBS= $(LIBFT) -ldl -lpthread -lm
-override CFLAGS +=  $(INCLUDE) -Ofast -finline-functions -g#-g# -g -O2
+override CFLAGS +=  $(INCLUDE) -Werror -Ofast -finline-functions -g#-g# -g -O2
 PWD= $(shell pwd)
 
 all: $(SDL2) $(LIBFT) $(OBJ) #src/SP1947.h
@@ -52,8 +53,14 @@ clean:
 	rm -f src/*.o
 	rm -f $(LIBFT)
 
+re:	clean all
+
+fclean: clean-sdl clean
+
 re-sdl: clean-sdl $(SDL2)
 	
 #clean: rm libs subfolders
 $(LIBFT):
 	make -C libft
+
+.PHONY : all shade1 shade2 clean-sdl clean re fclean re-sdl

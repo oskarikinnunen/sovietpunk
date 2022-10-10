@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 17:09:31 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 12:00:37 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 14:54:23 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	fdf_draw(t_fdf fdf)
 	}
 }
 
-//TODO: Free the prev vertices in this case of fail, line 85
 int	fdf_init(t_fdf *fdf, t_obj *object)
 {
 	int	i;
@@ -83,7 +82,7 @@ int	fdf_init(t_fdf *fdf, t_obj *object)
 	{
 		fdf->verts[i] = ft_memalloc(sizeof(float *) * 3);
 		if (fdf->verts[i] == NULL)
-			return (-1);
+			error_exit("alloc fail");
 		i++;
 	}
 	calc_matrices(fdf);

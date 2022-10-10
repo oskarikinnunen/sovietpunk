@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 20:57:09 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:54:42 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:22:23 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	update_deltatime(t_clock *c)
 	betweenframes++;
 	if (time_now >= prev_fpstime + 1000)
 	{
+		ft_putstr(CLRSCR);
 		ft_putstr("FPS: ");
 		ft_putnbr(1000 / (add / betweenframes));
 		ft_putstr("\n");

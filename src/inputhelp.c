@@ -6,13 +6,13 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:14:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/07 11:14:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 13:35:35 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 
-bool iskey(SDL_Event e, int keycode)
+bool	iskey(SDL_Event e, int keycode)
 {
 	return (e.key.keysym.sym == keycode);
 }

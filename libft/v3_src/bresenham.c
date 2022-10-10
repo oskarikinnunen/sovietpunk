@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 12:09:50 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 20:41:51 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 14:40:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	step_bresenham_y(t_bresenham *b)
 	}
 }
 
-int		step_bresenham(t_bresenham *b)
+int	step_bresenham(t_bresenham *b)
 {
 	step_bresenham_x(b);
 	step_bresenham_y(b);

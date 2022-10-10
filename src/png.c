@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 11:10:32 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 12:06:45 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:20:36 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ Uint32	png4byte(char *ptr)
 	return (result);
 }
 
-Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
+char	*readpalette(t_pngdata *png, char *ptr)
 {
 	int	i;
 
 	png->palette.plte = ft_memalloc(sizeof(Uint64) * 1024);
+	if (png->palette.plte == NULL)
+		error_exit("alloc fail");
 	while (ft_strncmp(ptr, "PLTE", 4) != 0)
 		ptr++;
 	ptr += 4;
@@ -47,7 +49,7 @@ Uint8	*readpalette(t_pngdata *png, Uint8 *ptr)
 	return (ptr);
 }
 
-void	readdat(t_pngdata *png, Uint8 *ptr)
+void	readdat(t_pngdata *png, char *ptr)
 {
 	int	count;
 
@@ -56,7 +58,7 @@ void	readdat(t_pngdata *png, Uint8 *ptr)
 	ptr += 12;
 	png->data = ft_memalloc(sizeof(Uint8) * png->size[X] * png->size[Y]);
 	if (png->data == NULL)
-		return ;
+		error_exit("alloc fail");
 	count = 0;
 	while (ft_strncmp(ptr, "tEXt", 4) != 0
 		&& count < png->size[X] * png->size[Y])
@@ -71,8 +73,8 @@ void	pngparse(t_pngdata	*png, char *filename)
 {
 	int			fd;
 	int			len;
-	Uint8		*ptr;
-	Uint8		buf[32000];
+	char		*ptr;
+	char		buf[32000];
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)

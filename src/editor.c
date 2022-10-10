@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 10:01:47 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 12:07:25 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 14:50:06 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,15 @@ void	drawmapstate(t_sdlcontext	context, t_mapeddata ed)
 	}
 }
 
+//memset(ed.mapdata, INT_MAX, MAPSIZE * MAPSIZE * sizeof(uint32_t));
 void	mapcreator(char *mapname, t_gamecontext gc)
 {
 	int				fd;
 	t_mapeddata		ed;
 
 	ft_bzero(&ed, sizeof(t_mapeddata));
-	fd = open(mapname, O_RDWR);
-	if (fd < 0)
-		exit(0);
-	(void)!read(fd, ed.mapdata, sizeof(u_int32_t [MAPSIZE * MAPSIZE]));
-	close(fd);
+	gc.mapname = mapname;
+	openmap(&gc, ed.mapdata);
 	while (!ed_eventloop(&ed))
 	{
 		draw_buttons(&gc.sdl, ed);
@@ -67,4 +65,5 @@ void	mapcreator(char *mapname, t_gamecontext gc)
 		(void)!write(fd, ed.mapdata, sizeof(u_int32_t) * MAPSIZE * MAPSIZE);
 		close(fd);
 	}
+	exit(0);
 }

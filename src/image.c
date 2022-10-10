@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 01:49:17 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 11:56:40 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 14:53:13 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	alloc_image(t_simpleimg *img, int width, int height)
 	img->size[Y] = width;
 	img->length = width * height;
 	img->data = ft_memalloc(img->length * sizeof(uint32_t));
+	if (img->data == NULL)
+		error_exit("alloc fail");
 }
 
 void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
@@ -43,22 +45,22 @@ void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale)
 	t_simpleimg	img;
 
 	iy = 0;
-	
-	tid = ft_clamp(tid, 0, PNG_COUNT - 1); //TODO: texturecount
+	tid = ft_clamp(tid, 0, PNG_COUNT - 1);
 	img = context->images[tid];
 	scalar = ((float)img.size[X] / (float)scale);
 	while (iy++ < scale - 1)
 	{
 		ix = 0;
 		if (iy + p[Y] < 0 || iy + p[Y] > WINDOW_H)
-			continue;
+			continue ;
 		while (ix++ < scale)
 		{
 			if (ix + p[X] < 0 || ix + p[X] >= WINDOW_W)
-				continue;
-			color = samplecolor(img, (float)(ix + iy) * scalar, (float)(iy * scalar));
+				continue ;
+			color = samplecolor(img, (ix + iy) * scalar, (iy * scalar));
 			if (color != 0)
-				draw(context->surface->pixels, (int [2]){ix + p[X], iy + p[Y]}, color);
+				draw(context->surface->pixels,
+					(int [2]){ix + p[X], iy + p[Y]}, color);
 		}
 	}
 }
