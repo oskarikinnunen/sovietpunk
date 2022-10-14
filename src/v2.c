@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 20:22:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 20:38:00 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:54:10 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@ void	f2add(float f[2], float of[2])
 	f[Y] += of[Y];
 }
 
-int v2dist(int *v, int *ov)
+int	v2dist(int *v, int *ov)
 {
 	return (
-			sqrt(
-			(v[X] - ov[X]) * (v[X] - ov[X]) +
-			(v[Y] - ov[Y]) * (v[Y] - ov[Y])
-			)
-			);
+		sqrt(
+			(v[X] - ov[X]) * (v[X] - ov[X])
+			+ (v[Y] - ov[Y]) * (v[Y] - ov[Y]))
+	);
 }

@@ -8,7 +8,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Fri Oct  7 16:00:06 2022
+# Make data base, printed on Fri Oct 14 13:15:58 2022
+ 
 
 # Variables
 
@@ -20,9 +21,9 @@ VSCODE_GIT_ASKPASS_MAIN = /Applications/Visual Studio Code.app/Contents/Resource
 ?F = $(notdir $?)
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
-# makefile (from `Makefile', line 22)
+# makefile (from `Makefile', line 24)
 OBJ = $(SRC:.c=.o)
-# makefile (from `Makefile', line 21)
+# makefile (from `Makefile', line 23)
 SRC = $(addprefix src/,$(SRCFILES))
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
@@ -31,26 +32,25 @@ SRC = $(addprefix src/,$(SRCFILES))
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /Users/okinnune/sovietpunk
+CURDIR := /Users/okinnune/w3dfinal_forreal
 # makefile
 SHELL = /bin/sh
 # environment
- 
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
-# makefile (from `Makefile', line 25)
-CFLAGS = $(INCLUDE) -g -O2
+# `override' directive (from `Makefile', line 27)
+CFLAGS = $(INCLUDE) -Werror -Ofast -finline-functions 
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # makefile (from `Makefile', line 18)
-SRCFILES = main.c editor.c png.c error.c file_open.c fdf_drawline.c mini_fdf.c obj.c image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c v2.c obj_render.c shade.c player.c inputhelp.c v2_2.c draw.c samplemap.c
+SRCFILES = main.c editor.c png.c file_open.c mini_fdf.c obj.c image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c convertpng.c v2.c obj_render.c shade.c spawnplayer.c inputhelp.c v2_2.c draw.c samplemap.c editor_buttons.c drawquadtile.c getwall.c mini_fdf_helpers.c mini_fdf_matrix.c error.c obj_parse.c player_move.c render.c perfgraph.c inputhelp_turn.c
 # environment
 VSCODE_INJECTION = 1
 # environment
-VSCODE_CWD = /Users/okinnune/sovietpunk
+VSCODE_CWD = /Users/okinnune/w3dfinal_forreal
 # environment
-Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.tOBvaxExfI/Render
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.6fCQGVpmBR/Render
 # environment
 PATH = /Users/okinnune/.brew/bin:/Users/okinnune/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/okinnune/.brew/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
 # environment
@@ -60,10 +60,10 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.GJJ0r70R07/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.MUYmjkL83H/Listeners
 # automatic
 %F = $(notdir $%)
-# makefile (from `Makefile', line 26)
+# makefile (from `Makefile', line 28)
 PWD = $(shell pwd)
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
@@ -101,7 +101,7 @@ MAKECMDGOALS := all
 SHLVL = 3
 # makefile (from `Makefile', line 16)
 LIBFT = libft/libft.a
-# makefile (from `Makefile', line 23)
+# makefile (from `Makefile', line 25)
 CC = gcc
 # default
 MAKE_VERSION := 3.81
@@ -112,7 +112,8 @@ USER = okinnune
 # makefile (from `Makefile', line 15)
 INCLUDE = -Ilib/include/SDL2/ -Isrc -Ilibft
 # makefile (from `Makefile', line 13)
-NAME = SovietPunk1947
+ 
+NAME = wolf3d
 # makefile (from `Makefile', line 17)
 SDL2 = SDL_built/lib/libSDL2.a
 # automatic
@@ -161,7 +162,7 @@ PROMPT_COMMAND = echo -ne "\033]0;$PWD\007"
 <F = $(notdir $<)
 # environment
 LC_ALL = C
-# makefile (from `Makefile', line 24)
+# makefile (from `Makefile', line 26)
 LIBS = $(LIBFT) -ldl -lpthread -lm
 # automatic
 ^F = $(notdir $^)
@@ -170,15 +171,15 @@ SUFFIXES :=
 # default
 .INCLUDE_DIRS = /usr/local/include
 # environment
-VSCODE_GIT_IPC_HANDLE = /var/folders/zz/zyxvpxvq6csfxvn_n0000kmr0004n6/T/vscode-git-e396580bdd.sock
+VSCODE_GIT_IPC_HANDLE = /var/folders/zz/zyxvpxvq6csfxvn_n0000kmr0004n6/T/vscode-git-7cc40e3180.sock
 # environment
 LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 86273
+VSCODE_PID = 96008
 # variable set hash-table stats:
-# Load=82/1024=8%, Rehash=0, Collisions=9/129=7%
+# Load=82/1024=8%, Rehash=0, Collisions=7/121=6%
 
 # Pattern-specific Variable Values
 
@@ -186,20 +187,37 @@ VSCODE_PID = 86273
 
 # Directories
 
-# . (device 16777227, inode 1349486): 25 files, no impossibilities.
+# . (device 16777227, inode 1785825): 17 files, no impossibilities.
 
-# 25 files, no impossibilities in 1 directories.
+# 17 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
- 
 # No implicit rules.
 
 # Files
 
+src/player_move.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:58
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+shade2:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 37):
+	$(MAKE) clean
+	$(MAKE) CFLAGS='-D SHADETRIPPY'
+	
+
 src/gameloop.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:21
+#  Last modified 2022-10-14 13:08:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -207,44 +225,38 @@ src/gameloop.o: src/SP1947.h
 
 src/obj_render.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:22
+#  Last modified 2022-10-14 13:08:55
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-all: SDL_built/lib/libSDL2.a libft/libft.a src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o src/shade.o src/player.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o
+src/obj_parse.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:58
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+all: wolf3d
+#  Phony target (prerequisite of .PHONY).
 #  Command-line target.
 #  Implicit rule search has not been done.
-#  Implicit/static pattern stem: `'
 #  File does not exist.
 #  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := all
-# automatic
-# % := 
-# automatic
-# * := 
-# automatic
-# + := SDL_built/lib/libSDL2.a libft/libft.a src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o src/shade.o src/player.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o
-# automatic
-# | := 
-# automatic
-# < := SDL_built/lib/libSDL2.a
-# automatic
-# ^ := SDL_built/lib/libSDL2.a libft/libft.a src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o src/shade.o src/player.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o
-# automatic
-# ? := SDL_built/lib/libSDL2.a libft/libft.a src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o src/shade.o src/player.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o
+#  Successfully updated.
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=4/18=22%
-#  commands to execute (from `Makefile', line 29):
-	$(CC) $(OBJ) -o $(NAME) `SDL_built/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
-	
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+.PHONY: all shade1 shade2 clean-sdl clean re fclean re-sdl rmbin
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 src/deltatime.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:21
+#  Last modified 2022-10-14 13:08:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -252,7 +264,7 @@ src/deltatime.o: src/SP1947.h
 
 src/main.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:19
+#  Last modified 2022-10-14 13:08:53
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -260,7 +272,7 @@ src/main.o: src/SP1947.h
 
 src/error.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:20
+#  Last modified 2022-10-14 13:08:58
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -268,7 +280,7 @@ src/error.o: src/SP1947.h
 
 src/v2_2.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:23
+#  Last modified 2022-10-14 13:08:56
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -276,7 +288,7 @@ src/v2_2.o: src/SP1947.h
 
 src/png.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:20
+#  Last modified 2022-10-14 13:08:53
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -288,10 +300,31 @@ src/png.o: src/SP1947.h
 #  Modification time never checked.
 #  File has not been updated.
 
+clean-sdl:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 49):
+	rm -rf SDL2-2.0.22/build/*
+	touch SDL2-2.0.22/build/DontRemoveMe
+	rm -rf SDL_built/*
+	touch SDL_built/DontRemoveMe
+	rm -f $(SDL2)
+	
+
+src/spawnplayer.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:56
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:08
+#  Last modified 2022-10-14 13:12:01
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -299,16 +332,32 @@ Makefile:
 
 SDL_built/lib/libSDL2.a:
 #  Implicit rule search has not been done.
-#  Last modified 2022-10-06 12:42:46
+#  Last modified 2022-10-14 13:08:03
 #  File has been updated.
 #  Successfully updated.
-#  commands to execute (from `Makefile', line 34):
+#  commands to execute (from `Makefile', line 46):
 	cd SDL2-2.0.22/build && ../configure --prefix=$(PWD)/SDL_built/ && make install
 	
 
+src/inputhelp_turn.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
 src/editor_eventloop.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:22
+#  Last modified 2022-10-14 13:08:55
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+src/drawquadtile.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:57
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -316,15 +365,7 @@ src/editor_eventloop.o: src/SP1947.h
 
 src/file_open.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:20
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
-
-src/player.o: src/SP1947.h
-#  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:23
+#  Last modified 2022-10-14 13:08:53
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -332,7 +373,23 @@ src/player.o: src/SP1947.h
 
 src/shade.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:22
+#  Last modified 2022-10-14 13:08:56
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+src/convertpng.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:55
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+src/render.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:58
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -341,32 +398,67 @@ src/shade.o: src/SP1947.h
 # Not a target:
 src/SP1947.h:
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:49:26
+#  Last modified 2022-10-14 13:08:49
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+ 
+wolf3d: SDL_built/lib/libSDL2.a libft/libft.a src/main.o src/editor.o src/png.o src/file_open.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/convertpng.o src/v2.o src/obj_render.o src/shade.o src/spawnplayer.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o src/editor_buttons.o src/drawquadtile.o src/getwall.o src/mini_fdf_helpers.o src/mini_fdf_matrix.o src/error.o src/obj_parse.o src/player_move.o src/render.o src/perfgraph.o src/inputhelp_turn.o
+#  Implicit rule search has not been done.
+#  Last modified 2022-10-14 13:13:00
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 41):
+	$(CC) $(OBJ) -o $(NAME) `SDL_built/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
+	
 
 libft/libft.a:
 #  Implicit rule search has not been done.
-#  Last modified 2022-10-07 15:59:19
+#  Last modified 2022-10-14 13:08:03
 #  File has been updated.
 #  Successfully updated.
-#  commands to execute (from `Makefile', line 50):
+#  commands to execute (from `Makefile', line 70):
 	make -C libft
 	
 
-src/image.o: src/SP1947.h
+fclean: clean-sdl clean rmbin
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+src/editor_buttons.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:21
+#  Last modified 2022-10-14 13:08:57
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
+src/image.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:54
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+rmbin:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 60):
+	rm -f $(NAME)
+	
+
 src/editor.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:19
+#  Last modified 2022-10-14 13:08:53
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -378,18 +470,33 @@ src/editor.o: src/SP1947.h
 #  Modification time never checked.
 #  File has not been updated.
 
-clean:
+src/mini_fdf_helpers.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:57
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+re: clean all
+#  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
-#  Modification time never checked.
+#  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 43):
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 56):
 	rm -f src/*.o
 	rm -f $(LIBFT)
 	
 
 src/mini_fdf.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:20
+#  Last modified 2022-10-14 13:08:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -397,7 +504,7 @@ src/mini_fdf.o: src/SP1947.h
 
 src/inputhelp.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:23
+#  Last modified 2022-10-14 13:08:56
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -405,58 +512,65 @@ src/inputhelp.o: src/SP1947.h
 
 src/eventloop.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:21
+#  Last modified 2022-10-14 13:08:55
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 re-sdl: clean-sdl SDL_built/lib/libSDL2.a
+#  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
-#  Modification time never checked.
+#  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 47):
+#  commands to execute (from `Makefile', line 67):
 	
 
-clean-sdl:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 37):
-	rm -rf SDL2-2.0.22/build/*
-	rm -rf SDL_built/*
-	touch SDL_built/DontRemoveMe
-	rm -f $(SDL2)
-	
-
-src/samplemap.o: src/SP1947.h
+src/mini_fdf_matrix.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:23
+#  Last modified 2022-10-14 13:08:58
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
+src/samplemap.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:57
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+shade1:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 33):
+	$(MAKE) clean
+	$(MAKE) CFLAGS='-D SHADE1'
+	
+
 src/v2.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:22
+#  Last modified 2022-10-14 13:08:55
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+src/getwall.o: src/SP1947.h
+#  Implicit rule search has been done.
+#  Last modified 2022-10-14 13:08:57
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 src/obj.o: src/SP1947.h
- 
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:21
-#  File has been updated.
-#  Successfully updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
-
-src/fdf_drawline.o: src/SP1947.h
-#  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:20
+#  Last modified 2022-10-14 13:08:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -464,22 +578,22 @@ src/fdf_drawline.o: src/SP1947.h
 
 src/draw.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:23
+#  Last modified 2022-10-14 13:12:59
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-src/simpleimg.o: src/SP1947.h
+src/perfgraph.o: src/SP1947.h
 #  Implicit rule search has been done.
-#  Last modified 2022-10-07 15:59:22
+#  Last modified 2022-10-14 13:08:59
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # files hash-table stats:
-# Load=32/1024=3%, Rehash=0, Collisions=0/94=0%
+# Load=48/1024=5%, Rehash=0, Collisions=6/142=4%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -491,6 +605,6 @@ src/simpleimg.o: src/SP1947.h
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Oct  7 16:00:06 2022
+# Finished Make data base on Fri Oct 14 13:15:58 2022
 
  

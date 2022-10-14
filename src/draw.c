@@ -6,20 +6,19 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 05:48:12 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 20:02:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/14 13:12:58 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 #include "bresenham.h"
 
-void	draw(uint32_t *pxls, int crd[2], uint32_t clr)
+void	draw(uint32_t *pxls, int crd[2], uint32_t color)
 {
 	if (crd[X] < 0 || crd[X] >= WINDOW_W - 1
 		|| crd[Y] < 0 || crd[Y] >= WINDOW_H - 1)
 		return ;
-	//printf("drawing %i %i \n", crd[X], crd[Y]);
-	pxls[crd[X] + crd[Y] * WINDOW_W] = clr;
+	pxls[crd[X] + crd[Y] * WINDOW_W] = color;
 }
 
 void	drawrect(uint32_t *pxls, int crd[2], int clr, int size)
@@ -42,19 +41,18 @@ void	drawrect(uint32_t *pxls, int crd[2], int clr, int size)
 	}
 }
 
-void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr)
+void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t color)
 {
 	static t_bresenham	b;
 
 	populate_bresenham(&b, from, to);
-	draw(pxls, b.local, clr);
+	draw(pxls, b.local, color);
 	while (step_bresenham(&b) != 1)
-		draw(pxls, b.local, clr);
-	draw(pxls, b.local, clr);
+		draw(pxls, b.local, color);
+	draw(pxls, b.local, color);
 }
 
-
-void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr)
+void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t color)
 {
 	int		edges[CIRCLESIDES + 1][2];
 	int		i;
@@ -67,7 +65,7 @@ void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr)
 		edges[i][X] = crd[X] + ((sin(angl) * (float)size));
 		edges[i][Y] = crd[Y] + ((cos(angl) * (float)size));
 		if (i >= 1)
-			drawline(pxls, edges[i - 1], edges[i], clr);
+			drawline(pxls, edges[i - 1], edges[i], color);
 		angl += FULLRAD / CIRCLESIDES;
 		i++;
 	}

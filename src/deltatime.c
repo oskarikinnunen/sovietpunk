@@ -6,35 +6,31 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 20:57:09 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 21:12:10 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/11 16:22:16 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SP1947.h"
 
-
-
-void	update_deltatime(t_clock *c)
+void	update_deltatime(t_clock *clock)
 {
-	Uint32			time_now;
-	static Uint32	prev_fpstime;
-	static Uint32	add;
-	static Uint32	betweenframes;
-	static char	fps[4];
+	uint32_t		time_now;
+	static uint32_t	prev_fpstime;
+	static uint32_t	add;
+	static uint32_t	betweenframes;
 
 	time_now = SDL_GetTicks();
-	c->delta = time_now - c->prev_time;
-	c->prev_time = time_now;
-	add += c->delta;
+	clock->delta = time_now - clock->prev_time;
+	clock->prev_time = time_now;
+	add += clock->delta;
 	betweenframes++;
-	#ifdef FPSCOUNTER
-	
 	if (time_now >= prev_fpstime + 1000)
 	{
-		printf("fps: %i\n",1000 / (add / betweenframes));
+		ft_putstr(CLRSCR);
+		ft_putstr("FPS: ");
+		ft_putnbr(1000 / (add / betweenframes));
 		add = 0;
 		betweenframes = 0;
 		prev_fpstime = time_now;
 	}
-	#endif
 }

@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 14:37:07 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/09 16:27:02 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/11 16:14:01 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # define TILESIZE 24
 # define TILESIZE2 32
 
+# include "SP1947.h"
+
 typedef struct s_mapeddata
 {
 	int				cursor[2];
@@ -24,11 +26,11 @@ typedef struct s_mapeddata
 	int				mousepos[2];
 	int				mouseheld;
 	int				wall_select;
-	u_int32_t		mapdata[MAPSIZE * MAPSIZE];
-} t_mapeddata;
+	uint32_t		mapdata[MAPSIZE * MAPSIZE];
+}	t_mapeddata;
 
 /* editor_eventloop.c */
-int	ed_eventloop(t_mapeddata *ed);
+int		ed_eventloop(t_mapeddata *ed);
 
 /* editor_buttons.c */
 void	draw_buttons(t_sdlcontext *sdl, t_mapeddata ed);

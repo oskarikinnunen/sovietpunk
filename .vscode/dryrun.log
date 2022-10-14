@@ -1,5 +1,40 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory `/Users/okinnune/sovietpunk'
-gcc src/main.o src/editor.o src/png.o src/error.o src/file_open.o src/fdf_drawline.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/simpleimg.o src/v2.o src/obj_render.o src/shade.o src/player.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o -o SovietPunk1947 `SDL_built/bin/sdl2-config --cflags --libs` -Ilib/include/SDL2/ -Isrc -Ilibft libft/libft.a -ldl -lpthread -lm
-make: Leaving directory `/Users/okinnune/sovietpunk'
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/okinnune/w3dfinal_forreal'
+cd SDL2-2.0.22/build && ../configure --prefix=/Users/okinnune/w3dfinal_forreal/SDL_built/ && make install
+make -C libft
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/main.o src/main.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/editor.o src/editor.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/png.o src/png.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/file_open.o src/file_open.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/mini_fdf.o src/mini_fdf.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/obj.o src/obj.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/image.o src/image.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/gameloop.o src/gameloop.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/deltatime.o src/deltatime.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/eventloop.o src/eventloop.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/editor_eventloop.o src/editor_eventloop.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/convertpng.o src/convertpng.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/v2.o src/v2.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/obj_render.o src/obj_render.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/shade.o src/shade.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/spawnplayer.o src/spawnplayer.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/inputhelp.o src/inputhelp.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/v2_2.o src/v2_2.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/draw.o src/draw.c
+ 
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/samplemap.o src/samplemap.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/editor_buttons.o src/editor_buttons.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/drawquadtile.o src/drawquadtile.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/getwall.o src/getwall.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/mini_fdf_helpers.o src/mini_fdf_helpers.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/mini_fdf_matrix.o src/mini_fdf_matrix.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/error.o src/error.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/obj_parse.o src/obj_parse.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/player_move.o src/player_move.c
+ 
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/render.o src/render.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/perfgraph.o src/perfgraph.c
+gcc -Ilib/include/SDL2/ -Isrc -Ilibft -Werror -Ofast -finline-functions    -c -o src/inputhelp_turn.o src/inputhelp_turn.c
+gcc src/main.o src/editor.o src/png.o src/file_open.o src/mini_fdf.o src/obj.o src/image.o src/gameloop.o src/deltatime.o src/eventloop.o src/editor_eventloop.o src/convertpng.o src/v2.o src/obj_render.o src/shade.o src/spawnplayer.o src/inputhelp.o src/v2_2.o src/draw.o src/samplemap.o src/editor_buttons.o src/drawquadtile.o src/getwall.o src/mini_fdf_helpers.o src/mini_fdf_matrix.o src/error.o src/obj_parse.o src/player_move.o src/render.o src/perfgraph.o src/inputhelp_turn.o -o wolf3d `SDL_built/bin/sdl2-config --cflags --libs` -Ilib/include/SDL2/ -Isrc -Ilibft libft/libft.a -ldl -lpthread -lm
+make: Leaving directory `/Users/okinnune/w3dfinal_forreal'
  

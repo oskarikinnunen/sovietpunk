@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/06 13:19:01 by okinnune          #+#    #+#             */
-/*   Updated: 2022/07/08 11:34:06 by okinnune         ###   ########.fr       */
+/*   Created: 2022/10/10 12:49:01 by okinnune          #+#    #+#             */
+/*   Updated: 2022/10/10 12:50:12 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 void	error_exit(char *str)
 {
-	ft_putstr_fd(str, 2);
-	exit (0);
+	ft_putstr_fd(str, 1);
+	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 17:57:33 by okinnune          #+#    #+#             */
-/*   Updated: 2022/09/05 17:41:06 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/10 14:40:19 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void			ft_strclr(char *s);
 void			ft_strfill(char *s, char c); /*extra*/
 char			**ft_strsplit(const char *s, char c);
 char			**ft_strscrape(const char*s, char *delims);
-void			ft_strreplace (char *str, int c1, int c2);
+void			ft_strreplace(char *str, int c1, int c2);
 char			*ft_strncpy(char *dest, const char *src, size_t num);
 void			ft_striter(char *s, void (*f)(char *));
 void			ft_striteri(char *s, void (*f)(unsigned int, char *));

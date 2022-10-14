@@ -6,28 +6,28 @@
 #    By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 13:41:07 by okinnune          #+#    #+#              #
-#    Updated: 2022/10/10 00:17:59 by okinnune         ###   ########.fr        #
+#    Updated: 2022/10/14 13:12:01 by okinnune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME= SovietPunk1947
+NAME= wolf3d
 
 INCLUDE= -Ilib/include/SDL2/ -Isrc -Ilibft
 LIBFT= libft/libft.a
 SDL2= SDL_built/lib/libSDL2.a
-SRCFILES= main.c editor.c png.c error.c file_open.c mini_fdf.c obj.c \
-		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c simpleimg.c \
+SRCFILES= main.c editor.c png.c file_open.c mini_fdf.c obj.c \
+		image.c gameloop.c deltatime.c eventloop.c editor_eventloop.c convertpng.c \
 		v2.c obj_render.c shade.c spawnplayer.c inputhelp.c v2_2.c draw.c samplemap.c \
-		editor_buttons.c drawquadtile.c getwall.c mini_fdf_helpers.c
+		editor_buttons.c drawquadtile.c getwall.c mini_fdf_helpers.c mini_fdf_matrix.c \
+		error.c obj_parse.c player_move.c render.c perfgraph.c inputhelp_turn.c
 SRC= $(addprefix src/,$(SRCFILES))
 OBJ= $(SRC:.c=.o)
 CC= gcc
 LIBS= $(LIBFT) -ldl -lpthread -lm
-override CFLAGS +=  $(INCLUDE) -Werror -Ofast -finline-functions#-g# -g -O2
+override CFLAGS +=  $(INCLUDE) -Werror -Ofast -finline-functions #-g -O2
 PWD= $(shell pwd)
 
-all: $(SDL2) $(LIBFT) $(OBJ) #src/SP1947.h
-	$(CC) $(OBJ) -o $(NAME) `SDL_built/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
+all: $(NAME)
 
 shade1:
 	$(MAKE) clean
@@ -37,6 +37,9 @@ shade2:
 	$(MAKE) clean
 	$(MAKE) CFLAGS='-D SHADETRIPPY'
 
+$(NAME): $(SDL2) $(LIBFT) $(OBJ)
+	$(CC) $(OBJ) -o $(NAME) `SDL_built/bin/sdl2-config --cflags --libs` $(INCLUDE) $(LIBS)
+
 $(OBJ): src/SP1947.h
 
 $(SDL2):
@@ -44,6 +47,7 @@ $(SDL2):
 
 clean-sdl:
 	rm -rf SDL2-2.0.22/build/*
+	touch SDL2-2.0.22/build/DontRemoveMe
 	rm -rf SDL_built/*
 	touch SDL_built/DontRemoveMe
 	rm -f $(SDL2)
@@ -52,8 +56,17 @@ clean:
 	rm -f src/*.o
 	rm -f $(LIBFT)
 
+rmbin:
+	rm -f $(NAME)
+
+re:	clean all
+
+fclean: clean-sdl clean rmbin
+
 re-sdl: clean-sdl $(SDL2)
 	
 #clean: rm libs subfolders
 $(LIBFT):
 	make -C libft
+
+.PHONY : all shade1 shade2 clean-sdl clean re fclean re-sdl rmbin

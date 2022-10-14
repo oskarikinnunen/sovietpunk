@@ -6,7 +6,7 @@
 /*   By: okinnune <okinnune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 13:13:20 by okinnune          #+#    #+#             */
-/*   Updated: 2022/10/10 00:17:26 by okinnune         ###   ########.fr       */
+/*   Updated: 2022/10/14 13:08:49 by okinnune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 # define SP1947_H
 
 # include "../SDL_built/include/SDL2/SDL.h"
-# include "SP_OBJ.h"
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
+# include <stdbool.h>
+# include <inttypes.h>
 # include "libft.h"
 # include "bresenham.h"
-# include <stdbool.h>
 
+# define CLRSCR "\e[1;1H\e[2J"
 # define FPSCOUNTER
-# define WINDOW_W 960
-# define WINDOW_H 720
-# define CENTER_X 480
-# define CENTER_Y 360
+# define WINDOW_W 1080
+# define WINDOW_H 600
+# define CENTER_X 540
+# define CENTER_Y 300
 //# define CENTER_X WINDOW_W / 2
 //# define CENTER_Y WINDOW_H / 2
 # define X 0
@@ -37,6 +38,7 @@
 # define CLR_TURQ 5505010
 # define CLR_GRAY 4868682
 
+# define MC 10
 # define ANIMFRAMES 18
 # define PNG_COUNT 14
 # define TILE_SPAWN 13
@@ -48,14 +50,14 @@
 # define DARKNESS	700.0f
 # define GAMESCALE	64
 # define RAYSLICE	0.0010f
-# define FOV		0.96f
+# define FOV		1.08f
 //# define FOV		RAYSLICE * WINDOW_W
 # define RAD90		1.57079633f
 # define WALLTHING	63997.2 //800w rayslice 0.0018f = 452
 //# define WALLTHING
 //	(0.0017777f / RAYSLICE) * 36000
-# define TURNSPEED	0.003f
-# define MOVESPEED	0.100f
+# define KEYTURNSPEED	0.002f
+# define MOVESPEED	0.130f
 # define MOUSESPEED 0.0001f
 # define MAPSIZE	20
 # define CIRCLESIDES 16
@@ -68,9 +70,15 @@
 # define SOUTHWALL 3
 
 # define KEYS_LEFTMASK 0
-# define KEYS_RGHTMASK 2
-# define KEYS_UPMASK 4
-# define KEYS_DOWNMASK 8
+# define KEYS_RGHTMASK 1
+# define KEYS_UPMASK 2
+# define KEYS_DOWNMASK 3
+# define KEYS_TURNLEFTMASK 4
+# define KEYS_TURNRGHTMASK 5
+
+# define WALLHEIGHTMASK 0xFF
+# define RAY_LENGTH	20
+# define MAPTILESIZE	10
 
 typedef struct s_player
 {
@@ -99,7 +107,7 @@ typedef struct s_obj
 	uint8_t		*colors;
 	uint32_t	m_count;
 	int32_t		**verts;
-	uint32_t	**faces;
+	int32_t		**faces;
 	uint32_t	v_count;
 	uint32_t	f_count;
 }	t_obj;
@@ -135,79 +143,110 @@ typedef struct s_clock
 	uint32_t	delta;
 }	t_clock;
 
+# define PERFGRAPH_SAMPLES 60
+
+typedef struct s_perfgraph
+{
+	t_simpleimg	image;
+	uint32_t	deltas[PERFGRAPH_SAMPLES];
+}	t_perfgraph;
+
 typedef struct s_gamecontext
 {
 	t_sdlcontext	sdl;
+	char			*mapname;
 	t_player		player;
 	_Bool			relativemousemode;
 	int32_t			keystate;
 	uint32_t		map[MAPSIZE * MAPSIZE];
 	int				mouse_delta[2];
 	t_clock			clock;
+	t_perfgraph		perfgraph;
 	u_int32_t		v[2];
 }	t_gamecontext;
 
-
-
 /* player.c */
-void	spawnplayer(t_gamecontext *gc);
+void		spawnplayer(t_gamecontext *gc);
 
 /* shade.c */
 u_int32_t	shade(u_int32_t color, int wallheight);
 u_int32_t	vanilla_shade(u_int32_t clr, int wallheight);
 
+/* render.c */
+void		rendergame(t_sdlcontext *sdl, int *walls, t_gamecontext *gc, int i);
+void		rendertopdownmap(t_gamecontext *gc);
+void		render_floor(t_sdlcontext sdl, int16_t *floor, int ix, int h);
+
 /* obj_render.c */
-void	drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
-void	renderobj(t_gamecontext *gc);
+void		drawfdf(t_sdlcontext *context, t_fdf fdf, int *walls);
+void		renderobj(t_gamecontext *gc, t_fdf *fdf);
 
 /* v2.c */
-int		v2dist(int *v, int *ov);
-void	f2mul(float f[2], float mul); //TODO: move f2 functions to own file and maybe think of better naming?
-void	f2tov2(float f[2], int v[2]);
-void	f2add(float f[2], float of[2]);
-void	f2cpy(float to[2], float from[2]);
-void	v2clamp_xy(int v[2], int min, int max);
+int			v2dist(int *v, int *ov);
+void		f2mul(float f[2], float mul);
+void		f2tov2(float f[2], int v[2]);
+void		f2add(float f[2], float of[2]);
+void		f2cpy(float to[2], float from[2]);
+void		v2clamp_xy(int v[2], int min, int max);
 
-void	v2add(int v[2], int ov[2]);
-void	v2mul(int v[2], int mul);
-void	v2div(int v[2], int div);
-void	v2cpy(int to[2], int from[2]);
-void	v2diff(int v[2], int ov[2], int rv[2]);
+void		v2add(int v[2], int ov[2]);
+void		v2mul(int v[2], int mul);
+void		v2div(int v[2], int div);
+void		v2cpy(int to[2], int from[2]);
+void		v2diff(int v[2], int ov[2], int rv[2]);
+
+/* player_move.c */
+void		moveplayer(t_gamecontext *gc);
 
 /* eventloop.c */
-int		eventloop(t_gamecontext *gc);
+int			eventloop(t_gamecontext *gc);
 
 /* gameloop.c */
-void	gameloop(t_gamecontext gc);
+void		gameloop(t_gamecontext gc);
 
 /* draw.c */
-void	draw(uint32_t *pxls, int crd[2], uint32_t clr);
-void	drawrect(uint32_t *pxls, int crd[2], int clr, int size);
-void	drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr);
-void	drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr);
+void		draw(uint32_t *pxls, int crd[2], uint32_t clr);
+void		drawrect(uint32_t *pxls, int crd[2], int clr, int size);
+void		drawcircle(uint32_t *pxls, int crd[2], int size, uint32_t clr);
+void		drawline(uint32_t *pxls, int from[2], int to[2], uint32_t clr);
 
 /* drawquadtile.c */
-void	drawquadtile(t_sdlcontext *context, int p[2], uint32_t wall, int scale);
+void		drawquadtile(t_sdlcontext *context,
+				int p[2], uint32_t wall, int scale);
 
 /* image.c */
 uint32_t	samplecolor(t_simpleimg img, int ix, int iy);
-void	drawimage(t_sdlcontext *context, int x, int y);
-void	drawimagescaled(t_sdlcontext *context, int p[2], int tid, int scale);
-void	alloc_image(t_simpleimg *img, int width, int height);
+void		drawimage(t_sdlcontext *context, int x, int y);
+void		drawimagescaled(t_sdlcontext *context,
+				int p[2], int tid, int scale);
+void		alloc_image(t_simpleimg *img, int width, int height);
+void		put_image_to_screen(t_sdlcontext *context,
+				t_simpleimg img, int p[2]);
 
 /* fdf.c / obj.c */
-void	draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c);  //FDF SPECIFIC
-void	fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c);
-void	fv3_to_iv3(float *f3, int *i3);
-void	parse_obj(t_obj *obj);
-int		fdf_init(t_fdf *fdf, t_obj *object);
-void	fdf_update(t_fdf *fdf);
+void		draw_line(t_fdf *fdf, t_bresenham b, float z, uint32_t c);
+void		fill_tri(int tri[3][3], t_fdf *fdf, float z, uint32_t c);
+void		fv3_to_iv3(float *f3, int *i3);
+void		parse_obj(t_obj *obj);
+int			fdf_init(t_fdf *fdf, t_obj *object);
+void		fdf_update(t_fdf *fdf);
+void		calc_matrices(t_fdf *fdf);
+void		read_vertex(int *v3, char *line);
+void		read_face(int *v3, char *line);
+uint8_t		materialcolor(char *name, t_obj o);
+void		get_vertices(t_obj *obj, int fd);
+uint32_t	get_color(char *line);
+void		get_materials(t_obj *obj, int fd);
+void		cpy_materials(t_obj *dst, t_obj *src);
 
 /* getwall.c */
 uint32_t	getindexedwall(uint32_t wall, int i);
 
 /* deltatime.c */
-void	update_deltatime(t_clock *c);
+void		update_deltatime(t_clock *c);
+
+/* perfgraph.c */
+void		drawperfgraph(t_perfgraph *graph, uint32_t delta);
 
 /* samplemap.c */
 bool		is_in_map(int crd[2]);
@@ -215,22 +254,25 @@ uint32_t	samplemap(uint32_t *map, int crd[2]);
 
 /* MAP.C */
 
-void	mapcreator(char *mapname, t_gamecontext gc);
+void		mapcreator(char *mapname, t_gamecontext gc);
 
 /* simpleimage.c */
-void	loadpngs(t_sdlcontext	*sdl);
+void		loadpngs(t_sdlcontext	*sdl);
 
 /* inputhelp.c */
-bool	iskey(SDL_Event e, int keycode);
-bool	keyismoveleft(SDL_Event e);
-bool	keyismoveright(SDL_Event e);
-bool	keyismoveup(SDL_Event e);
-bool	keyismovedown(SDL_Event e);
+bool		iskey(SDL_Event e, int keycode);
+bool		keyisturnleft(SDL_Event e);
+bool		keyisturnright(SDL_Event e);
+bool		keyismoveleft(SDL_Event e);
+bool		keyismoveright(SDL_Event e);
+bool		keyismoveup(SDL_Event e);
+bool		keyismovedown(SDL_Event e);
 
 /* FILE_OPEN.c */
-int		sp_fileopen(char *filename, int flags);
+int			sp_fileopen(char *filename, int flags);
+void		openmap(t_gamecontext *gc, uint32_t *to);
 
 /* ERROR.C */
-void	error_exit(char *str);
+void		error_exit(char *str);
 
 #endif
