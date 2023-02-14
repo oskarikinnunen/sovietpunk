@@ -1,11 +1,19 @@
-# sovietpunk
+# Wolf3D
+Basic raycasting engine made in C, using SDL 2.
 
-https://user-images.githubusercontent.com/45420297/218782078-c2039ce4-1e7b-4c61-9fe7-1bea24c4409d.webm
+## Features
+### Raycasting renderer with basic movement and collision.
 
-<video width="960" height="600" controls autoplay loop>
-      <source src="https://user-images.githubusercontent.com/45420297/218782078-c2039ce4-1e7b-4c61-9fe7-1bea24c4409d.webm" type="video/webm">
-  <p>Your browser doesn't support HTML5 video. Here is a <a href="Hexxcaudio.webm">link to the video</a> instead.</p>
-</video>
+[walk_new.webm](https://user-images.githubusercontent.com/45420297/218786903-76eba0ce-b04e-419d-bebe-89aa7476face.webm){width=50%}
 
-https://user-images.githubusercontent.com/45420297/218782186-45985bb4-ce8e-4327-8155-56870b228ee9.mp4
+### 3D character and animation support, using my own simple .obj file parser:
 
+[fly_newcut.webm](https://user-images.githubusercontent.com/45420297/218786845-f05a2104-7018-4cb8-813f-1455c0df9e1b.webm)
+
+### Different shading modes:
+
+[colormodes.webm](https://user-images.githubusercontent.com/45420297/218786863-8bd39558-30e0-4a0b-94ba-196927de28d2.webm)
+
+### Simple editor for creating maps:
+
+[mouse.webm](https://user-images.githubusercontent.com/45420297/218786930-a9d290c8-131a-4978-83eb-a7e17a64788e.webm)
